@@ -1,8 +1,4 @@
-// import 'dart:io';
 import 'package:flutter/foundation.dart';
-// import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -24,7 +20,6 @@ class _UploadPageState extends State<UploadPage> {
   final picker = ImagePicker();
   Future<File?> processImage(File imageFile) async {
     try {
-      // Read the image file
       img.Image? image = img.decodeImage(await imageFile.readAsBytes());
 
       image =
@@ -48,7 +43,6 @@ class _UploadPageState extends State<UploadPage> {
       EasyLoading.show(status: 'loading...');
       processImage(image as File);
       if (image != null) {
-        // print(image.path);
         final processedImageFile = await processImage(File(image.path));
         extracted = await FlutterTesseractOcr.extractText(processedImageFile!.path);
       } else {
