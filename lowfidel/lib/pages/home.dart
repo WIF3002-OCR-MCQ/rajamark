@@ -1,11 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:lowfidel/utils/routes.dart';
-import 'package:lowfidel/utils/scan.dart';
+import 'package:lowfidel/pages/upload.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -21,11 +18,11 @@ class _HomePageState extends State<HomePage> {
       home: Scaffold(
         appBar: AppBar(
           elevation: 0.2,
-          title: Text(
+          title: const Text(
             "OCR Application",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
           ),
-          leading: Icon(
+          leading: const Icon(
             Icons.home,
             color: Colors.black,
           ),
@@ -38,47 +35,35 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "A handy tool to extract text from images or using your camera",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w100,
-                        wordSpacing: 2,
-                        fontSize: 25,
-                        fontStyle: FontStyle.italic),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(60.0),
-                    child: Image.asset(
-                      "assets/images/ocr_image.png",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text("Language : English"),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ScanPage(),
-                  // SizedBox(
-                  //   height: 50,
-                  // ),
                   Hero(
-                    tag: Key("upload"),
+                    tag: const Key("upload"),
                     child: Card(
                       color: Colors.grey.shade700,
                       child: InkWell(
                         onTap: () {
-                          Navigator.pushNamed(context, MyRoutes.uploadpage);
+                          Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        const UploadPage(),
+                                transitionsBuilder:
+                                    (context, animation1, animation2, child) {
+                                  const curve = Curves.easeInOut;
+
+                                  var tween = Tween(begin: 0.0, end: 1.0)
+                                      .chain(CurveTween(curve: curve));
+                                  var opacityAnimation =
+                                      animation1.drive(tween);
+
+                                  return FadeTransition(
+                                      opacity: opacityAnimation, child: child);
+                                },
+                                transitionDuration:
+                                    const Duration(milliseconds: 500),
+                              ));
                           setState(() {});
                         },
-                        // hoverColor: Colors.orange,
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -86,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           height: 40,
                           width: 400,
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               "Upload Image",
                               style: TextStyle(

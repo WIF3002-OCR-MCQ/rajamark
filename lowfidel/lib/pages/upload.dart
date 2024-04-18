@@ -15,7 +15,7 @@ class UploadPage extends StatefulWidget {
 
 class _UploadPageState extends State<UploadPage> {
   XFile? _imageFile;
-  dynamic? _pickerror;
+  dynamic _pickerror;
   String? extracted = 'Recognised Extracted Text Will Appear Here';
   final picker = ImagePicker();
   _imgFromGallery() async {
@@ -25,24 +25,22 @@ class _UploadPageState extends State<UploadPage> {
       if (image != null) {
         // print(image.path);
         extracted = await FlutterTesseractOcr.extractText(image.path);
-      } else
+      } else {
         extracted = "Recogonised extracted text will be shown here";
+      }
       print(extracted);
 
       setState(() {
         if (image != null) {
           _imageFile = image;
-
-          // if (_imageFile != null) {
-          //   print(extracted);
-          // } else
-          //   extracted = "Recogonised extracted text will be shown here";
         }
       });
     } catch (e) {
       setState(() {
         _pickerror = e;
-        print(e);
+        if (kDebugMode) {
+          print(e);
+        }
       });
     }
   }
@@ -58,23 +56,21 @@ class _UploadPageState extends State<UploadPage> {
       } else {
         EasyLoading.dismiss();
         return Semantics(
+            label: 'image_picked_image',
             child: Image.file(File(
               _imageFile!.path,
-            )),
-            label: 'image_picked_image');
+            )));
       }
     } else if (_pickerror != null) {
       EasyLoading.dismiss();
-      return Text(
+      return const Text(
         'Error: Select An Image (.PNG,.JPG,.JPEG,..) \nand Wait a Few Seconds',
         textAlign: TextAlign.center,
       );
     } else {
       EasyLoading.dismiss();
       return const Text(
-        'You have not yet picked an image' +
-            '\n' +
-            'Upload an Image And Wait A few Seconds',
+        'You have not yet picked an image\nUpload an Image And Wait A few Seconds',
         textAlign: TextAlign.center,
       );
     }
@@ -89,13 +85,13 @@ class _UploadPageState extends State<UploadPage> {
       builder: EasyLoading.init(),
       home: Scaffold(
         appBar: AppBar(
-            leading: new IconButton(
-              icon: new Icon(Icons.arrow_back),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-            title: Text(
+            title: const Text(
               "Extract text from image",
               style: TextStyle(
                 color: Colors.black,
@@ -103,7 +99,7 @@ class _UploadPageState extends State<UploadPage> {
               ),
             ),
             backgroundColor: Colors.grey.shade100,
-            iconTheme: IconThemeData(
+            iconTheme: const IconThemeData(
               color: Colors.black,
             )),
         body: Material(
@@ -116,18 +112,16 @@ class _UploadPageState extends State<UploadPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      child: Container(
-                        decoration: BoxDecoration(color: Colors.grey.shade100),
-                        child: Center(child: preview()),
-                        height: 250,
-                        width: 650,
-                      ),
+                      decoration: BoxDecoration(color: Colors.grey.shade100),
+                      height: 250,
+                      width: 650,
+                      child: Center(child: preview()),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
                     Hero(
-                      tag: Key("upload"),
+                      tag: const Key("upload"),
                       child: Card(
                         color: Colors.grey.shade700,
                         child: InkWell(
@@ -142,7 +136,7 @@ class _UploadPageState extends State<UploadPage> {
                             ),
                             height: 40,
                             width: 400,
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 "Upload Image",
                                 style: TextStyle(
@@ -154,7 +148,7 @@ class _UploadPageState extends State<UploadPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
                     Container(
@@ -167,8 +161,8 @@ class _UploadPageState extends State<UploadPage> {
                             padding: const EdgeInsets.all(20.0),
                             child: SelectableText(
                               extracted.toString(),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 14),
                               textAlign: TextAlign.center,
                             ),
                           ),
