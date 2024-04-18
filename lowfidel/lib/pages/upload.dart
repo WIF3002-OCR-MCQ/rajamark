@@ -1,9 +1,14 @@
-import 'dart:io';
+// import 'dart:io';
 import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart';
+// import 'package:image_picker/image_picker.dart';
+// import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image/image.dart' as img;
 
 class UploadPage extends StatefulWidget {
   const UploadPage({super.key});
@@ -17,15 +22,37 @@ class _UploadPageState extends State<UploadPage> {
   dynamic _pickerror;
   String? extracted = 'Recognised Extracted Text Will Appear Here';
   final picker = ImagePicker();
+  Future<File?> processImage(File imageFile) async {
+    try {
+      // Read the image file
+      img.Image? image = img.decodeImage(await imageFile.readAsBytes());
+
+      image =
+          img.copyResize(image!, width: 800);
+
+      image = img.grayscale(image);
+
+      final processedImageFile = File('${imageFile.path}_processed.jpg');
+      await processedImageFile.writeAsBytes(img.encodeJpg(image));
+
+      return processedImageFile;
+    } catch (e) {
+      print('Error processing image: $e');
+      return null;
+    }
+  }
+
   _imgFromGallery() async {
     try {
       final image = await picker.pickImage(source: ImageSource.gallery);
       EasyLoading.show(status: 'loading...');
+      processImage(image as File);
       if (image != null) {
         // print(image.path);
-        extracted = await FlutterTesseractOcr.extractText(image.path);
+        final processedImageFile = await processImage(File(image.path));
+        extracted = await FlutterTesseractOcr.extractText(processedImageFile!.path);
       } else {
-        extracted = "Recogonised extracted text will be shown here";
+        extracted = "Recognised extracted text will be shown here";
       }
       print(extracted);
 
