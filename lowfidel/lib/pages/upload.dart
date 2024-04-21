@@ -41,7 +41,6 @@ class _UploadPageState extends State<UploadPage> {
     try {
       final image = await picker.pickImage(source: ImageSource.gallery);
       EasyLoading.show(status: 'loading...');
-      processImage(image as File);
       if (image != null) {
         final processedImageFile = await processImage(File(image.path));
         extracted = await FlutterTesseractOcr.extractText(processedImageFile!.path);
