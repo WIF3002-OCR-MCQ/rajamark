@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:rajamarkapp/database/database.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseInitialization.initialize();
   runApp(const MyApp());
 }
 
@@ -116,7 +119,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          _incrementCounter;
+          addDocument(); // To test the database successfully call
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
