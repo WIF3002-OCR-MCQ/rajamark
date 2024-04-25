@@ -119,9 +119,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           _incrementCounter;
-          addDocument(); // To test the database successfully call
+
+
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
