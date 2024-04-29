@@ -69,12 +69,12 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
         Positioned(
-          top: 0,
-          left: 0,
+          top: 10,
+          left: 10,
           child: Image.asset(
             'images/3.png',
-            width: 300,
-            height: 300,
+            width: 100,
+            height: 100,
           ),
         ),
       ],
@@ -107,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 20),
                 Expanded(
                   child: FractionallySizedBox(
                     widthFactor: 1.0,

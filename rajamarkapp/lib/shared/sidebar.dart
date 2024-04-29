@@ -17,7 +17,7 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth < 600) {
+        if (constraints.maxWidth < 700) {
           return MobileTopMenu(
             onExamTap: onExamTap,
             onAccountTap: onAccountTap,
@@ -26,7 +26,7 @@ class Sidebar extends StatelessWidget {
         } else {
           return Container(
             width: 200,
-            color: const Color(0xFF0074B7),
+            color: const Color.fromARGB(255, 241, 243, 246),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -45,7 +45,7 @@ class Sidebar extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: const Color.fromARGB(255, 0, 0, 0),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -57,7 +57,7 @@ class Sidebar extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: const Color.fromARGB(255, 0, 0, 0),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -67,14 +67,17 @@ class Sidebar extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
-                  child: TextButton(
+                  child: ElevatedButton(
                     onPressed: onLogoutTap,
-                    style: TextButton.styleFrom(
-                      backgroundColor: const Color(0xFF0074B7),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFE54A50),
                       foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                     child: Text(
-                      'Logout',
+                      'Log out',
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -112,71 +115,105 @@ class _MobileTopMenuState extends State<MobileTopMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFF0074B7),
-      child: Column(
-        children: [
-          ListTile(
-            title: Image.asset(
-              'images/3.png',
-              width: 100,
-              height: 100,
-            ),
-            trailing: IconButton(
-              icon: Icon(
-                _isExpanded ? Icons.expand_less : Icons.expand_more,
-                color: Colors.white,
+    return Stack(
+      children: [
+        Container(
+          color: Colors.white,
+          child: Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  setState(() {
+                    _isExpanded = !_isExpanded;
+                  });
+                },
               ),
-              onPressed: () {
-                setState(() {
-                  _isExpanded = !_isExpanded;
-                });
-              },
-            ),
+              const SizedBox(width: 16),
+              Image.asset(
+                'images/1.png',
+                width: 50,
+                height: 50,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'RajaMark',
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  // TODO: Implement search functionality
+                },
+              ),
+            ],
           ),
-          if (_isExpanded)
-            Column(
+        ),
+        if (_isExpanded)
+          Container(
+            color: Colors.white.withOpacity(0.8),
+            child: Column(
               children: [
-                ListTile(
-                  title: Text(
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.menu),
+                      onPressed: () {
+                        setState(() {
+                          _isExpanded = !_isExpanded;
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 16),
+                    Image.asset(
+                      'images/1.png',
+                      width: 50,
+                      height: 50,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'RajaMark',
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                TextButton(
+                  onPressed: widget.onExamTap,
+                  child: Text(
                     'Exams',
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  onTap: widget.onExamTap,
                 ),
-                ListTile(
-                  title: Text(
+                TextButton(
+                  onPressed: widget.onAccountTap,
+                  child: Text(
                     'Account',
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  onTap: widget.onAccountTap,
-                ),
-                ListTile(
-                  title: Text(
-                    'Logout',
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  onTap: widget.onLogoutTap,
                 ),
               ],
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }

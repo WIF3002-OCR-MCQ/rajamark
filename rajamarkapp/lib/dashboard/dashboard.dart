@@ -31,10 +31,14 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen width
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          if (constraints.maxWidth < 600) {
+          if (constraints.maxWidth < 700) {
+            // Assuming 700px as the breakpoint for mobile view
             // Mobile layout
             return Column(
               children: [
@@ -65,6 +69,19 @@ class _DashboardPageState extends State<DashboardPage> {
           }
         },
       ),
+      floatingActionButton: screenWidth < 700 // Check if mobile view
+          ? FloatingActionButton.extended(
+              // label for extended fab
+              label: const Text('Create Exam',
+                  style: TextStyle(color: Colors.white)),
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                // TODO: Implement create exam functionality
+              },
+
+              backgroundColor: Colors.blue, // Use your desired color
+            )
+          : null, // Do not show FAB in desktop view
     );
   }
 }
