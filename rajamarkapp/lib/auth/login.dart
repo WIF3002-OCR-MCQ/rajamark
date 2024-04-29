@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rajamarkapp/shared/login_module.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,6 +11,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,10 +51,16 @@ class _LoginPageState extends State<LoginPage> {
                 child: Center(
                   child: Container(
                     width: 400,
-                    height: 400,
-                    color: Colors.white,
-                    child: const Center(
-                      child: Text('Login Module'),
+                    height: 500,
+
+                    //make corner radius
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: const Center(child: LoginModule()),
                     ),
                   ),
                 ),
@@ -79,21 +90,28 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: FractionallySizedBox(
-                    widthFactor: 0.4,
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Image.asset('images/3.png'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'images/1.png',
+                      width: 60,
+                      height: 60,
                     ),
-                  ),
+                    Text(
+                      'RajaMark',
+                      style: GoogleFonts.poppins(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: FractionallySizedBox(
                     widthFactor: 1.0,
                     child: FittedBox(
-                      fit: BoxFit.contain,
+                      fit: BoxFit.fitHeight,
                       child: SvgPicture.asset(
                         'images/examIllustration.svg',
                       ),
@@ -106,14 +124,15 @@ class _LoginPageState extends State<LoginPage> {
         ),
         Expanded(
           child: Container(
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: const Color.fromARGB(255, 255, 255, 255),
             child: Center(
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: 400,
+                height: 700,
                 color: Colors.white,
-                child: const Center(
-                  child: Text('Login Module'),
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: Center(child: LoginModule()),
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rajamarkapp/dashboard/dashboard.dart';
 import 'package:rajamarkapp/database/database.dart';
 import 'package:rajamarkapp/dashboard/account.dart';
 import 'package:rajamarkapp/dashboard/exam.dart';
@@ -17,17 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'OCR MCQ Exam Checker',
+      title: 'RajaMark',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
+      initialRoute: '/dashboard',
       routes: {
         '/': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage(),
-        '/exam-dashboard': (context) => const ExamDashboardPage(),
-        '/account-dashboard': (context) => const AccountDashboardPage(),
+        '/dashboard': (context) => const DashboardPage(),
       },
     );
   }
