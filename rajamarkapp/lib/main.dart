@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rajamarkapp/auth/forgot_pass.dart';
 import 'package:rajamarkapp/dashboard/dashboard.dart';
 import 'package:rajamarkapp/database/database.dart';
 import 'package:rajamarkapp/dashboard/account.dart';
@@ -25,6 +26,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/dashboard',
       routes: {
         '/': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
+        '/forgot-password': (context) => const ForgotPassPage(),
         '/dashboard': (context) => const DashboardPage(),
       },
     );

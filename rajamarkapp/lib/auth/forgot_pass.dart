@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rajamarkapp/shared/register_module.dart';
+import 'package:rajamarkapp/shared/forgotpass_module.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class ForgotPassPage extends StatefulWidget {
+  const ForgotPassPage({Key? key}) : super(key: key);
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _ForgotPassPageState createState() => _ForgotPassPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _ForgotPassPageState extends State<ForgotPassPage> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
  @override
@@ -59,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: const Center(child: RegisterModule()),
+                      child: const Center(child: ForgotPassModule()),
                     ),
                   ),
                 ),
@@ -131,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 color: Colors.white,
                 child: const Padding(
                   padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                  child: Center(child: RegisterModule()),
+                  child: Center(child: ForgotPassModule()),
                 ),
               ),
             ),
