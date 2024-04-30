@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rajamarkapp/shared/login_module.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rajamarkapp/dashboard/dashboard.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

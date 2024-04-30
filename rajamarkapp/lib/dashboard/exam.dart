@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rajamarkapp/dashboard/exam_detail.dart';
 
 class ExamDashboard extends StatelessWidget {
   const ExamDashboard({Key? key}) : super(key: key);
@@ -157,7 +158,16 @@ class ExamDashboard extends StatelessWidget {
                             IconButton(
                               icon: Icon(Icons.visibility),
                               onPressed: () {
-                                // TODO: Implement view functionality
+                                // TODO: Navigate to ExamDetailsView and pass the exam ID
+                                int examId = index +
+                                    1; // Assuming the index is the exam ID
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ExamDetailsView(examId: examId),
+                                  ),
+                                );
                               },
                             ),
                             IconButton(
