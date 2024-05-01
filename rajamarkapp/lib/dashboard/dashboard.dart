@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rajamarkapp/dashboard/student_answer.dart';
 import 'package:rajamarkapp/shared/sidebar.dart';
 import 'package:rajamarkapp/dashboard/exam.dart';
 import 'package:rajamarkapp/dashboard/account.dart';
@@ -35,6 +36,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _logout() {
     // TODO: Implement logout functionality
+    setState(() {
+      _currentContent = const StudentAnswerPage();
+    });
   }
 
   @override
