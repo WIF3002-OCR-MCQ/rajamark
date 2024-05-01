@@ -182,7 +182,9 @@ class StatisticsWidget extends StatelessWidget {
     return const Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        MeanDonutChart(),
+        MeanDonutChart(
+          value: 77,
+        ),
         SizedBox(
             height: 312,
             child: VerticalDivider(
@@ -190,15 +192,17 @@ class StatisticsWidget extends StatelessWidget {
               width: 20,
               color: Color(0xff88899D),
             )),
-        MedianDonutChart(),
+        MedianDonutChart(
+          value: 81,
+        ),
       ],
     );
   }
 }
 
 class MeanDonutChart extends StatefulWidget {
-  const MeanDonutChart({super.key});
-
+  const MeanDonutChart({super.key, required this.value});
+  final double value;
   @override
   State<MeanDonutChart> createState() => _MeanDonutChartState();
 }
@@ -206,6 +210,17 @@ class MeanDonutChart extends StatefulWidget {
 class _MeanDonutChartState extends State<MeanDonutChart> {
   @override
   Widget build(BuildContext context) {
+    String percentage = '${widget.value.round()}%';
+    Color getColor(double value) {
+      if (value >= 80) {
+        return const Color(0xff6fb293);
+      } else if (value >= 50) {
+        return const Color(0xffeec76b);
+      } else {
+        return const Color(0xffe54a50);
+      }
+    }
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Padding(
@@ -218,10 +233,7 @@ class _MeanDonutChartState extends State<MeanDonutChart> {
               const Center(
                 child: Text(
                   'Mean Score',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
@@ -236,12 +248,12 @@ class _MeanDonutChartState extends State<MeanDonutChart> {
                             sectionsSpace: 0,
                             sections: [
                               PieChartSectionData(
-                                  value: 81,
-                                  color: Color(0xff6FB293),
+                                  value: widget.value,
+                                  color: getColor(widget.value),
                                   radius: 40,
                                   showTitle: false),
                               PieChartSectionData(
-                                  value: 19,
+                                  value: 100 - widget.value,
                                   color: Color(0xffF0E5FC),
                                   radius: 40,
                                   showTitle: false)
@@ -257,10 +269,10 @@ class _MeanDonutChartState extends State<MeanDonutChart> {
                                   color: Colors.transparent,
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: Text(
-                                    '81%',
-                                    style: TextStyle(fontSize: 40),
+                                    percentage,
+                                    style: const TextStyle(fontSize: 40),
                                   ),
                                 ),
                               )
@@ -279,7 +291,8 @@ class _MeanDonutChartState extends State<MeanDonutChart> {
 }
 
 class MedianDonutChart extends StatefulWidget {
-  const MedianDonutChart({super.key});
+  const MedianDonutChart({super.key, required this.value});
+  final double value;
 
   @override
   State<MedianDonutChart> createState() => _MedianDonutChartState();
@@ -288,6 +301,17 @@ class MedianDonutChart extends StatefulWidget {
 class _MedianDonutChartState extends State<MedianDonutChart> {
   @override
   Widget build(BuildContext context) {
+    String percentage = '${widget.value.round()}%';
+    Color getColor(double value) {
+      if (value >= 80) {
+        return const Color(0xff6fb293);
+      } else if (value >= 50) {
+        return const Color(0xffeec76b);
+      } else {
+        return const Color(0xffe54a50);
+      }
+    }
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Padding(
@@ -315,12 +339,12 @@ class _MedianDonutChartState extends State<MedianDonutChart> {
                             sectionsSpace: 0,
                             sections: [
                               PieChartSectionData(
-                                  value: 91,
-                                  color: Color(0xff6FB293),
+                                  value: widget.value,
+                                  color: getColor(widget.value),
                                   radius: 40,
                                   showTitle: false),
                               PieChartSectionData(
-                                  value: 9,
+                                  value: 100 - widget.value,
                                   color: Color(0xffF0E5FC),
                                   radius: 40,
                                   showTitle: false)
@@ -336,10 +360,10 @@ class _MedianDonutChartState extends State<MedianDonutChart> {
                                   color: Colors.transparent,
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: Text(
-                                    '90%',
-                                    style: TextStyle(fontSize: 40),
+                                    percentage,
+                                    style: const TextStyle(fontSize: 40),
                                   ),
                                 ),
                               )
