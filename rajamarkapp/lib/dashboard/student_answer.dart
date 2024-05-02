@@ -15,15 +15,17 @@ class StudentAnswerBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          TopRowWidget(),
-          SecondRow(),
-          SizedBox(child: Divider(thickness: 2, color: Color(0xff88899D))),
-          ThirdRow(),
-          FourthRow(),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TopRowWidget(),
+            SecondRow(),
+            SizedBox(child: Divider(thickness: 2, color: Color(0xff88899D))),
+            ThirdRow(),
+            FourthRow(),
+          ],
+        ),
       ),
     );
   }
