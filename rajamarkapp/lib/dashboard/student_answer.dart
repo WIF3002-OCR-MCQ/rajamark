@@ -279,7 +279,12 @@ class _StudentAnswerQuestionState extends State<StudentAnswerQuestion> {
         continue;
       } else {
         choice[i] = -1;
+        points--;
       }
+    }
+
+    if (points < 0) {
+      points = 0;
     }
 
     Color getColor(int correct) {
