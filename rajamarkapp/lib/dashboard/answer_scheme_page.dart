@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:rajamarkapp/const/constant.dart';
 
 import '../shared/top_row_widget.dart';
@@ -110,44 +111,65 @@ class FourthRow extends StatelessWidget {
       children: [
         Expanded(
           flex: 1,
-          child: Container(
-            padding: EdgeInsets.all(14),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Color(0xffbfd7ed)),
-            child: const SizedBox(
-              width: 546,
-              height: 582,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    StudentAnswerQuestion(
-                        questionNum: 1,
-                        answer: [1, 0, 0, 0],
-                        selectedAnswer: [1, 0, 0, 0]),
-                    StudentAnswerQuestion(
-                        questionNum: 2,
-                        answer: [0, 0, 0, 1],
-                        selectedAnswer: [0, 0, 0, 1]),
-                    StudentAnswerQuestion(
-                        questionNum: 3,
-                        answer: [0, 0, 0, 1],
-                        selectedAnswer: [0, 0, 0, 1]),
-                    StudentAnswerQuestion(
-                        questionNum: 4,
-                        answer: [0, 0, 1, 0],
-                        selectedAnswer: [0, 0, 1, 0]),
-                    StudentAnswerQuestion(
-                        questionNum: 5,
-                        answer: [0, 0, 0, 1],
-                        selectedAnswer: [0, 0, 0, 1]),
-                    StudentAnswerQuestion(
-                        questionNum: 6,
-                        answer: [0, 1, 0, 0],
-                        selectedAnswer: [0, 1, 0, 0]),
-                  ],
-                ),
-              ),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.55,
+              child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                return Container(
+                  height: constraints.maxHeight * 0.55,
+                  padding: EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Color(0xffbfd7ed)),
+                  child: const SizedBox(
+                    width: 546,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          QuestionAnswers(
+                            questionNum: 1,
+                            selectedAnswer: "D",
+                          ),
+                          QuestionAnswers(
+                            questionNum: 2,
+                            selectedAnswer: "D",
+                          ),
+                          QuestionAnswers(
+                            questionNum: 3,
+                            selectedAnswer: "B",
+                          ),
+                          QuestionAnswers(
+                            questionNum: 4,
+                            selectedAnswer: "A",
+                          ),
+                          QuestionAnswers(
+                            questionNum: 5,
+                            selectedAnswer: "C",
+                          ),
+                          QuestionAnswers(
+                            questionNum: 6,
+                            selectedAnswer: "A",
+                          ),
+                          QuestionAnswers(
+                            questionNum: 7,
+                            selectedAnswer: "B",
+                          ),
+                          QuestionAnswers(
+                            questionNum: 8,
+                            selectedAnswer: "B",
+                          ),
+                          QuestionAnswers(
+                            questionNum: 10,
+                            selectedAnswer: "D",
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
             ),
           ),
         ),
@@ -159,21 +181,34 @@ class FourthRow extends StatelessWidget {
         ),
         Expanded(
           flex: 1,
-          child: Container(
-            padding: EdgeInsets.all(14),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Color(0xffbfd7ed)),
-            child: SizedBox(
-              width: 546,
-              height: 582,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    AddStudent(),
-                  ],
-                ),
-              ),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.55,
+              child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                return Container(
+                  height: MediaQuery.of(context).size.height * 0.55,
+                  padding: EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Color(0xffbfd7ed)),
+                  child: SizedBox(
+                    width: 546,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          StudentDetail(
+                              studentId: "S2132421", studentName: "Ikhwan Lol"),
+                          StudentDetail(
+                              studentId: "S2132421", studentName: "Ikhwan Lol"),
+                          AddStudent(),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
             ),
           ),
         )
@@ -182,51 +217,23 @@ class FourthRow extends StatelessWidget {
   }
 }
 
-class StudentAnswerQuestion extends StatefulWidget {
-  const StudentAnswerQuestion(
-      {super.key,
-      required this.questionNum,
-      required this.answer,
-      required this.selectedAnswer});
+class QuestionAnswers extends StatefulWidget {
+  const QuestionAnswers({
+    super.key,
+    required this.questionNum,
+    required this.selectedAnswer,
+  });
+
   final int questionNum;
-  final List<int> answer;
-  final List<int> selectedAnswer;
+  final String selectedAnswer;
+
   @override
-  State<StudentAnswerQuestion> createState() => _StudentAnswerQuestionState();
+  State<QuestionAnswers> createState() => _QuestionAnswersState();
 }
 
-class _StudentAnswerQuestionState extends State<StudentAnswerQuestion> {
+class _QuestionAnswersState extends State<QuestionAnswers> {
   @override
   Widget build(BuildContext context) {
-    int points = 0;
-    List<int> choice = [0, 0, 0, 0];
-
-    for (int i = 0; i < widget.answer.length; i++) {
-      if (widget.answer[i] == 1 && widget.selectedAnswer[i] == 1) {
-        points++;
-        choice[i] = 1;
-      } else if (widget.answer[i] == 0 && widget.selectedAnswer[i] == 0) {
-        continue;
-      } else {
-        choice[i] = -1;
-        points--;
-      }
-    }
-
-    if (points < 0) {
-      points = 0;
-    }
-
-    Color getColor(int correct) {
-      if (correct == 1) {
-        return Color(0xff6fb293);
-      } else if (correct == -1) {
-        return Color(0xffe54a50);
-      } else {
-        return Colors.white;
-      }
-    }
-
     return Container(
       padding: EdgeInsets.all(15),
       margin: EdgeInsets.only(bottom: 17),
@@ -242,7 +249,10 @@ class _StudentAnswerQuestionState extends State<StudentAnswerQuestion> {
               children: [
                 Text(
                   'Question ${widget.questionNum}',
-                  style: const TextStyle(fontSize: 15),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -255,65 +265,179 @@ class _StudentAnswerQuestionState extends State<StudentAnswerQuestion> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                          decoration: BoxDecoration(
-                              color: getColor(choice[0]),
-                              borderRadius: BorderRadius.circular(3),
-                              border:
-                                  Border.all(color: Colors.black, width: 1)),
-                          child: const SizedBox(
-                            width: 30,
-                            height: 25,
-                            child: Center(
-                              child: Text('A'),
-                            ),
-                          )),
+                        child: AnswerSelection(
+                          letter: "A",
+                          fill: widget.selectedAnswer == "A" ? true : false,
+                        ),
+                      ),
                       Container(
-                          margin: EdgeInsets.only(left: 10),
-                          decoration: BoxDecoration(
-                              color: getColor(choice[1]),
-                              borderRadius: BorderRadius.circular(3),
-                              border:
-                                  Border.all(color: Colors.black, width: 1)),
-                          child: const SizedBox(
-                            width: 30,
-                            height: 25,
-                            child: Center(
-                              child: Text('B'),
-                            ),
-                          )),
+                        margin: EdgeInsets.only(left: 10.0),
+                        child: AnswerSelection(
+                          letter: "B",
+                          fill: widget.selectedAnswer == "B" ? true : false,
+                        ),
+                      ),
                       Container(
-                          margin: EdgeInsets.only(left: 10),
-                          decoration: BoxDecoration(
-                              color: getColor(choice[2]),
-                              borderRadius: BorderRadius.circular(3),
-                              border:
-                                  Border.all(color: Colors.black, width: 1)),
-                          child: const SizedBox(
-                            width: 30,
-                            height: 25,
-                            child: Center(
-                              child: Text('C'),
-                            ),
-                          )),
+                        margin: EdgeInsets.only(left: 10.0),
+                        child: AnswerSelection(
+                          letter: "C",
+                          fill: widget.selectedAnswer == "C" ? true : false,
+                        ),
+                      ),
                       Container(
-                          margin: EdgeInsets.only(left: 10),
-                          decoration: BoxDecoration(
-                              color: getColor(choice[3]),
-                              borderRadius: BorderRadius.circular(3),
-                              border:
-                                  Border.all(color: Colors.black, width: 1)),
-                          child: const SizedBox(
-                            width: 30,
-                            height: 25,
-                            child: Center(
-                              child: Text('D'),
-                            ),
-                          )),
+                        margin: EdgeInsets.only(left: 10.0),
+                        child: AnswerSelection(
+                          letter: "D",
+                          fill: widget.selectedAnswer == "D" ? true : false,
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AnswerSelection extends StatefulWidget {
+  const AnswerSelection({
+    super.key,
+    required this.letter,
+    required this.fill,
+  });
+
+  final String letter;
+  final bool fill;
+
+  @override
+  State<AnswerSelection> createState() => _AnswerSelectionState();
+}
+
+class _AnswerSelectionState extends State<AnswerSelection> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+            color: widget.fill ? correctColour : backgroundColor,
+            borderRadius: BorderRadius.circular(3),
+            border: Border.all(color: Colors.black, width: 1)),
+        child: SizedBox(
+          width: 30,
+          height: 25,
+          child: Center(
+            child: Text(widget.letter),
+          ),
+        ));
+  }
+}
+
+class StudentDetail extends StatefulWidget {
+  const StudentDetail({
+    super.key,
+    required this.studentId,
+    required this.studentName,
+  });
+
+  final String studentId;
+  final String studentName;
+
+  @override
+  State<StudentDetail> createState() => StudentDetailState();
+}
+
+class StudentDetailState extends State<StudentDetail> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.all(15),
+      margin: EdgeInsets.only(bottom: 17),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: SizedBox(
+        width: 750,
+        height: 70,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 100.0,
+                  margin: EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    ("Student ID"),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 20.0,
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    (":"),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10.0),
+                    child: Text(
+                      (widget.studentId),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Container(
+                  width: 100.0,
+                  margin: EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    ("Name"),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 20.0,
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    (":"),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10.0),
+                    child: Text(
+                      (widget.studentName),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ],
         ),
       ),
@@ -343,7 +467,7 @@ class AddStudent extends StatelessWidget {
                 Container(
                   child: Center(
                     child: IconButton(
-                      icon: Icon(Icons.add_circle_outline_rounded),
+                      icon: Icon(Icons.add),
                       onPressed: () {},
                       iconSize: 30.0,
                     ),
