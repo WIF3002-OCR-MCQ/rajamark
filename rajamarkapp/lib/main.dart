@@ -34,7 +34,6 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/forgot-password': (context) => const ForgotPassPage(),
         '/dashboard': (context) => const DashboardPage(),
-        '/answer-scheme': (context) => const AnswerScheme(),
       },
     );
   }
