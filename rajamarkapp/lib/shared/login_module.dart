@@ -86,6 +86,14 @@ class _LoginModuleState extends State<LoginModule> {
           const SizedBox(height: 16.0),
           TextButton(
             onPressed: () {
+
+              String email = _emailController.text;
+              String password = _passwordController.text;
+
+              // Print email and password to the terminal
+               print('Email: $email');
+                print('Password: $password');
+
               Navigator.push(
                 context, 
                 MaterialPageRoute(builder: (context)=> ForgotPassPage()));

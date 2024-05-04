@@ -40,12 +40,13 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
-  void _logout() {
-    // TODO: Implement logout functionality
-    setState(() {
-      _currentContent = const LoginPage();
-    });
-  }
+ void _logout() {
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => LoginPage()),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:rajamarkapp/dashboard/student_answer.dart';
+
+import '../popups/delete_popup.dart';
 
 class ExamDetailsView extends StatelessWidget {
   final int examId;
@@ -144,7 +147,9 @@ class ExamDetailsView extends StatelessWidget {
                             IconButton(
                               icon: Icon(Icons.visibility),
                               onPressed: () {
-                                // View functionality
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(builder: (context)=> StudentAnswerPage()));
                               },
                             ),
                             IconButton(
@@ -156,7 +161,10 @@ class ExamDetailsView extends StatelessWidget {
                             IconButton(
                               icon: Icon(Icons.delete, color: Colors.red),
                               onPressed: () {
-                                // Delete functionality
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => DeletePopup(),
+                                );
                               },
                             ),
                           ],
