@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rajamarkapp/const/constant.dart';
 import 'package:rajamarkapp/dashboard/exam_detail.dart';
+
+import '../popups/delete_popup.dart';
 
 class ExamDashboard extends StatelessWidget {
   const ExamDashboard({Key? key}) : super(key: key);
@@ -179,7 +182,10 @@ class ExamDashboard extends StatelessWidget {
                             IconButton(
                               icon: Icon(Icons.delete, color: Colors.red),
                               onPressed: () {
-                                // TODO: Implement delete functionality
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => DeletePopup(),
+                                );
                               },
                             ),
                           ],
