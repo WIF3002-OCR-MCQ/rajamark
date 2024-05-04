@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           scaffoldBackgroundColor: backgroundColor,
           textTheme: GoogleFonts.poppinsTextTheme()),
-      initialRoute: '/dashboard',
+      initialRoute: '/',
       routes: {
         '/': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),

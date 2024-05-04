@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rajamarkapp/auth/forgot_pass.dart';
+import 'package:rajamarkapp/dashboard/dashboard.dart';
+import 'package:rajamarkapp/shared/forgotpass_module.dart';
 
 class LoginModule extends StatefulWidget {
   const LoginModule({Key? key}) : super(key: key);
@@ -61,8 +64,10 @@ class _LoginModuleState extends State<LoginModule> {
           const SizedBox(height: 32.0),
           ElevatedButton(
             onPressed: () {
-              // TODO: Implement login functionality
-            },
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context)=> DashboardPage()));
+            } ,
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromARGB(255, 49, 114, 178),
               padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -81,8 +86,10 @@ class _LoginModuleState extends State<LoginModule> {
           const SizedBox(height: 16.0),
           TextButton(
             onPressed: () {
-              // TODO: Implement forgot password functionality
-            },
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context)=> ForgotPassPage()));
+            } ,
             child: Text(
               'Forgot Password?',
               style: GoogleFonts.poppins(

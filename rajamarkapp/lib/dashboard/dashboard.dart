@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:rajamarkapp/auth/login.dart';
 import 'package:rajamarkapp/dashboard/student_answer.dart';
+import 'package:rajamarkapp/shared/login_module.dart';
 import 'package:rajamarkapp/shared/sidebar.dart';
 import 'package:rajamarkapp/dashboard/exam.dart';
 import 'package:rajamarkapp/dashboard/account.dart';
-import 'package:rajamarkapp/dashboard/exam_detail.dart';
+import 'package:rajamarkapp/dashboard/exam_detail.dart';                                         
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+
+  const DashboardPage({
+    Key? key,
+  }) : super(key: key);
+ 
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -37,7 +43,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void _logout() {
     // TODO: Implement logout functionality
     setState(() {
-      _currentContent = const StudentAnswerPage();
+      _currentContent = const LoginPage();
     });
   }
 
