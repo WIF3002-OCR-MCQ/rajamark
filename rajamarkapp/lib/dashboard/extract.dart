@@ -10,7 +10,7 @@ class ExtractingPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double popupWidth = MediaQuery.of(context).size.width * 0.7;
-    double imageSize = popupWidth * 0.4;
+    double imageSize =  MediaQuery.of(context).size.width >= 600 ? popupWidth * 0.4 : popupWidth * 0.8;
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -29,7 +29,7 @@ class ExtractingPopup extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back, size: 36.0),
+                    icon: Icon(Icons.arrow_back,  size: MediaQuery.of(context).size.width >= 600 ? 36 : 20),
                     color: Colors.black,
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -39,7 +39,7 @@ class ExtractingPopup extends StatelessWidget {
                     'Extract',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 32.0,
+                        fontSize: MediaQuery.of(context).size.width >= 600 ? 32 : 16,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -96,7 +96,7 @@ class ExtractingPopup extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 padding: EdgeInsets.only(right: 0, bottom: 0),
                 child: Container(
-                  width: 90,
+                  width: MediaQuery.of(context).size.width >= 600 ? 100 : 70,
                   decoration: BoxDecoration(
                     color: Color(0xFF0074B7),
                   ),
@@ -107,8 +107,8 @@ class ExtractingPopup extends StatelessWidget {
                     children: [
                       Image.asset(
                         'images/4.png', 
-                        width: 24,
-                        height: 24,
+                        width: MediaQuery.of(context).size.width >= 600 ? 24 : 18,
+                        height: MediaQuery.of(context).size.height >= 600 ? 24 : 18,
                       ),
                       TextButton(
                         onPressed: () {
@@ -118,7 +118,7 @@ class ExtractingPopup extends StatelessWidget {
                           'Cancel',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16.0,
+                            fontSize: MediaQuery.of(context).size.width >= 600 ? 16 : 8,
                           ),
                         ),
                       ),
