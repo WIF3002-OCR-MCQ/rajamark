@@ -28,7 +28,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
     );
   }
 
-  Widget _buildDesktopLayout() {
+ Widget _buildDesktopLayout() {
     return Stack(
       children: [
         Row(
@@ -68,12 +68,12 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
           ],
         ),
         Positioned(
-          top: 0,
-          left: 0,
+          top: 10,
+          left: 10,
           child: Image.asset(
             'images/3.png',
-            width: 300,
-            height: 300,
+            width: 100,
+            height: 100,
           ),
         ),
       ],

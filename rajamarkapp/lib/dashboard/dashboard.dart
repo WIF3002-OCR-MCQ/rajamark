@@ -5,7 +5,7 @@ import 'package:rajamarkapp/shared/login_module.dart';
 import 'package:rajamarkapp/shared/sidebar.dart';
 import 'package:rajamarkapp/dashboard/exam.dart';
 import 'package:rajamarkapp/dashboard/account.dart';
-import 'package:rajamarkapp/dashboard/exam_detail.dart';                                         
+import 'package:rajamarkapp/dashboard/exam_detail.dart';     
 
 class DashboardPage extends StatefulWidget {
 

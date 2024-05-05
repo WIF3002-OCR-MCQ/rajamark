@@ -7,6 +7,7 @@ import 'package:rajamarkapp/dashboard/dashboard.dart';
 import 'package:rajamarkapp/database/database.dart';
 import 'package:rajamarkapp/auth/register.dart';
 import 'package:rajamarkapp/auth/login.dart';
+import 'package:rajamarkapp/auth/verify_email.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'const/constant.dart';
@@ -33,12 +34,13 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           scaffoldBackgroundColor: backgroundColor,
           textTheme: GoogleFonts.poppinsTextTheme()),
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
-        '/': (context) => const LoginPage(),
+        '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/forgot-password': (context) => const ForgotPassPage(),
         '/dashboard': (context) => const DashboardPage(),
+        '/verify-email' :(context) => const VerifyEmailPage(),
       },
     );
   }
