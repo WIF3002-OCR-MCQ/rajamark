@@ -426,7 +426,9 @@ class TitleIconTextButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pop(context);
+        },
         style: TextButton.styleFrom(
           iconColor: Colors.black,
           foregroundColor: Colors.black,

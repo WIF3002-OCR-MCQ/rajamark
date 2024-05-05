@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:rajamarkapp/dashboard/student_answer.dart';
+import 'package:rajamarkapp/popups/delete_student_data.dart';
+import 'package:rajamarkapp/popups/edit_result_popup.dart';
 
 import '../popups/delete_popup.dart';
 import 'package:rajamarkapp/dashboard/file_picker.dart';
@@ -165,7 +167,10 @@ class ExamDetailsView extends StatelessWidget {
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: () {
-                                // Edit functionality
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => EditResultPopUp(),
+                                );
                               },
                             ),
                             IconButton(
@@ -173,7 +178,8 @@ class ExamDetailsView extends StatelessWidget {
                               onPressed: () {
                                 showDialog(
                                   context: context,
-                                  builder: (context) => DeletePopup(),
+                                  builder: (context) =>
+                                      DeleteStudentDataPopup(),
                                 );
                               },
                             ),
