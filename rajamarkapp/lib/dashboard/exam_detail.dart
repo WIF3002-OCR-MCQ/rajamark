@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:rajamarkapp/dashboard/student_answer.dart';
 
 import '../popups/delete_popup.dart';
+import 'package:rajamarkapp/dashboard/file_picker.dart';
 
 class ExamDetailsView extends StatelessWidget {
   final int examId;
@@ -20,7 +21,12 @@ class ExamDetailsView extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton.icon(
               onPressed: () {
-                // TODO: Implement upload answer functionality
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return FilePickerPopup(isUploadMode: true); // Pass mode here if true, will show upload else will show extract
+                  },
+                );
               },
               icon: Icon(Icons.upload, color: Colors.white),
               label: Text(
