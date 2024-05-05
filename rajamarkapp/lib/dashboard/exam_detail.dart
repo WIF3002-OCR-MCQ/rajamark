@@ -24,7 +24,9 @@ class ExamDetailsView extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return FilePickerPopup(isUploadMode: true); // Pass mode here if true, will show upload else will show extract
+                    return FilePickerPopup(
+                        isUploadMode:
+                            true); // Pass mode here if true, will show upload else will show extract
                   },
                 );
               },
@@ -154,8 +156,10 @@ class ExamDetailsView extends StatelessWidget {
                               icon: Icon(Icons.visibility),
                               onPressed: () {
                                 Navigator.push(
-                                  context, 
-                                  MaterialPageRoute(builder: (context)=> StudentAnswerPage()));
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            StudentAnswerPage()));
                               },
                             ),
                             IconButton(
