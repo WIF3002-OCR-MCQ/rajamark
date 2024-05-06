@@ -2,15 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:rajamarkapp/const/constant.dart';
 
 class SampleAnswerSecondPopUp extends StatefulWidget {
-  const SampleAnswerSecondPopUp({super.key, required this.quantity});
+  SampleAnswerSecondPopUp(
+      {super.key, required this.quantity, this.showRedText = false});
   final int quantity;
+  bool showRedText;
+
   @override
   State<SampleAnswerSecondPopUp> createState() =>
-      _SampleAnswerSecondPopUpState();
+      _SampleAnswerSecondPopUpState(this.quantity);
 }
 
 class _SampleAnswerSecondPopUpState extends State<SampleAnswerSecondPopUp> {
   final _formKey = GlobalKey<FormState>();
+  final int quantity;
+  bool showRedText = false;
+
+  List<bool>? _answerFilled;
+
+  _SampleAnswerSecondPopUpState(this.quantity);
+
+  @override
+  void initState() {
+    super.initState();
+    _answerFilled = List<bool>.filled(quantity, false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +117,10 @@ class _SampleAnswerSecondPopUpState extends State<SampleAnswerSecondPopUp> {
                                             horizontal: 10),
                                         child: Center(
                                           child: TextFormField(
+                                            onChanged: (value) => setState(() {
+                                              _answerFilled?[index] =
+                                                  value.isNotEmpty;
+                                            }),
                                             decoration: const InputDecoration(
                                                 border: OutlineInputBorder(),
                                                 fillColor: Colors.white,
@@ -125,6 +144,13 @@ class _SampleAnswerSecondPopUpState extends State<SampleAnswerSecondPopUp> {
                         style: TextStyle(color: Colors.red, fontSize: 16),
                       ),
                     ),
+              widget.showRedText
+                  ? Text(
+                      ("Please ensure all questions are filled up"),
+                      style: TextStyle(
+                          color: warningColour, fontWeight: FontWeight.bold),
+                    )
+                  : Container(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
@@ -156,7 +182,12 @@ class _SampleAnswerSecondPopUpState extends State<SampleAnswerSecondPopUp> {
                       flex: 2,
                       child: ElevatedButton(
                         onPressed: () {
-                          // TODO: Add functionality
+                          if (_answerFilled?.every((element) => element) ??
+                              false) {
+                            // Insert API/DB logic
+                          } else {
+                            setState(() => widget.showRedText = true);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: backgroundColor,
