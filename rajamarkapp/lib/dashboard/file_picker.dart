@@ -9,6 +9,7 @@ class DropboxWidget extends StatefulWidget {
 }
 
 class _DropboxWidgetState extends State<DropboxWidget> {
+
   List<String> _droppedFiles = [];
 
   @override
@@ -71,6 +72,12 @@ class FilePickerPopup extends StatelessWidget {
 
   final bool isUploadMode;
 
+    bool isDesktop (BuildContext context)=>
+    MediaQuery.of(context).size.width >= 850;
+
+  bool isMobile (BuildContext context) =>
+    MediaQuery.of(context).size.width < 600;
+
   const FilePickerPopup({Key? key, required this.isUploadMode}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -81,6 +88,7 @@ class FilePickerPopup extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
+
       child: Container(
         width: popupWidth,
         padding: const EdgeInsets.all(16.0),
@@ -106,9 +114,10 @@ class FilePickerPopup extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16.0),
-            Row(
+            Row( // the container should be hide and show only icon when mobile size is less than 400
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (isDesktop(context))
                 Container(
                   width: 250,
                   child: 
