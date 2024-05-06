@@ -33,6 +33,7 @@ class AnswerSchemeBody extends StatelessWidget {
           ),
           ThirdRow(),
           FourthRow(),
+          SaveButton(),
         ],
       ),
     );
@@ -114,11 +115,11 @@ class FourthRow extends StatelessWidget {
           child: Align(
             alignment: Alignment.topCenter,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.55,
+              height: MediaQuery.of(context).size.height * 0.5,
               child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                 return Container(
-                  height: constraints.maxHeight * 0.55,
+                  height: constraints.maxHeight * 0.5,
                   padding: EdgeInsets.all(14),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -184,11 +185,11 @@ class FourthRow extends StatelessWidget {
           child: Align(
             alignment: Alignment.topCenter,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.55,
+              height: MediaQuery.of(context).size.height * 0.5,
               child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                 return Container(
-                  height: MediaQuery.of(context).size.height * 0.55,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   padding: EdgeInsets.all(14),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -213,6 +214,43 @@ class FourthRow extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class SaveButton extends StatelessWidget {
+  const SaveButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(20.0),
+      padding: EdgeInsets.all(5.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 500,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: blueButtonText,
+                foregroundColor: backgroundColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: Text(
+                ("Save"),
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
