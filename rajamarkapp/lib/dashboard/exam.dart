@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rajamarkapp/dashboard/create_exam.dart';
 import 'package:rajamarkapp/dashboard/exam_detail.dart';
 
 import '../popups/delete_popup.dart';
@@ -76,7 +77,12 @@ class ExamDashboard extends StatelessWidget {
               // "Create" button with right next icon
               ElevatedButton.icon(
                 onPressed: () {
-                  // TODO: Implement create exam functionality
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CreateExamPage(),
+                    ),
+                  );
                 },
                 icon: Icon(Icons.add,
                     color:

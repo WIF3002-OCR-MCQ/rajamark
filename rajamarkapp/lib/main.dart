@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rajamarkapp/auth/forgot_pass.dart';
+import 'package:rajamarkapp/dashboard/create_exam.dart';
 import 'package:rajamarkapp/dashboard/dashboard.dart';
 import 'package:rajamarkapp/dashboard/extract.dart';
 import 'package:rajamarkapp/database/database.dart';
@@ -20,7 +21,7 @@ void main() async {
 
   //if (Platform.isWindows) {
   //  WindowManager.instance.setMinimumSize(const Size(1200, 850));
- //  }
+  //  }
   runApp(const MyApp());
 }
 
@@ -41,7 +42,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/forgot-password': (context) => const ForgotPassPage(),
         '/dashboard': (context) => const DashboardPage(),
-        '/verify-email' :(context) => const VerifyEmailPage(),
+        '/verify-email': (context) => const VerifyEmailPage(),
+        '/createExamPage': (context) => const CreateExamPage(),
       },
     );
   }
