@@ -15,12 +15,12 @@ import 'const/constant.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FirebaseInitialization.initialize();
-  await windowManager.ensureInitialized();
+  //await FirebaseInitialization.initialize();
+  //await windowManager.ensureInitialized();
 
-  if (Platform.isWindows) {
-    WindowManager.instance.setMinimumSize(const Size(1200, 850));
-  }
+  //if (Platform.isWindows) {
+  //  WindowManager.instance.setMinimumSize(const Size(1200, 850));
+ //  }
   runApp(const MyApp());
 }
 
