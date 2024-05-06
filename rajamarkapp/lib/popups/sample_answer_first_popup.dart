@@ -30,6 +30,7 @@ class _SampleAnswerFirstPopUpState extends State<SampleAnswerFirstPopUp> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
+                style: const TextStyle(fontWeight: FontWeight.bold),
                 controller: _quantityController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
@@ -37,9 +38,6 @@ class _SampleAnswerFirstPopUpState extends State<SampleAnswerFirstPopUp> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                ),
-                style: GoogleFonts.poppins(
-                  FontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(
@@ -63,11 +61,12 @@ class _SampleAnswerFirstPopUpState extends State<SampleAnswerFirstPopUp> {
                     onPressed: () {
                       int enteredQuantity =
                           int.tryParse(_quantityController.text) ?? 0;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SampleAnswerSecondPopUp(
-                                quantity: enteredQuantity)),
+                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (context) => SampleAnswerSecondPopUp(
+                          quantity: enteredQuantity,
+                        ),
                       );
                     },
                     child: const Text('Next'),
