@@ -116,7 +116,6 @@ class SecondRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TitleIconTextButtonWidget(),
-          EditResultWidget(),
         ],
       ),
     );
@@ -437,25 +436,6 @@ class TitleIconTextButtonWidget extends StatelessWidget {
         label: const Text(
           'Results (View)',
           style: TextStyle(fontSize: 32),
-        ));
-  }
-}
-
-class EditResultWidget extends StatelessWidget {
-  const EditResultWidget({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-        onPressed: () {},
-        style: TextButton.styleFrom(
-            backgroundColor: Color(0xffbfd7ed),
-            iconColor: Color(0xff0074b7),
-            foregroundColor: Color(0xff0074b7),
-            padding: EdgeInsets.all(18)),
-        icon: const Icon(Icons.edit),
-        label: const Text(
-          'Edit Results',
-          style: TextStyle(fontSize: 14),
         ));
   }
 }
