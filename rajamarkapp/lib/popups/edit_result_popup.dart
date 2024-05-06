@@ -161,8 +161,8 @@ class _EditResultPopUpState extends State<EditResultPopUp> {
                           // TODO: Add functionality
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: warningColour,
-                          foregroundColor: backgroundColor,
+                          backgroundColor: backgroundColor,
+                          foregroundColor: blueButtonText,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
