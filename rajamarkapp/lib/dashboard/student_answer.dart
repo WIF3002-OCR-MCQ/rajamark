@@ -1,11 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:rajamarkapp/auth/login.dart';
+import 'package:rajamarkapp/dashboard/account.dart';
+import 'package:rajamarkapp/dashboard/exam.dart';
+import 'package:rajamarkapp/dashboard/exam_detail.dart';
+import 'package:rajamarkapp/shared/sidebar.dart';
+import 'package:rajamarkapp/shared/top_row_widget.dart';
 
-class StudentAnswerPage extends StatelessWidget {
-  const StudentAnswerPage({Key? key}) : super(key: key);
+class StudentAnswerPage extends StatefulWidget {
+  const StudentAnswerPage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _StudentAnswerPageState createState() => _StudentAnswerPageState();
+}
+
+class _StudentAnswerPageState extends State<StudentAnswerPage> {
+  Widget _currentContent = const StudentAnswerBody();
+  ExamDetailsView? _examDetailsView;
+
+  void _showExamDashboard() {
+    setState(() {
+      _currentContent = const ExamDashboard();
+    });
+  }
+
+  void _showExamDetailsView(int examId) {
+    setState(() {
+      _examDetailsView = ExamDetailsView(examId: examId);
+    });
+  }
+
+  void _showAccountDashboard() {
+    setState(() {
+      _currentContent = const AccountDashboard();
+    });
+  }
+
+  void _logout() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const StudentAnswerBody();
+    return Scaffold(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth < 700) {
+            // Mobile layout
+            return Column(
+              children: [
+                Sidebar(
+                  onExamTap: _showExamDashboard,
+                  onAccountTap: _showAccountDashboard,
+                  onLogoutTap: _logout,
+                ),
+                Expanded(
+                  child: _currentContent,
+                ),
+              ],
+            );
+          } else {
+            // Desktop layout
+            return Row(
+              children: [
+                Sidebar(
+                  onExamTap: _showExamDashboard,
+                  onAccountTap: _showAccountDashboard,
+                  onLogoutTap: _logout,
+                ),
+                Expanded(
+                  child: _currentContent,
+                ),
+              ],
+            );
+          }
+        },
+      ),
+    );
   }
 }
 
@@ -27,20 +102,6 @@ class StudentAnswerBody extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class TopRowWidget extends StatelessWidget {
-  const TopRowWidget({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SearchBarWidget(),
-        ProfileIconTextButtonWidget(),
-      ],
     );
   }
 }
@@ -164,92 +225,6 @@ class FourthRow extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-}
-
-class ProfileIconTextButtonWidget extends StatelessWidget {
-  const ProfileIconTextButtonWidget({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return TextButton.icon(
-        onPressed: () {},
-        style: TextButton.styleFrom(
-          iconColor: Colors.black,
-          foregroundColor: Colors.black,
-        ),
-        icon: const Icon(Icons.account_circle_rounded),
-        label: const Text('Umi Arifah Basri'));
-  }
-}
-
-class SearchBarWidget extends StatefulWidget {
-  const SearchBarWidget({super.key});
-
-  @override
-  State<SearchBarWidget> createState() => _SearchBarWidgetState();
-}
-
-class _SearchBarWidgetState extends State<SearchBarWidget> {
-  Color getColor(Set<MaterialState> states) {
-    return const Color(0xffF1F3F6);
-  }
-
-  Color getColorShadow(Set<MaterialState> states) {
-    return const Color(0x00000000);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SearchAnchor(
-          viewConstraints: const BoxConstraints(maxHeight: 250),
-          viewBackgroundColor: const Color(0xffF1F3F6),
-          dividerColor: const Color(0xff535669),
-          builder: (BuildContext context, SearchController controller) {
-            return SearchBar(
-              hintText: 'Find tests',
-              constraints: const BoxConstraints(maxWidth: 350),
-              shadowColor: MaterialStateProperty.resolveWith((getColorShadow)),
-              controller: controller,
-              backgroundColor: MaterialStateProperty.resolveWith((getColor)),
-              padding: const MaterialStatePropertyAll<EdgeInsets>(
-                  EdgeInsets.symmetric(horizontal: 16.0)),
-              onTap: () {
-                controller.openView();
-              },
-              onChanged: (_) {
-                controller.openView();
-              },
-              trailing: <Widget>[
-                IconButton(
-                  hoverColor: Colors.transparent,
-                  onPressed: () {
-                    controller.openView();
-                  },
-                  icon: const Icon(Icons.search),
-                ),
-              ],
-            );
-          },
-          suggestionsBuilder:
-              (BuildContext context, SearchController controller) {
-            return List<ListTile>.generate(
-              20,
-              (int index) {
-                final String item = 'item $index';
-                return ListTile(
-                  title: Text(item),
-                  onTap: () {
-                    setState(() {
-                      controller.closeView(item);
-                    });
-                  },
-                );
-              },
-            );
-          }),
     );
   }
 }
@@ -451,7 +426,9 @@ class TitleIconTextButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pop(context);
+        },
         style: TextButton.styleFrom(
           iconColor: Colors.black,
           foregroundColor: Colors.black,
