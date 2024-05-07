@@ -42,6 +42,7 @@ dependencies:
   google_fonts: ^6.2.1
   fl_chart: ^0.67.0
   window_manager: ^0.3.8
+  flutter_dropzone: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +66,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/
+    - Images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
