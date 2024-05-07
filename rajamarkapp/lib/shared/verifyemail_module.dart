@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rajamarkapp/auth/verify_email.dart';
+import 'package:rajamarkapp/auth/login.dart';
 
-class ForgotPassModule extends StatefulWidget {
-  const ForgotPassModule({Key? key}) : super(key: key);
+class VerifyEmailModule extends StatefulWidget {
+  const VerifyEmailModule({Key? key}) : super(key: key);
 
   @override
-  _ForgotPassModuleState createState() => _ForgotPassModuleState();
+  _VerifyEmailModuleState createState() => _VerifyEmailModuleState();
 }
 
-class _ForgotPassModuleState extends State<ForgotPassModule> {
+class _VerifyEmailModuleState extends State<VerifyEmailModule> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool isLinkSent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,51 +21,36 @@ class _ForgotPassModuleState extends State<ForgotPassModule> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 32.0),
-          Center (
+          Center(
             child: Text(
-              'Forgot Your Password?',
+              'Verify Email',
               style: GoogleFonts.poppins(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-        ),
-          const SizedBox(height: 32.0),
-          TextField(
-            controller: _emailController,
-            decoration: InputDecoration(
-              labelText: 'Email',
-              labelStyle: GoogleFonts.poppins(),
-              filled: true,
-              fillColor: const Color(0xFFF5F5F5),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none,
-              ),
-            ),
-            style: GoogleFonts.poppins(),
           ),
-          const SizedBox(height: 16.0),
-           if (isLinkSent)
-            Center(
-              child: Text(
-                'Reset email link sent!',
-                style: GoogleFonts.poppins(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+          const SizedBox(height: 32.0),
+          Text(
+            'Email Sent!',
+            style: GoogleFonts.poppins(
+              fontSize: 22.0,
+              fontWeight: FontWeight.bold,
             ),
+          ),
+          Text(
+            'Please check your email and open the link with the given instructions. Please check your spam folder if you did not receive it.',
+            style: GoogleFonts.poppins(
+              fontSize: 20.0,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
           const SizedBox(height: 32.0),
           ElevatedButton(
             onPressed: () {
-              // TODO: Implement ForgotPass functionality.
+              // TODO: Implement verify email functionality.
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => VerifyEmailPage()));
-            
-              setState(() {
-                isLinkSent = true;
-              });
+                  MaterialPageRoute(builder: (context) => LoginPage()));
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromARGB(255, 49, 114, 178),
@@ -76,15 +60,14 @@ class _ForgotPassModuleState extends State<ForgotPassModule> {
               ),
             ),
             child: Text(
-              'Change Password',
+              'Continue',
               style: GoogleFonts.poppins(
                 fontSize: 18.0,
                 color: Colors.white,
               ),
-              
             ),
-          ),   
-          const SizedBox(height: 32.0),   
+          ),
+          const SizedBox(height: 32.0),
         ],
       ),
     );

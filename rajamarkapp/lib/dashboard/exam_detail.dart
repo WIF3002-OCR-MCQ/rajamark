@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:rajamarkapp/dashboard/student_answer.dart';
+import 'package:rajamarkapp/popups/delete_student_data.dart';
+import 'package:rajamarkapp/popups/edit_result_popup.dart';
+import 'package:rajamarkapp/popups/sample_answer_first_popup.dart';
+import 'package:rajamarkapp/popups/sample_answer_second_popup.dart';
+
+import '../popups/delete_popup.dart';
+import 'package:rajamarkapp/dashboard/file_picker.dart';
 
 class ExamDetailsView extends StatelessWidget {
   final int examId;
@@ -17,7 +25,14 @@ class ExamDetailsView extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton.icon(
               onPressed: () {
-                // TODO: Implement upload answer functionality
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return FilePickerPopup(
+                        isUploadMode:
+                            true); // Pass mode here if true, will show upload else will show extract
+                  },
+                );
               },
               icon: Icon(Icons.upload, color: Colors.white),
               label: Text(
@@ -144,19 +159,31 @@ class ExamDetailsView extends StatelessWidget {
                             IconButton(
                               icon: Icon(Icons.visibility),
                               onPressed: () {
-                                // View functionality
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            StudentAnswerPage()));
                               },
                             ),
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: () {
-                                // Edit functionality
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      SampleAnswerFirstPopUp(),
+                                );
                               },
                             ),
                             IconButton(
                               icon: Icon(Icons.delete, color: Colors.red),
                               onPressed: () {
-                                // Delete functionality
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      DeleteStudentDataPopup(),
+                                );
                               },
                             ),
                           ],

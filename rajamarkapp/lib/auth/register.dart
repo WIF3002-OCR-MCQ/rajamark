@@ -68,12 +68,12 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
         Positioned(
-          top: 0,
-          left: 0,
+          top: 10,
+          left: 10,
           child: Image.asset(
             'images/3.png',
-            width: 300,
-            height: 300,
+            width: 100,
+            height: 100,
           ),
         ),
       ],
