@@ -3,24 +3,20 @@ import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UploadError extends StatelessWidget {
-  const UploadError(
-    String s, {
-    Key? key,
-    required this.errorMessage,
-  }) : super(key: key);
-
-  final String errorMessage;
+  const UploadError({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         backgroundColor: Colors.white,
         child: Container(
             width: 800,
             height: 500,
             child: Column(children: [
-              SizedBox(
+              const SizedBox(
                 width: 10,
                 height: 50,
               ),
@@ -42,7 +38,7 @@ class UploadError extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        errorMessage,
+                        "Image processing failed.\nPlease try again",
                         style: TextStyle(
                           color: Colors.red.shade900, // Dark red text color
                           fontSize: 20.0,
@@ -78,19 +74,19 @@ class UploadError extends StatelessWidget {
                       DropzoneView(
                         onDrop: (dynamic event) {},
                       ),
-                      Center(
+                      const Center(
                         child: Text("Drop files to Upload"),
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
                 height: 10,
               ),
-              Text("or"),
-              SizedBox(
+              const Text("or"),
+              const SizedBox(
                 width: 10,
                 height: 10,
               ),
@@ -108,12 +104,12 @@ class UploadError extends StatelessWidget {
                     style: GoogleFonts.poppins(
                         fontSize: 12, fontWeight: FontWeight.normal),
                   )),
-              SizedBox(
+              const SizedBox(
                 width: 10,
                 height: 100,
               ),
               IconButton(onPressed: () {}, icon: Icon(Icons.close_rounded)),
-              Text("Cancel")
+              const Text("Cancel")
             ])));
   }
 }
