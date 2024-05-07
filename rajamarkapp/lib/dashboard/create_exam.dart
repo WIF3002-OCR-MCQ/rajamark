@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rajamarkapp/dashboard/answer_scheme_page.dart';
 import 'package:rajamarkapp/shared/top_row_widget.dart';
+import 'package:rajamarkapp/const/constant.dart';
 
 class CreateExamPage extends StatefulWidget {
   const CreateExamPage({Key? key}) : super(key: key);
@@ -38,21 +40,24 @@ class _CreateExamPageState extends State<CreateExamPage> {
               thickness: 1, // Adjust the thickness of the divider
               height: 20.0,
             ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
-              child: Text(
-                "Exam Details",
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+
             SizedBox(height: 20), // Add some spacing
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Container(
+                      margin:
+                          EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
+                      child: Text(
+                        "Exam Details",
+                        style: GoogleFonts.poppins(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     Container(
                       height: 400,
                       width: double.infinity,
@@ -205,24 +210,72 @@ class _CreateExamPageState extends State<CreateExamPage> {
                                   ),
                                 ),
                                 Container(
-                                  child: Text(
-                                    'Save',
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Color(0xFF0074B7), // Background color
+                                    borderRadius: BorderRadius.circular(
+                                        8.0), // Rounded corners
                                   ),
-                                  color: Color(0xFF0074B7),
                                   padding: EdgeInsets.all(20.0),
                                   margin: EdgeInsets.all(20.0),
+                                  child: Text(
+                                    'Next',
+                                    style: TextStyle(
+                                      color: Colors.white, // Text color
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            // Corrected placement of Row widget
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        'Grading System:',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      margin: EdgeInsets.only(
+                                          right:
+                                              7.0), // Adjust margin as needed
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        'Grading System:',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
+
+                            SizedBox(height: 20),
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Text(
+                                  'Column 2:',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 SizedBox(
-                                  width:
-                                      200, // Set the width of the text input box
+                                  width: 200,
                                   child: TextField(
                                     onChanged: (value) {
                                       setState(() {
-                                        textFieldValue = value;
+                                        // Handle the state change for Column 2 text field
                                       });
                                     },
                                     decoration: InputDecoration(
@@ -230,19 +283,43 @@ class _CreateExamPageState extends State<CreateExamPage> {
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              10), // Changed the fill color
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
                                     ),
-                                    style: TextStyle(
-                                        color: Colors
-                                            .black), // Changed the text color
+                                    style: TextStyle(color: Colors.black),
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Text(
-                                  'Input: $textFieldValue',
-                                  style: TextStyle(color: Colors.white),
+                                  'Column 3:',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 200,
+                                  child: TextField(
+                                    onChanged: (value) {
+                                      setState(() {
+                                        // Handle the state change for Column 3 text field
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: 'Enter your input here',
+                                      border: OutlineInputBorder(),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                    ),
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ),
                               ],
                             ),
@@ -251,24 +328,291 @@ class _CreateExamPageState extends State<CreateExamPage> {
                       ),
                     ),
                     Container(
-                      height: 100,
-                      width: double.infinity,
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Second Container',
-                          style: TextStyle(color: Colors.white),
+                      // Added container for "Answer Scheme"
+                      margin: EdgeInsets.all(20),
+                      child: Text(
+                        "Answer Scheme",
+                        style: GoogleFonts.poppins(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
+                      ),
+                    ),
+                    Container(
+                      height: 1000,
+                      width: double.infinity,
+                      padding: EdgeInsets.all(20),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 200, vertical: 0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Color(0xffbfd7ed)),
+                      child: const SizedBox(
+                        width: 546,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              QuestionAnswers(
+                                questionNum: 1,
+                                selectedAnswer: "D",
+                              ),
+                              QuestionAnswers(
+                                questionNum: 2,
+                                selectedAnswer: "D",
+                              ),
+                              QuestionAnswers(
+                                questionNum: 3,
+                                selectedAnswer: "B",
+                              ),
+                              QuestionAnswers(
+                                questionNum: 4,
+                                selectedAnswer: "A",
+                              ),
+                              QuestionAnswers(
+                                questionNum: 5,
+                                selectedAnswer: "C",
+                              ),
+                              QuestionAnswers(
+                                questionNum: 6,
+                                selectedAnswer: "A",
+                              ),
+                              QuestionAnswers(
+                                questionNum: 7,
+                                selectedAnswer: "B",
+                              ),
+                              QuestionAnswers(
+                                questionNum: 8,
+                                selectedAnswer: "B",
+                              ),
+                              QuestionAnswers(
+                                questionNum: 10,
+                                selectedAnswer: "D",
+                              ),
+                              AddQuestion(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 300.0, vertical: 0),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              // Navigate to the previous page
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xFF0074B7),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              padding: EdgeInsets.all(20.0),
+                              margin: EdgeInsets.all(20.0),
+                              child: Text(
+                                "Back",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 20,
+                                  color: Colors.white, // Text color
+                                ),
+                              ),
+                            ),
+                          ),
+                          Spacer(), // Use Spacer widget to distribute space
+                          GestureDetector(
+                            onTap: () {
+                              // Navigate to the next page
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    // Replace `AnswerSchemePage()` with the widget for your next page
+                                    return AnswerSchemePage();
+                                  },
+                                ),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xFF0074B7),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              padding: EdgeInsets.all(20.0),
+                              margin: EdgeInsets.all(20.0),
+                              child: Text(
+                                "Save",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 20,
+                                  color: Colors.white, // Text color
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class QuestionAnswers extends StatefulWidget {
+  const QuestionAnswers({
+    required this.questionNum,
+    required this.selectedAnswer,
+    Key? key,
+  }) : super(key: key);
+
+  final int questionNum;
+  final String selectedAnswer;
+
+  @override
+  State<QuestionAnswers> createState() => _QuestionAnswersState();
+}
+
+class _QuestionAnswersState extends State<QuestionAnswers> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(15),
+      margin: EdgeInsets.only(bottom: 17),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: SizedBox(
+        width: 750,
+        height: 70,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Question ${widget.questionNum}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: AnswerSelection(
+                          letter: "A",
+                          fill: widget.selectedAnswer == "A",
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 10.0),
+                        child: AnswerSelection(
+                          letter: "B",
+                          fill: widget.selectedAnswer == "B",
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 10.0),
+                        child: AnswerSelection(
+                          letter: "C",
+                          fill: widget.selectedAnswer == "C",
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 10.0),
+                        child: AnswerSelection(
+                          letter: "D",
+                          fill: widget.selectedAnswer == "D",
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AnswerSelection extends StatelessWidget {
+  const AnswerSelection({
+    required this.letter,
+    required this.fill,
+    Key? key,
+  }) : super(key: key);
+
+  final String letter;
+  final bool fill;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: fill ? correctColour : backgroundColor,
+        borderRadius: BorderRadius.circular(3),
+        border: Border.all(color: Colors.black, width: 1),
+      ),
+      child: SizedBox(
+        width: 30,
+        height: 25,
+        child: Center(
+          child: Text(letter),
+        ),
+      ),
+    );
+  }
+}
+
+class AddQuestion extends StatelessWidget {
+  const AddQuestion({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.all(15),
+      margin: EdgeInsets.only(bottom: 17),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: SizedBox(
+        width: 750,
+        height: 70,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Center(
+                    child: IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {},
+                      iconSize: 30.0,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                child: Text("Click to add question"),
+              )
+            ]),
           ],
         ),
       ),

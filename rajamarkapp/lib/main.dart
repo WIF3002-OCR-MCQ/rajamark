@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rajamarkapp/auth/forgot_pass.dart';
+import 'package:rajamarkapp/dashboard/answer_scheme_page.dart';
 import 'package:rajamarkapp/dashboard/create_exam.dart';
 import 'package:rajamarkapp/dashboard/dashboard.dart';
 import 'package:rajamarkapp/dashboard/extract.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => const DashboardPage(),
         '/verify-email': (context) => const VerifyEmailPage(),
         '/createExamPage': (context) => const CreateExamPage(),
+        '/answerSchemePage': (context) => const AnswerSchemePage(),
       },
     );
   }
