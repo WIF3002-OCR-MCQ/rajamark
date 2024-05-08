@@ -44,6 +44,7 @@ dependencies:
   fl_chart: ^0.67.0
   window_manager: ^0.3.8
   flutter_dropzone: ^4.0.0
+  get: ^4.6.6
 
 dev_dependencies:
   flutter_test:

@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rajamarkapp/GlobalService.dart';
 import 'package:rajamarkapp/auth/forgot_pass.dart';
 import 'package:rajamarkapp/auth/register.dart';
 import 'package:rajamarkapp/auth/verify_email.dart';
 import 'package:rajamarkapp/dashboard/dashboard.dart';
+import 'package:rajamarkapp/services/auth_service.dart';
 import 'package:rajamarkapp/shared/forgotpass_module.dart';
 import 'package:rajamarkapp/shared/verifyemail_module.dart';
+import 'package:rajamarkapp/state/UserState.dart';
 
 class LoginModule extends StatefulWidget {
-  const LoginModule({Key? key}) : super(key: key);
+  const LoginModule({Key? key, required this.dialogBuilder}) : super(key: key);
+
+  final Function(BuildContext, String, String) dialogBuilder;
 
   @override
   _LoginModuleState createState() => _LoginModuleState();
@@ -17,6 +23,28 @@ class LoginModule extends StatefulWidget {
 class _LoginModuleState extends State<LoginModule> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  final AuthService _authService = AuthService();
+
+  void login(BuildContext context) {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      widget.dialogBuilder(context, "Login fail", 'Please fill in all fields');
+      return;
+    }
+
+    _authService
+        .signInWithEmailAndPassword(
+            _emailController.text, _passwordController.text)
+        .then((user) => {
+              if (user != null)
+                {
+                  UserState.to.updateUser(user),
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => DashboardPage()))
+                }
+            })
+        .catchError((e) => print('Error signing in: $e'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +97,7 @@ class _LoginModuleState extends State<LoginModule> {
           const SizedBox(height: 32.0),
           ElevatedButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => DashboardPage()));
+              login(context);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromARGB(255, 49, 114, 178),

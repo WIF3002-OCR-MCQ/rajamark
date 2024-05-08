@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rajamarkapp/GlobalService.dart';
 import 'package:rajamarkapp/auth/forgot_pass.dart';
 import 'package:rajamarkapp/dashboard/answer_scheme_page.dart';
 import 'package:rajamarkapp/dashboard/create_exam.dart';
@@ -17,12 +19,14 @@ import 'const/constant.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await FirebaseInitialization.initialize();
-  //await windowManager.ensureInitialized();
+  await FirebaseInitialization.initialize();
+  await windowManager.ensureInitialized();
+  Get.put<GlobalService>(GlobalService());
 
-  //if (Platform.isWindows) {
-  //  WindowManager.instance.setMinimumSize(const Size(1200, 850));
-  //  }
+  if (Platform.isWindows) {
+   WindowManager.instance.setMinimumSize(const Size(1200, 850));
+   }
+
   runApp(const MyApp());
 }
 

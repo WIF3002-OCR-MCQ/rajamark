@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rajamarkapp/dashboard/answer_scheme_page.dart';
+import 'package:rajamarkapp/modal/Exam.dart';
 import 'package:rajamarkapp/shared/top_row_widget.dart';
 import 'package:rajamarkapp/const/constant.dart';
+import 'package:rajamarkapp/state/ExamState.dart';
 
 class CreateExamPage extends StatefulWidget {
   const CreateExamPage({Key? key}) : super(key: key);
@@ -12,7 +15,33 @@ class CreateExamPage extends StatefulWidget {
 }
 
 class _CreateExamPageState extends State<CreateExamPage> {
-  String textFieldValue = '';
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _courseCodeController = TextEditingController();
+  final _sessionController = TextEditingController();
+
+  void createExam() {
+    Exam newExam = Exam(
+      examId: "", // Firestore will auto-generate an ID
+      title: _titleController.text,
+      description: _descriptionController.text,
+      courseCode: _courseCodeController.text,
+      session: _sessionController.text,
+      grades: [], // Initialize with an empty list of grades
+      studentResults: [], // Initialize with an empty list of student results
+      sampleAnswer: [], // Initialize with an empty list of sample answers
+    );
+
+    ExamState.to.addExam(newExam);
+    // Clear form fields (optional)
+    _titleController.clear();
+    _descriptionController.clear();
+    _courseCodeController.clear();
+    _sessionController.clear();
+
+    // Show success message or navigate back
+    Get.snackbar("Success", "Exam Created!");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,13 +147,14 @@ class _CreateExamPageState extends State<CreateExamPage> {
                                   width:
                                       200, // Set the width of the text input box
                                   child: TextField(
-                                    onChanged: (value) {
-                                      setState(() {
-                                        textFieldValue = value;
-                                      });
-                                    },
+                                    controller: _titleController,
+                                    // onChanged: (value) {
+                                    //   setState(() {
+                                    //     textFieldValue = value;
+                                    //   });
+                                    // },
                                     decoration: InputDecoration(
-                                      hintText: 'Enter your input here',
+                                      hintText: 'Enter title here',
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,
@@ -142,13 +172,14 @@ class _CreateExamPageState extends State<CreateExamPage> {
                                   width:
                                       200, // Set the width of the text input box
                                   child: TextField(
-                                    onChanged: (value) {
-                                      setState(() {
-                                        textFieldValue = value;
-                                      });
-                                    },
+                                    controller: _descriptionController,
+                                    // onChanged: (value) {
+                                    //   setState(() {
+                                    //     textFieldValue = value;
+                                    //   });
+                                    // },
                                     decoration: InputDecoration(
-                                      hintText: 'Enter your input here',
+                                      hintText: 'Enter description here',
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,
@@ -166,13 +197,14 @@ class _CreateExamPageState extends State<CreateExamPage> {
                                   width:
                                       200, // Set the width of the text input box
                                   child: TextField(
-                                    onChanged: (value) {
-                                      setState(() {
-                                        textFieldValue = value;
-                                      });
-                                    },
+                                    controller: _courseCodeController,
+                                    // onChanged: (value) {
+                                    //   setState(() {
+                                    //     textFieldValue = value;
+                                    //   });
+                                    // },
                                     decoration: InputDecoration(
-                                      hintText: 'Enter your input here',
+                                      hintText: 'Enter course code here',
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,
@@ -190,13 +222,14 @@ class _CreateExamPageState extends State<CreateExamPage> {
                                   width:
                                       200, // Set the width of the text input box
                                   child: TextField(
-                                    onChanged: (value) {
-                                      setState(() {
-                                        textFieldValue = value;
-                                      });
-                                    },
+                                    controller: _sessionController,
+                                    // onChanged: (value) {
+                                    //   setState(() {
+                                    //     textFieldValue = value;
+                                    //   });
+                                    // },
                                     decoration: InputDecoration(
-                                      hintText: 'Enter your input here',
+                                      hintText: 'Enter session here',
                                       border: OutlineInputBorder(),
                                       filled: true,
                                       fillColor: Colors.white,
@@ -209,120 +242,43 @@ class _CreateExamPageState extends State<CreateExamPage> {
                                             .black), // Changed the text color
                                   ),
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color:
-                                        Color(0xFF0074B7), // Background color
-                                    borderRadius: BorderRadius.circular(
-                                        8.0), // Rounded corners
-                                  ),
-                                  padding: EdgeInsets.all(20.0),
-                                  margin: EdgeInsets.all(20.0),
-                                  child: Text(
-                                    'Next',
-                                    style: TextStyle(
-                                      color: Colors.white, // Text color
-                                    ),
-                                  ),
-                                )
+                                //=================================Right Part=====================
+                                // Container(
+                                //   decoration: BoxDecoration(
+                                //     color:
+                                //         Color(0xFF0074B7), // Background color
+                                //     borderRadius: BorderRadius.circular(
+                                //         8.0), // Rounded corners
+                                //   ),
+                                //   padding: EdgeInsets.all(20.0),
+                                //   margin: EdgeInsets.all(20.0),
+                                //   child: Text(
+                                //     'Next',
+                                //     style: TextStyle(
+                                //       color: Colors.white, // Text color
+                                //     ),
+                                //   ),
+                                // )
                               ],
                             ),
                             // Corrected placement of Row widget
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      child: Text(
-                                        'Grading System:',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      margin: EdgeInsets.only(
-                                          right:
-                                              7.0), // Adjust margin as needed
+                                Container(
+                                  child: Text(
+                                    'Grading System:',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    Container(
-                                      child: Text(
-                                        'Grading System:',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: 20),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Column 2:',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 200,
-                                  child: TextField(
-                                    onChanged: (value) {
-                                      setState(() {
-                                        // Handle the state change for Column 2 text field
-                                      });
-                                    },
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter your input here',
-                                      border: OutlineInputBorder(),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                    ),
-                                    style: TextStyle(color: Colors.black),
-                                  ),
+                                  margin: EdgeInsets.only(
+                                      right: 7.0), // Adjust margin as needed
                                 ),
                               ],
                             ),
                             SizedBox(height: 20),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Column 3:',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 200,
-                                  child: TextField(
-                                    onChanged: (value) {
-                                      setState(() {
-                                        // Handle the state change for Column 3 text field
-                                      });
-                                    },
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter your input here',
-                                      border: OutlineInputBorder(),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                    ),
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),

@@ -28,8 +28,7 @@ class AuthService {
       );
       return userCredential.user;
     } catch (e) {
-      print('Error registering user: $e');
-      return null;
+      throw e;
     }
   }
 

@@ -1,8 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rajamarkapp/services/auth_service.dart';
 
 class RegisterModule extends StatefulWidget {
-  const RegisterModule({Key? key}) : super(key: key);
+  const RegisterModule({Key? key, required this.dialogBuilder})
+      : super(key: key);
+
+  final Function(BuildContext, String, String) dialogBuilder;
 
   @override
   _RegisterModuleState createState() => _RegisterModuleState();
@@ -11,6 +17,43 @@ class RegisterModule extends StatefulWidget {
 class _RegisterModuleState extends State<RegisterModule> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  final AuthService _authService = AuthService();
+
+  Future<void> register(context) async {
+    if (_emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
+        _confirmPasswordController.text.isEmpty) {
+      await widget.dialogBuilder(
+          context, "Register fail", 'Please fill in all fields');
+      return;
+    }
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      await widget.dialogBuilder(context, "Register fail",
+          'Password and Confirm Password does not match');
+      return;
+    }
+
+    try {
+      final User? user = await _authService.registerWithEmailAndPassword(
+          _emailController.text, _passwordController.text);
+
+      if (user != null) {
+        print('User registered: ${user.email}');
+        await widget.dialogBuilder(context, "Register success",
+            'You have successfully registered. Please proceed to login page to continue.');
+        Navigator.pop(context);
+        return;
+      }
+    } catch (e) {
+      print('Error registering user: $e');
+      await widget.dialogBuilder(
+          context, "Error registering", 'Error registering user: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +71,7 @@ class _RegisterModuleState extends State<RegisterModule> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-        ),
+          ),
           const SizedBox(height: 32.0),
           TextField(
             controller: _emailController,
@@ -62,7 +105,7 @@ class _RegisterModuleState extends State<RegisterModule> {
           ),
           const SizedBox(height: 16.0),
           TextField(
-            controller: _passwordController,
+            controller: _confirmPasswordController,
             obscureText: true,
             decoration: InputDecoration(
               labelText: 'Confirm Password',
@@ -78,8 +121,8 @@ class _RegisterModuleState extends State<RegisterModule> {
           ),
           const SizedBox(height: 32.0),
           ElevatedButton(
-            onPressed: () {
-              // TODO: Implement Register functionality.
+            onPressed: () async {
+              await register(context);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromARGB(255, 49, 114, 178),
@@ -94,10 +137,22 @@ class _RegisterModuleState extends State<RegisterModule> {
                 fontSize: 18.0,
                 color: Colors.white,
               ),
-              
             ),
-          ),   
-          const SizedBox(height: 32.0),   
+          ),
+          const SizedBox(height: 16.0),
+          TextButton(
+            onPressed: () {
+              //Go to Register Page
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Already have an account? Login here.',
+              style: GoogleFonts.poppins(
+                color: const Color.fromARGB(255, 0, 0, 0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16.0),
         ],
       ),
     );

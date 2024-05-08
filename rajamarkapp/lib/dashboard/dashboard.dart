@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rajamarkapp/auth/login.dart';
 import 'package:rajamarkapp/dashboard/student_answer.dart';
+import 'package:rajamarkapp/services/firebase_service.dart';
 import 'package:rajamarkapp/shared/login_module.dart';
 import 'package:rajamarkapp/shared/sidebar.dart';
 import 'package:rajamarkapp/dashboard/exam.dart';
@@ -21,6 +22,13 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   Widget _currentContent = const ExamDashboard();
   ExamDetailsView? _examDetailsView;
+  FirebaseService firebaseService = FirebaseService();
+
+  @override
+  void initState() {
+    super.initState();
+    firebaseService.getExams();
+  }
 
   void _showExamDashboard() {
     setState(() {

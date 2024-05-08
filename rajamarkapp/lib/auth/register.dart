@@ -11,9 +11,40 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
- @override
+  Future<void> _dialogBuilder(
+      BuildContext context, String title, String message) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            // TextButton(
+            //   style: TextButton.styleFrom(
+            //     textStyle: Theme.of(context).textTheme.labelLarge,
+            //   ),
+            //   child: const Text('Enable'),
+            //   onPressed: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(
@@ -59,7 +90,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: const Center(child: RegisterModule()),
+                      child: Center(
+                          child: RegisterModule(
+                        dialogBuilder: _dialogBuilder,
+                      )),
                     ),
                   ),
                 ),
@@ -129,9 +163,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 width: MediaQuery.of(context).size.width,
                 height: 700,
                 color: Colors.white,
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                  child: Center(child: RegisterModule()),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: Center(
+                      child: RegisterModule(
+                    dialogBuilder: _dialogBuilder,
+                  )),
                 ),
               ),
             ),

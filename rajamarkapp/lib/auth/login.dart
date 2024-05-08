@@ -30,6 +30,39 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Future<void> _dialogBuilder(
+      BuildContext context, String title, String message) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            // TextButton(
+            //   style: TextButton.styleFrom(
+            //     textStyle: Theme.of(context).textTheme.labelLarge,
+            //   ),
+            //   child: const Text('Enable'),
+            //   onPressed: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildDesktopLayout() {
     return Stack(
       children: [
@@ -61,7 +94,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: const Center(child: LoginModule()),
+                      child: Center(
+                          child: LoginModule(dialogBuilder: _dialogBuilder)),
                     ),
                   ),
                 ),
@@ -132,9 +166,10 @@ class _LoginPageState extends State<LoginPage> {
                 width: MediaQuery.of(context).size.width,
                 height: 700,
                 color: Colors.white,
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                  child: Center(child: LoginModule()),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                  child:
+                      Center(child: LoginModule(dialogBuilder: _dialogBuilder)),
                 ),
               ),
             ),
