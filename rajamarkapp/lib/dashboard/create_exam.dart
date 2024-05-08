@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rajamarkapp/dashboard/answer_scheme_page.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
+import 'package:rajamarkapp/modal/Grade.dart';
 import 'package:rajamarkapp/shared/top_row_widget.dart';
 import 'package:rajamarkapp/const/constant.dart';
 import 'package:rajamarkapp/state/ExamState.dart';
@@ -14,33 +17,156 @@ class CreateExamPage extends StatefulWidget {
   State<CreateExamPage> createState() => _CreateExamPageState();
 }
 
+class QuestionModal {
+  final int questionNum;
+  final String selectedAnswer;
+
+  QuestionModal({required this.questionNum, required this.selectedAnswer});
+}
+
+class GradeModal {
+  final String grade;
+  final int marks;
+
+  GradeModal({required this.grade, required this.marks});
+}
+
 class _CreateExamPageState extends State<CreateExamPage> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _courseCodeController = TextEditingController();
   final _sessionController = TextEditingController();
 
-  void createExam() {
-    Exam newExam = Exam(
-      examId: "", // Firestore will auto-generate an ID
-      title: _titleController.text,
-      description: _descriptionController.text,
-      courseCode: _courseCodeController.text,
-      session: _sessionController.text,
-      grades: [], // Initialize with an empty list of grades
-      studentResults: [], // Initialize with an empty list of student results
-      sampleAnswer: [], // Initialize with an empty list of sample answers
+  List<String> gradeName = [
+    "A",
+    "A-",
+    "B+",
+    "B",
+    // "B-",
+    // "C+",
+    // "C",
+    // "D",
+    // "F",
+  ];
+
+  Map<String, List<TextEditingController>> gradeMap = {};
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   gradeName.forEach((grade) {
+  //     gradeMap[grade] = [TextEditingController(), TextEditingController()];
+  //   });
+  // }
+
+  _CreateExamPageState() {
+    gradeName.forEach((grade) {
+      gradeMap[grade] = [TextEditingController(), TextEditingController()];
+    });
+  }
+
+  List<QuestionModal> questionList = [
+    QuestionModal(questionNum: 1, selectedAnswer: "D"),
+    QuestionModal(questionNum: 2, selectedAnswer: "D"),
+    QuestionModal(questionNum: 3, selectedAnswer: "B"),
+    QuestionModal(questionNum: 4, selectedAnswer: "A"),
+    QuestionModal(questionNum: 5, selectedAnswer: "C"),
+    QuestionModal(questionNum: 6, selectedAnswer: "A"),
+    QuestionModal(questionNum: 7, selectedAnswer: "B"),
+    QuestionModal(questionNum: 8, selectedAnswer: "B"),
+    QuestionModal(questionNum: 9, selectedAnswer: "C"),
+    QuestionModal(questionNum: 10, selectedAnswer: "D"),
+  ];
+
+  void addQuestion() {
+    questionList.add(QuestionModal(
+        questionNum: questionList.length + 1, selectedAnswer: "A"));
+    setState(() {});
+  }
+
+  void deleteQuestion(int questionNum) {
+    questionList.removeWhere((element) => element.questionNum == questionNum);
+    setState(() {});
+  }
+
+  Future<void> _dialogBuilder(
+      BuildContext context, String title, String message) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
+  }
 
-    ExamState.to.addExam(newExam);
+  Future<void> createExam(BuildContext context) async {
+    if (_titleController.text.isEmpty ||
+        _descriptionController.text.isEmpty ||
+        _courseCodeController.text.isEmpty ||
+        _sessionController.text.isEmpty) {
+      _dialogBuilder(context, "Error", "Please fill in all the details");
+      return;
+    }
+    Random random = Random();
+    int examIdint = random.nextInt(100001);
+    String examId = "e$examIdint";
+
+    List<String> sampleAnswers =
+        questionList.map((question) => question.selectedAnswer).toList();
+
+    List<Grade> grades = [];
+
+    gradeName.forEach((grade) {
+      int gradeIdInt = random.nextInt(100001);
+      String gradeId = "g" + gradeIdInt.toString();
+
+      grades.add(Grade(
+          gradeId: gradeId,
+          examId: examId.toString(),
+          gradeLabel: grade,
+          lowerScore: int.parse(gradeMap[grade]![0].text),
+          upperScore: int.parse(gradeMap[grade]![1].text)));
+    });
+
+    Exam newExam = Exam(
+        examId: examId.toString(), // Firestore will auto-generate an ID
+        title: _titleController.text,
+        description: _descriptionController.text,
+        courseCode: _courseCodeController.text,
+        session: _sessionController.text,
+        grades: grades, // Initialize with an empty list of grades
+        studentResults: [], // Initialize with an empty list of student results
+        sampleAnswer: sampleAnswers);
+
+    try {
+      ExamState.to.addExam(newExam);
+    } catch (e) {
+      print("Error adding exam: $e");
+      return;
+    }
+
+    await _dialogBuilder(context, "Added Success!", "Exam added successfully!");
+    Navigator.of(context).pop();
+
     // Clear form fields (optional)
-    _titleController.clear();
-    _descriptionController.clear();
-    _courseCodeController.clear();
-    _sessionController.clear();
-
-    // Show success message or navigate back
-    Get.snackbar("Success", "Exam Created!");
+    // _titleController.clear();
+    // _descriptionController.clear();
+    // _courseCodeController.clear();
+    // _sessionController.clear();
   }
 
   @override
@@ -69,7 +195,6 @@ class _CreateExamPageState extends State<CreateExamPage> {
               thickness: 1, // Adjust the thickness of the divider
               height: 20.0,
             ),
-
             SizedBox(height: 20), // Add some spacing
             Expanded(
               child: SingleChildScrollView(
@@ -88,7 +213,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
                       ),
                     ),
                     Container(
-                      height: 400,
+                      height: 800,
                       width: double.infinity,
                       margin: EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
@@ -242,23 +367,6 @@ class _CreateExamPageState extends State<CreateExamPage> {
                                             .black), // Changed the text color
                                   ),
                                 ),
-                                //=================================Right Part=====================
-                                // Container(
-                                //   decoration: BoxDecoration(
-                                //     color:
-                                //         Color(0xFF0074B7), // Background color
-                                //     borderRadius: BorderRadius.circular(
-                                //         8.0), // Rounded corners
-                                //   ),
-                                //   padding: EdgeInsets.all(20.0),
-                                //   margin: EdgeInsets.all(20.0),
-                                //   child: Text(
-                                //     'Next',
-                                //     style: TextStyle(
-                                //       color: Colors.white, // Text color
-                                //     ),
-                                //   ),
-                                // )
                               ],
                             ),
                             // Corrected placement of Row widget
@@ -276,9 +384,12 @@ class _CreateExamPageState extends State<CreateExamPage> {
                                   margin: EdgeInsets.only(
                                       right: 7.0), // Adjust margin as needed
                                 ),
+                                SizedBox(height: 20),
+                                ...gradeName.map((grade) {
+                                  return gradeRow(grade, gradeMap[grade]!);
+                                }).toList(),
                               ],
                             ),
-                            SizedBox(height: 20),
                           ],
                         ),
                       ),
@@ -303,48 +414,20 @@ class _CreateExamPageState extends State<CreateExamPage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           color: Color(0xffbfd7ed)),
-                      child: const SizedBox(
+                      child: SizedBox(
                         width: 546,
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              QuestionAnswers(
-                                questionNum: 1,
-                                selectedAnswer: "D",
-                              ),
-                              QuestionAnswers(
-                                questionNum: 2,
-                                selectedAnswer: "D",
-                              ),
-                              QuestionAnswers(
-                                questionNum: 3,
-                                selectedAnswer: "B",
-                              ),
-                              QuestionAnswers(
-                                questionNum: 4,
-                                selectedAnswer: "A",
-                              ),
-                              QuestionAnswers(
-                                questionNum: 5,
-                                selectedAnswer: "C",
-                              ),
-                              QuestionAnswers(
-                                questionNum: 6,
-                                selectedAnswer: "A",
-                              ),
-                              QuestionAnswers(
-                                questionNum: 7,
-                                selectedAnswer: "B",
-                              ),
-                              QuestionAnswers(
-                                questionNum: 8,
-                                selectedAnswer: "B",
-                              ),
-                              QuestionAnswers(
-                                questionNum: 10,
-                                selectedAnswer: "D",
-                              ),
-                              AddQuestion(),
+                              ...questionList
+                                  .map((question) => questionAnswers(
+                                        question.questionNum,
+                                        question.selectedAnswer,
+                                      ))
+                                  .toList(),
+                              ElevatedButton(
+                                  onPressed: () => addQuestion(),
+                                  child: Text("Add question")),
                             ],
                           ),
                         ),
@@ -379,15 +462,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
                           Spacer(), // Use Spacer widget to distribute space
                           GestureDetector(
                             onTap: () {
-                              // Navigate to the next page
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    // Replace `AnswerSchemePage()` with the widget for your next page
-                                    return AnswerSchemePage();
-                                  },
-                                ),
-                              );
+                              createExam(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -417,25 +492,56 @@ class _CreateExamPageState extends State<CreateExamPage> {
       ),
     );
   }
-}
 
-class QuestionAnswers extends StatefulWidget {
-  const QuestionAnswers({
-    required this.questionNum,
-    required this.selectedAnswer,
-    Key? key,
-  }) : super(key: key);
+  Widget gradeRow(String grade, List<TextEditingController> controllers) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        children: [
+          SizedBox(width: 32, child: Text(grade)),
+          SizedBox(width: 10),
+          SizedBox(
+            width: 200,
+            child: TextField(
+              keyboardType: TextInputType.number,
+              controller: controllers[0],
 
-  final int questionNum;
-  final String selectedAnswer;
+              decoration: const InputDecoration(
+                hintText: 'Lower score',
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10), // Changed the fill color
+              ),
+              style: TextStyle(color: Colors.black), // Changed the text color
+            ),
+          ),
+          SizedBox(width: 20),
+          Text("-"),
+          SizedBox(width: 20),
+          SizedBox(
+            width: 200,
+            child: TextField(
+              keyboardType: TextInputType.number,
+              controller: controllers[1],
+              decoration: const InputDecoration(
+                hintText: 'Upper score',
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10), // Changed the fill color
+              ),
+              style: TextStyle(color: Colors.black), // Changed the text color
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-  @override
-  State<QuestionAnswers> createState() => _QuestionAnswersState();
-}
-
-class _QuestionAnswersState extends State<QuestionAnswers> {
-  @override
-  Widget build(BuildContext context) {
+  Widget questionAnswers(int questionNum, String selectedAnswer) {
     return Container(
       padding: EdgeInsets.all(15),
       margin: EdgeInsets.only(bottom: 17),
@@ -444,132 +550,81 @@ class _QuestionAnswersState extends State<QuestionAnswers> {
       child: SizedBox(
         width: 750,
         height: 70,
-        child: Column(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
               children: [
-                Text(
-                  'Question ${widget.questionNum}',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Question $questionNum',
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        child: AnswerSelection(
-                          letter: "A",
-                          fill: widget.selectedAnswer == "A",
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10.0),
-                        child: AnswerSelection(
-                          letter: "B",
-                          fill: widget.selectedAnswer == "B",
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10.0),
-                        child: AnswerSelection(
-                          letter: "C",
-                          fill: widget.selectedAnswer == "C",
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10.0),
-                        child: AnswerSelection(
-                          letter: "D",
-                          fill: widget.selectedAnswer == "D",
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          answerSelection(
+                              "A", selectedAnswer == "A", questionNum),
+                          answerSelection(
+                              "B", selectedAnswer == "B", questionNum),
+                          answerSelection(
+                              "C", selectedAnswer == "C", questionNum),
+                          answerSelection(
+                              "D", selectedAnswer == "D", questionNum),
+                        ],
                       ),
                     ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AnswerSelection extends StatelessWidget {
-  const AnswerSelection({
-    required this.letter,
-    required this.fill,
-    Key? key,
-  }) : super(key: key);
-
-  final String letter;
-  final bool fill;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: fill ? correctColour : backgroundColor,
-        borderRadius: BorderRadius.circular(3),
-        border: Border.all(color: Colors.black, width: 1),
-      ),
-      child: SizedBox(
-        width: 30,
-        height: 25,
-        child: Center(
-          child: Text(letter),
-        ),
-      ),
-    );
-  }
-}
-
-class AddQuestion extends StatelessWidget {
-  const AddQuestion({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.only(bottom: 17),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
-      child: SizedBox(
-        width: 750,
-        height: 70,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  child: Center(
-                    child: IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {},
-                      iconSize: 30.0,
-                    ),
                   ),
                 )
               ],
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                child: Text("Click to add question"),
-              )
-            ]),
+            IconButton(
+                onPressed: () {
+                  deleteQuestion(questionNum);
+                },
+                icon: const Icon(Icons.delete))
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget answerSelection(String letter, bool isFilled, int questionNum) {
+    return Padding(
+      padding: EdgeInsets.only(right: 10),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            questionList[questionNum - 1] =
+                QuestionModal(questionNum: questionNum, selectedAnswer: letter);
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: isFilled ? correctColour : backgroundColor,
+            borderRadius: BorderRadius.circular(3),
+            border: Border.all(color: Colors.black, width: 1),
+          ),
+          child: SizedBox(
+            width: 30,
+            height: 25,
+            child: Center(
+              child: Text(letter),
+            ),
+          ),
         ),
       ),
     );

@@ -48,15 +48,6 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.of(context).pop();
               },
             ),
-            // TextButton(
-            //   style: TextButton.styleFrom(
-            //     textStyle: Theme.of(context).textTheme.labelLarge,
-            //   ),
-            //   child: const Text('Enable'),
-            //   onPressed: () {
-            //     Navigator.of(context).pop();
-            //   },
-            // ),
           ],
         );
       },

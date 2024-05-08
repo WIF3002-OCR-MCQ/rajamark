@@ -1,11 +1,17 @@
 import 'package:get/get.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
+import 'package:rajamarkapp/services/firebase_service.dart';
+import 'package:rajamarkapp/state/GradeState.dart';
 
 class ExamState extends GetxService {
   static ExamState get to => Get.find();
   RxList<Exam> exams = RxList<Exam>([]);
+  FirebaseService firebaseService = FirebaseService();
 
-  void addExam(Exam exam) {
+  Future<void> addExam(Exam exam) async {
+    await firebaseService.addExam(exam);
+    GradeState.to.addGradeList(exam.grades);
+
     exams.add(exam);
   }
 

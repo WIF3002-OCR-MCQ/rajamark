@@ -13,6 +13,10 @@ import 'package:rajamarkapp/database/database.dart';
 import 'package:rajamarkapp/auth/register.dart';
 import 'package:rajamarkapp/auth/login.dart';
 import 'package:rajamarkapp/auth/verify_email.dart';
+import 'package:rajamarkapp/state/ExamState.dart';
+import 'package:rajamarkapp/state/GradeState.dart';
+import 'package:rajamarkapp/state/StudentResultState.dart';
+import 'package:rajamarkapp/state/UserState.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'const/constant.dart';
@@ -22,10 +26,14 @@ void main() async {
   await FirebaseInitialization.initialize();
   await windowManager.ensureInitialized();
   Get.put<GlobalService>(GlobalService());
+  Get.put<UserState>(UserState());
+  Get.put<StudentResultState>(StudentResultState());
+  Get.put<GradeState>(GradeState());
+  Get.put<ExamState>(ExamState());
 
   if (Platform.isWindows) {
-   WindowManager.instance.setMinimumSize(const Size(1200, 850));
-   }
+    WindowManager.instance.setMinimumSize(const Size(1200, 850));
+  }
 
   runApp(const MyApp());
 }

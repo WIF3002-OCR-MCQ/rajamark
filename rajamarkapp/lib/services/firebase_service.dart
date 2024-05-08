@@ -32,7 +32,7 @@ class FirebaseService {
     CollectionReference exams = _firestore.collection('exam');
 
     try {
-      await exams.doc().set(examData.toJson());
+      await exams.doc(examData.examId).set(examData.toJson());
       return true;
     } catch (e) {
       print('Error creating exam: $e');
@@ -245,12 +245,12 @@ class FirebaseService {
 
   //------------------- GRADE -------------------
 
-  Future<bool> addGrade(String examId, Map<String, dynamic> gradeData) async {
+  Future<bool> addGrade(Grade gradeData) async {
     CollectionReference grades =
-        FirebaseFirestore.instance.collection('exam/$examId/grades');
+        FirebaseFirestore.instance.collection('exam/${gradeData.examId}/grades');
 
     try {
-      await grades.doc().set(gradeData);
+      await grades.doc(gradeData.gradeId).set(gradeData.toJson());
       return true;
     } catch (e) {
       print('Error creating grade: $e');
