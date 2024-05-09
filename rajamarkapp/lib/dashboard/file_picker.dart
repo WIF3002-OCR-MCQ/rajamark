@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:rajamarkapp/dashboard/extract.dart';
+import 'package:google_vision/google_vision.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:io';
 
 class DropboxWidget extends StatefulWidget {
   @override
@@ -268,7 +271,7 @@ class FilePickerPopup extends StatelessWidget {
                           }
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                          // backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                            shape: MaterialStateProperty.all<OutlinedBorder>(
                             const RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
@@ -306,18 +309,43 @@ class FilePickerPopup extends StatelessWidget {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
       String? filePath = result.files.single.path;
+      String? extracted;
+
+      if(Platform.isWindows || Platform.isLinux || Platform.isMacOS){
+          final String authString = await rootBundle.loadString('assets/auth/auth.json');
+          final googleVision = await GoogleVision.withJwt(authString);
+          List<EntityAnnotation> annotations = await googleVision.textDetection(
+          JsonImage.fromFilePath(filePath!));
+          extracted = annotations[0].description;
+      }
 
       if (filePath != null) {
         // Close initial popup
         Navigator.of(context).pop();
-        
-        // File picked successfully, show extracting popup
+
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return ExtractingPopup(filePath: filePath);
+            return AlertDialog(
+              title: Text('Extracted Text'),
+              content: Text(extracted.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('Close'),
+                ),
+              ],
+            );
           },
         );
+
+        // File picked successfully, show extracting popup
+        // showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return ExtractingPopup(filePath: filePath);
+        //   },
+        // );
       }
     }
   }

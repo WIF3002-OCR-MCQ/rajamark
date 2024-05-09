@@ -45,6 +45,7 @@ dependencies:
   window_manager: ^0.3.8
   flutter_dropzone: ^4.0.0
   get: ^4.6.6
+  google_vision: ^1.2.0+6
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,7 @@ flutter:
 
   assets:
     - Images/
+    - assets/auth/auth.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:
