@@ -208,6 +208,7 @@ class StatisticsWidget extends StatelessWidget {
     return const Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        //Change values for each chart to API value
         MeanDonutChart(
           value: 77,
         ),

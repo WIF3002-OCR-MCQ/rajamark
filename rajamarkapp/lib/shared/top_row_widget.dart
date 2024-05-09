@@ -67,6 +67,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           },
           suggestionsBuilder:
               (BuildContext context, SearchController controller) {
+            //Add search logic here
             return List<ListTile>.generate(
               20,
               (int index) {

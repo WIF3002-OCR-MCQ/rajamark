@@ -16,6 +16,7 @@ class _EditResultPopUpState extends State<EditResultPopUp> {
     if (result != null) {
       List<PlatformFile> platformfile = result.files;
     }
+    //Add image to database here
   }
 
   @override
@@ -141,7 +142,7 @@ class _EditResultPopUpState extends State<EditResultPopUp> {
                         margin: EdgeInsets.only(right: 20),
                         child: ElevatedButton(
                           onPressed: () {
-                            // TODO: Add Functionality
+                            Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: backgroundColor,
@@ -158,7 +159,7 @@ class _EditResultPopUpState extends State<EditResultPopUp> {
                       flex: 3,
                       child: ElevatedButton(
                         onPressed: () {
-                          // TODO: Add functionality
+                          // Update student answer here
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: backgroundColor,
