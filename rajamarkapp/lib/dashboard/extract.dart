@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 class ExtractingPopup extends StatelessWidget {
   final String? filePath;
@@ -10,7 +11,9 @@ class ExtractingPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double popupWidth = MediaQuery.of(context).size.width * 0.7;
-    double imageSize =  MediaQuery.of(context).size.width >= 600 ? popupWidth * 0.4 : popupWidth * 0.8;
+    double imageSize = MediaQuery.of(context).size.width >= 600
+        ? popupWidth * 0.4
+        : popupWidth * 0.8;
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -29,7 +32,9 @@ class ExtractingPopup extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back,  size: MediaQuery.of(context).size.width >= 600 ? 36 : 20),
+                    icon: Icon(Icons.arrow_back,
+                        size:
+                            MediaQuery.of(context).size.width >= 600 ? 36 : 20),
                     color: Colors.black,
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -39,7 +44,8 @@ class ExtractingPopup extends StatelessWidget {
                     'Extract',
                     style: TextStyle(
                       color: Colors.black,
-                        fontSize: MediaQuery.of(context).size.width >= 600 ? 32 : 16,
+                      fontSize:
+                          MediaQuery.of(context).size.width >= 600 ? 32 : 16,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -52,8 +58,8 @@ class ExtractingPopup extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.asset(
-                    'images/ocr.png', //TODO: Image based on the choosen file
+                  Image.file(
+                    File(filePath!), //TODO: Image based on the choosen file
                     width: imageSize,
                     height: imageSize,
                   ),
@@ -90,7 +96,7 @@ class ExtractingPopup extends StatelessWidget {
             SizedBox(height: 8.0),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
               child: Container(
                 alignment: Alignment.bottomRight,
@@ -106,9 +112,11 @@ class ExtractingPopup extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Image.asset(
-                        'images/4.png', 
-                        width: MediaQuery.of(context).size.width >= 600 ? 24 : 18,
-                        height: MediaQuery.of(context).size.height >= 600 ? 24 : 18,
+                        'images/4.png',
+                        width:
+                            MediaQuery.of(context).size.width >= 600 ? 24 : 18,
+                        height:
+                            MediaQuery.of(context).size.height >= 600 ? 24 : 18,
                       ),
                       TextButton(
                         onPressed: () {
@@ -118,7 +126,9 @@ class ExtractingPopup extends StatelessWidget {
                           'Cancel',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: MediaQuery.of(context).size.width >= 600 ? 16 : 8,
+                            fontSize: MediaQuery.of(context).size.width >= 600
+                                ? 16
+                                : 8,
                           ),
                         ),
                       ),
