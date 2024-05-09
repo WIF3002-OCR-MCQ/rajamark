@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rajamarkapp/const/constant.dart';
+import 'package:rajamarkapp/modal/Exam.dart';
+import 'package:rajamarkapp/state/ExamState.dart';
 
 class DeletePopup extends StatelessWidget {
-  const DeletePopup({
-    super.key,
-  });
+  const DeletePopup({super.key, required this.examData});
+
+  final Exam examData;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class DeletePopup extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                // TODO: Add Functionality
+                Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: backgroundColor,
@@ -39,7 +41,8 @@ class DeletePopup extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // TODO: Add functionality
+                ExamState.to.removeExam(examData);
+                Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: warningColour,

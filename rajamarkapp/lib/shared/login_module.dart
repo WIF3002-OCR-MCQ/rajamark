@@ -26,6 +26,13 @@ class _LoginModuleState extends State<LoginModule> {
 
   final AuthService _authService = AuthService();
 
+  @override
+  void initState(){
+    super.initState();
+    _emailController.text = 'abc@gmail.com';
+    _passwordController.text = 'abc123';
+  }
+
   void login(BuildContext context) {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       widget.dialogBuilder(context, "Login fail", 'Please fill in all fields');

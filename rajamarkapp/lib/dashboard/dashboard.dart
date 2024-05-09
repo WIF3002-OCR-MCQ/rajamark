@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:rajamarkapp/auth/login.dart';
-import 'package:rajamarkapp/dashboard/student_answer.dart';
-import 'package:rajamarkapp/services/firebase_service.dart';
-import 'package:rajamarkapp/shared/login_module.dart';
 import 'package:rajamarkapp/shared/sidebar.dart';
 import 'package:rajamarkapp/dashboard/exam.dart';
 import 'package:rajamarkapp/dashboard/account.dart';
-import 'package:rajamarkapp/dashboard/exam_detail.dart';     
+import 'package:rajamarkapp/state/ExamState.dart';
+import 'package:rajamarkapp/state/UserState.dart';
 
 class DashboardPage extends StatefulWidget {
-
   const DashboardPage({
     Key? key,
   }) : super(key: key);
- 
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -21,24 +17,16 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   Widget _currentContent = const ExamDashboard();
-  ExamDetailsView? _examDetailsView;
-  FirebaseService firebaseService = FirebaseService();
 
   @override
   void initState() {
     super.initState();
-    firebaseService.getExams();
+    ExamState.to.getExams();
   }
 
   void _showExamDashboard() {
     setState(() {
       _currentContent = const ExamDashboard();
-    });
-  }
-
-  void _showExamDetailsView(int examId) {
-    setState(() {
-      _examDetailsView = ExamDetailsView(examId: examId);
     });
   }
 
@@ -48,13 +36,13 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
- void _logout() {
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (context) => LoginPage()),
-  );
-}
-
+  void _logout() {
+    UserState.to.removeUser();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

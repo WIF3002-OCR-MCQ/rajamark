@@ -11,59 +11,23 @@ import 'package:rajamarkapp/const/constant.dart';
 import 'package:rajamarkapp/state/ExamState.dart';
 
 class CreateExamPage extends StatefulWidget {
-  const CreateExamPage({Key? key}) : super(key: key);
+  const CreateExamPage({Key? key, this.examData}) : super(key: key);
+
+  final Exam? examData;
 
   @override
   State<CreateExamPage> createState() => _CreateExamPageState();
 }
 
-class QuestionModal {
-  final int questionNum;
-  final String selectedAnswer;
-
-  QuestionModal({required this.questionNum, required this.selectedAnswer});
-}
-
-class GradeModal {
-  final String grade;
-  final int marks;
-
-  GradeModal({required this.grade, required this.marks});
-}
-
 class _CreateExamPageState extends State<CreateExamPage> {
+  bool isEditing = false;
+  Random random = Random();
+
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _courseCodeController = TextEditingController();
   final _sessionController = TextEditingController();
 
-  List<String> gradeName = [
-    "A",
-    "A-",
-    "B+",
-    "B",
-    // "B-",
-    // "C+",
-    // "C",
-    // "D",
-    // "F",
-  ];
-
-  Map<String, List<TextEditingController>> gradeMap = {};
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   gradeName.forEach((grade) {
-  //     gradeMap[grade] = [TextEditingController(), TextEditingController()];
-  //   });
-  // }
-
-  _CreateExamPageState() {
-    gradeName.forEach((grade) {
-      gradeMap[grade] = [TextEditingController(), TextEditingController()];
-    });
-  }
 
   List<QuestionModal> questionList = [
     QuestionModal(questionNum: 1, selectedAnswer: "D"),
@@ -77,6 +41,88 @@ class _CreateExamPageState extends State<CreateExamPage> {
     QuestionModal(questionNum: 9, selectedAnswer: "C"),
     QuestionModal(questionNum: 10, selectedAnswer: "D"),
   ];
+
+  List<String> gradeName = ["A", "A-", "B+", "B", "B-", "C+", "C", "D", "F"];
+
+  Map<String, List<TextEditingController>> gradeMap = {};
+
+  _CreateExamPageState() {
+  gradeName.forEach((grade) {
+    //0 is lowerscore, 1 is higherscore
+    gradeMap[grade] = [TextEditingController(), TextEditingController()];
+
+    switch (grade) {
+      case "A":
+        gradeMap[grade]![0].text = "90";
+        gradeMap[grade]![1].text = "100";
+        break;
+      case "A-":
+        gradeMap[grade]![0].text = "85";
+        gradeMap[grade]![1].text = "89";
+        break;
+      case "B+":
+        gradeMap[grade]![0].text = "80";
+        gradeMap[grade]![1].text = "84";
+        break;
+      case "B":
+        gradeMap[grade]![0].text = "75";
+        gradeMap[grade]![1].text = "79";
+        break;
+      case "B-":
+        gradeMap[grade]![0].text = "70";
+        gradeMap[grade]![1].text = "74";
+        break;
+      case "C+":
+        gradeMap[grade]![0].text = "65";
+        gradeMap[grade]![1].text = "69";
+        break;
+      case "C":
+        gradeMap[grade]![0].text = "60";
+        gradeMap[grade]![1].text = "64";
+        break;
+      case "D":
+        gradeMap[grade]![0].text = "50";
+        gradeMap[grade]![1].text = "59";
+        break;
+      case "F":
+        gradeMap[grade]![0].text = "0";
+        gradeMap[grade]![1].text = "49";
+        break;
+      default:
+        gradeMap[grade]![0].text = "0";
+        gradeMap[grade]![1].text = "0";
+    }
+  });
+}
+
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.examData == null) {
+      return;
+    }
+
+    isEditing = true;
+    _titleController.text = widget.examData!.title;
+    _descriptionController.text = widget.examData!.description;
+    _courseCodeController.text = widget.examData!.courseCode;
+    _sessionController.text = widget.examData!.session;
+
+    widget.examData!.grades.forEach((grade) {
+      gradeMap[grade.gradeLabel]![0].text = grade.lowerScore.toString();
+      gradeMap[grade.gradeLabel]![1].text = grade.upperScore.toString();
+    });
+
+    questionList = widget.examData!.sampleAnswer
+        .asMap()
+        .entries
+        .map((entry) => QuestionModal(
+            questionNum: entry.key + 1, selectedAnswer: entry.value))
+        .toList();
+
+    setState(() {});
+  }
 
   void addQuestion() {
     questionList.add(QuestionModal(
@@ -121,7 +167,6 @@ class _CreateExamPageState extends State<CreateExamPage> {
       _dialogBuilder(context, "Error", "Please fill in all the details");
       return;
     }
-    Random random = Random();
     int examIdint = random.nextInt(100001);
     String examId = "e$examIdint";
 
@@ -161,12 +206,62 @@ class _CreateExamPageState extends State<CreateExamPage> {
 
     await _dialogBuilder(context, "Added Success!", "Exam added successfully!");
     Navigator.of(context).pop();
+  }
 
-    // Clear form fields (optional)
-    // _titleController.clear();
-    // _descriptionController.clear();
-    // _courseCodeController.clear();
-    // _sessionController.clear();
+  Future<void> editExam(BuildContext context) async {
+    if (_titleController.text.isEmpty ||
+        _descriptionController.text.isEmpty ||
+        _courseCodeController.text.isEmpty ||
+        _sessionController.text.isEmpty) {
+      _dialogBuilder(context, "Error", "Please fill in all the details");
+      return;
+    }
+    String examId = widget.examData!.examId;
+
+    List<String> sampleAnswers =
+        questionList.map((question) => question.selectedAnswer).toList();
+
+    List<Grade> grades = [];
+
+    gradeName.forEach((grade) {
+      var existingGrade = widget.examData!.grades.firstWhere(
+        (element) => element.gradeLabel == grade,
+        orElse: () => Grade(
+          gradeId: "g${random.nextInt(100001)}",
+          examId: examId.toString(),
+          gradeLabel: grade,
+          lowerScore: 0,
+          upperScore: 0,
+        ),
+      );
+
+      existingGrade.lowerScore = int.parse(gradeMap[grade]![0].text);
+      existingGrade.upperScore = int.parse(gradeMap[grade]![1].text);
+
+      grades.add(existingGrade);
+    });
+
+    Exam currentExam = Exam(
+        examId: examId.toString(), // Firestore will auto-generate an ID
+        title: _titleController.text,
+        description: _descriptionController.text,
+        courseCode: _courseCodeController.text,
+        session: _sessionController.text,
+        grades: grades, // Initialize with an empty list of grades
+        studentResults: widget.examData!
+            .studentResults, // Initialize with an empty list of student results
+        sampleAnswer: sampleAnswers);
+
+    try {
+      ExamState.to.updateExam(currentExam);
+    } catch (e) {
+      print("Error updating exam: $e");
+      return;
+    }
+
+    await _dialogBuilder(
+        context, "Updated Success!", "Exam updated successfully!");
+    Navigator.of(context).pop();
   }
 
   @override
@@ -461,9 +556,9 @@ class _CreateExamPageState extends State<CreateExamPage> {
                           ),
                           Spacer(), // Use Spacer widget to distribute space
                           GestureDetector(
-                            onTap: () {
-                              createExam(context);
-                            },
+                            onTap: () => isEditing
+                                ? editExam(context)
+                                : createExam(context),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Color(0xFF0074B7),
@@ -472,7 +567,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
                               padding: EdgeInsets.all(20.0),
                               margin: EdgeInsets.all(20.0),
                               child: Text(
-                                "Save",
+                                isEditing ? "Update" : "Save",
                                 style: GoogleFonts.poppins(
                                   fontSize: 20,
                                   color: Colors.white, // Text color
@@ -629,4 +724,18 @@ class _CreateExamPageState extends State<CreateExamPage> {
       ),
     );
   }
+}
+
+class QuestionModal {
+  final int questionNum;
+  final String selectedAnswer;
+
+  QuestionModal({required this.questionNum, required this.selectedAnswer});
+}
+
+class GradeModal {
+  final String grade;
+  final int marks;
+
+  GradeModal({required this.grade, required this.marks});
 }
