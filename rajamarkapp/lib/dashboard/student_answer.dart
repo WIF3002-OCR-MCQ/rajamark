@@ -17,17 +17,10 @@ class StudentAnswerPage extends StatefulWidget {
 
 class _StudentAnswerPageState extends State<StudentAnswerPage> {
   Widget _currentContent = const StudentAnswerBody();
-  ExamDetailsView? _examDetailsView;
 
   void _showExamDashboard() {
     setState(() {
       _currentContent = const ExamDashboard();
-    });
-  }
-
-  void _showExamDetailsView(String examId) {
-    setState(() {
-      _examDetailsView = ExamDetailsView(examId: examId);
     });
   }
 

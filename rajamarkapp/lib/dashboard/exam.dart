@@ -192,7 +192,7 @@ class ExamDashboard extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            ExamDetailsView(examId: examData.examId),
+                            ExamDetailsView(examData: examData),
                       ),
                     );
                   },

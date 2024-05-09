@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:rajamarkapp/dashboard/student_answer.dart';
+import 'package:rajamarkapp/modal/Exam.dart';
+import 'package:rajamarkapp/modal/StudentResult.dart';
 import 'package:rajamarkapp/popups/delete_student_data.dart';
 import 'package:rajamarkapp/popups/edit_result_popup.dart';
 import 'package:rajamarkapp/popups/sample_answer_first_popup.dart';
@@ -11,9 +14,9 @@ import '../popups/delete_popup.dart';
 import 'package:rajamarkapp/dashboard/file_picker.dart';
 
 class ExamDetailsView extends StatelessWidget {
-  final String examId;
+  final Exam examData;
 
-  const ExamDetailsView({Key? key, required this.examId}) : super(key: key);
+  const ExamDetailsView({Key? key, required this.examData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +74,14 @@ class ExamDetailsView extends StatelessWidget {
                     CrossAxisAlignment.start, // Keeps the text left-aligned
                 children: [
                   Text(
-                    'Exam Title: ',
+                    'Exam Title: ${examData.title}',
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text('Exam Description: '),
-                  Text('Course Code: '),
-                  Text('Session: '),
+                  Text('Exam Description: ${examData.description}'),
+                  Text('Course Code:  ${examData.courseCode}'),
+                  Text('Session: ${examData.session}'),
                 ],
               ),
             ),
@@ -86,8 +89,8 @@ class ExamDetailsView extends StatelessWidget {
             Container(
               height: 400,
               child: Center(
-                child:
-                    StatisticsWidget(), //Mean Score, Median Score with vertical divider
+                child: statisticWidget(
+                    examData), //Mean Score, Median Score with vertical divider
               ),
             ),
             SizedBox(height: 16.0),
@@ -125,94 +128,96 @@ class ExamDetailsView extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: ListView.separated(
-                itemCount: 10, // Number of items
-                separatorBuilder: (context, index) =>
-                    Divider(color: Colors.grey),
-                itemBuilder: (context, index) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'S${index + 101}', // Mock Student ID
-                          style: GoogleFonts.poppins(),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Student ${index + 1}', // Mock Student Name
-                          style: GoogleFonts.poppins(),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          ['A', 'B', 'C', 'D', 'F'][index % 5], // Mock Result
-                          style: GoogleFonts.poppins(),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.visibility),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            StudentAnswerPage()));
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => EditResultPopUp(),
-                                );
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      DeleteStudentDataPopup(),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
+                child: examData.studentResults.length == 0
+                    ? const Center(
+                        child: Text("No student data"),
+                      )
+                    : ListView.separated(
+                        itemCount:
+                            examData.studentResults.length, // Number of items
+                        separatorBuilder: (context, index) =>
+                            Divider(color: Colors.grey),
+                        itemBuilder: (context, index) {
+                          StudentResult result = examData.studentResults[index];
+                          return studentResultRow(result, context);
+                        },
+                      )),
           ],
         ),
       ),
     );
   }
-}
 
-class StatisticsWidget extends StatelessWidget {
-  const StatisticsWidget({super.key});
+  Widget studentResultRow(StudentResult result, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            result.studentId,
+            style: GoogleFonts.poppins(),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            result.studentId,
+            style: GoogleFonts.poppins(),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            result.gradeLabel,
+            style: GoogleFonts.poppins(),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: Icon(Icons.visibility),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => StudentAnswerPage()));
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => EditResultPopUp(),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.red),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => DeleteStudentDataPopup(),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
+  Widget statisticWidget(Exam examData) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         //Change values for each chart to API value
         MeanDonutChart(
-          value: 77,
+          value: examData.meanScore,
         ),
-        SizedBox(
+        const SizedBox(
             height: 312,
             child: VerticalDivider(
               thickness: 2,
@@ -220,7 +225,7 @@ class StatisticsWidget extends StatelessWidget {
               color: Color(0xff88899D),
             )),
         MedianDonutChart(
-          value: 81,
+          value: examData.medianScore,
         ),
       ],
     );
