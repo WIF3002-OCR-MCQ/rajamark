@@ -48,7 +48,7 @@ StudentInfo parseInputString(String input) {
       // Extract individual answer choices
       for (int i = 0; i < tokens.length; i += 2) {
         if (i + 1 < tokens.length) {
-          String answer = tokens[i] + ' ' + tokens[i + 1]; // Combine question number and answer choice
+          String answer = tokens[i + 1]; // Exclude question number from the answer
           studentAnswers.add(answer);
         }
       }
