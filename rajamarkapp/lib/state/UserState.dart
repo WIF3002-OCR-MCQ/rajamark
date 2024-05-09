@@ -6,6 +6,10 @@ class UserState extends GetxService {
 
   User? _currentUser;
 
+  void removeUser() {
+    _currentUser = null;
+  }
+
   void updateUser(User user) {
     _currentUser = user;
   }

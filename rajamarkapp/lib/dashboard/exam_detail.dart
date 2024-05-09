@@ -11,7 +11,7 @@ import '../popups/delete_popup.dart';
 import 'package:rajamarkapp/dashboard/file_picker.dart';
 
 class ExamDetailsView extends StatelessWidget {
-  final int examId;
+  final String examId;
 
   const ExamDetailsView({Key? key, required this.examId}) : super(key: key);
 

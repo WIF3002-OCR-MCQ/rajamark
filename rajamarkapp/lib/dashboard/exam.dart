@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rajamarkapp/dashboard/create_exam.dart';
 import 'package:rajamarkapp/dashboard/exam_detail.dart';
+import 'package:rajamarkapp/modal/Exam.dart';
+import 'package:rajamarkapp/state/ExamState.dart';
+import 'package:rajamarkapp/state/UserState.dart';
 
 import '../popups/delete_popup.dart';
 
@@ -27,6 +32,7 @@ class ExamDashboard extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: TextField(
+                    onChanged: (value) => ExamState.to.filterExams(value),
                     decoration: InputDecoration(
                       labelText: 'Search Exams',
                       suffixIcon: Icon(Icons.search),
@@ -50,11 +56,14 @@ class ExamDashboard extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 8),
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'https://example.com/user_profile.jpg'), // Placeholder image URL
-                        radius: 16,
-                      ),
+
+                      //TODO user avatar
+                      // CircleAvatar(
+                      //   backgroundImage: NetworkImage(
+                      //       UserState.to.getUser()!.photoURL ??
+                      //           ""), // Placeholder image URL
+                      //   radius: 16,
+                      // ),
                     ],
                   ),
                 ),
@@ -115,7 +124,7 @@ class ExamDashboard extends StatelessWidget {
             children: [
               Text('Name',
                   style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
-              Text('         Creation Date',
+              Text('Session',
                   style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center),
               Text('Actions',
@@ -126,84 +135,95 @@ class ExamDashboard extends StatelessWidget {
         ),
         Expanded(
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 90),
-            child: ListView.separated(
-              itemCount: 20, // Assuming there are 10 dummy items for now
-              separatorBuilder: (context, index) =>
-                  Divider(color: Colors.black),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Left aligned Exam name
-                      Expanded(
-                        child: Text(
-                          'Exam ${index + 1}',
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, top: 20, bottom: 90),
+              child: Obx(
+                () => ExamState.to.filteredExams.isEmpty
+                    ? const Center(child: Text("No exam"))
+                    : ListView.separated(
+                        itemCount: ExamState.to.filteredExams.length,
+                        separatorBuilder: (context, index) =>
+                            const Divider(color: Colors.black),
+                        itemBuilder: (context, index) {
+                          final exam = ExamState.to.filteredExams[index];
+                          return examListTile(context, exam);
+                        },
                       ),
-                      // Center aligned Date of exam
-                      Expanded(
-                        child: Text(
-                          '15-04-2024', // Example date
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                      // Right aligned action icons
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.visibility),
-                              onPressed: () {
-                                // TODO: Navigate to ExamDetailsView and pass the exam ID
-                                int examId = index +
-                                    1; // Assuming the index is the exam ID
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        ExamDetailsView(examId: examId),
-                                  ),
-                                );
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                // TODO: Implement edit functionality
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => DeletePopup(),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
+              )),
         ),
       ],
+    );
+  }
+
+  Widget examListTile(BuildContext context, Exam examData) {
+    return ListTile(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              examData.title,
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+          // Center aligned Date of exam
+          Expanded(
+            child: Text(
+              examData.courseCode, // Example date
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+          // Right aligned action icons
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.visibility),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ExamDetailsView(examId: examData.examId),
+                      ),
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CreateExamPage(
+                          examData: examData,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => DeletePopup(examData: examData),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -25,7 +25,7 @@ class _StudentAnswerPageState extends State<StudentAnswerPage> {
     });
   }
 
-  void _showExamDetailsView(int examId) {
+  void _showExamDetailsView(String examId) {
     setState(() {
       _examDetailsView = ExamDetailsView(examId: examId);
     });

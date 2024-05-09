@@ -19,7 +19,7 @@ class FirebaseService {
       querySnapshot.docs.forEach((element) {
         final data = element.data() as Map<String, dynamic>;
         examList.add(Exam.fromJson(data));
-        print("Successfully get Exams");
+        // print("Successfully get Exams");
       });
     } catch (e) {
       print('Error getting exams: $e');
