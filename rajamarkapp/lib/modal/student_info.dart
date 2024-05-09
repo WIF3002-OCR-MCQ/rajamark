@@ -9,7 +9,21 @@ class StudentInfo {
     required this.studentAnswers,
   });
 }
-
+  // function use case 
+  // *******************
+  // String sampleText = '''
+  //     sTudEnT NamE : John Cena
+  //     stUDeNt iD : U9999999
+  //     1 A 2 B 3 C 4 D
+  //     ''';
+  // StudentInfo studentInfo = parseInputString(sampleText);
+  // print('Student ID: ${studentInfo.studentID}');
+  // print('Student Name: ${studentInfo.studentName}');
+  // print('Student Answers:');
+  //   studentInfo.studentAnswers.forEach((answer) {
+  //     print(answer);
+  //   });
+  
 StudentInfo parseInputString(String input) {
   String studentID = '';
   String studentName = '';
