@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import 'package:image/image.dart' as img;
-import 'package:image/src/util/math_util.dart';
 
 class UploadPage extends StatefulWidget {
   const UploadPage({super.key});
@@ -19,6 +18,7 @@ class _UploadPageState extends State<UploadPage> {
   dynamic _pickerror;
   String? extracted = 'Recognised Extracted Text Will Appear Here';
   final picker = ImagePicker();
+  File? processedImageFile;
   Future<File?> processImage(File imageFile) async {
     try {
       img.Image? image = img.decodeImage(await imageFile.readAsBytes());
@@ -28,13 +28,14 @@ class _UploadPageState extends State<UploadPage> {
 
       var resizedImage = img.copyResize(image, width: Dwidth, height: Dheight);
 
+      var isBlurry = isImageBlurry(resizedImage);
+      print("Blur: ");
+      print(isBlurry);
+
       //Greyscale
       var greyscaleImage = img.grayscale(resizedImage);
 
-      //Threshold
-      var thresholdedImage = threshold(greyscaleImage);
-
-      image = sharpenImage(thresholdedImage);
+      image = sharpenImage(greyscaleImage);
 
       final processedImageFile = File('${imageFile.path}_processed.jpg');
       await processedImageFile.writeAsBytes(img.encodeJpg(image));
@@ -44,28 +45,6 @@ class _UploadPageState extends State<UploadPage> {
       print('Error processing image: $e');
       return null;
     }
-  }
-
-  img.Image threshold(img.Image image) {
-    num threshold = 0.5;
-    //Image? mask;
-    for (final frame in image.frames) {
-      for (final p in frame) {
-        final y =
-            0.3 * p.rNormalized + 0.59 * p.gNormalized + 0.11 * p.bNormalized;
-        // final y =
-        //     0.2126 * p.rNormalized + 0.7152 * p.gNormalized + 0.0722 * p.bNormalized;
-
-        final y2 = y < threshold ? 0 : p.maxChannelValue;
-        //final msk = mask?.getPixel(p.x, p.y).getChannelNormalized(maskChannel);
-        //final mx = (msk ?? 1) * 1;
-        p
-          ..r = mix(p.r, y2, 1)
-          ..g = mix(p.g, y2, 1)
-          ..b = mix(p.b, y2, 1);
-      }
-    }
-    return image;
   }
 
   img.Image sharpenImage(img.Image image) {
@@ -93,7 +72,22 @@ class _UploadPageState extends State<UploadPage> {
       final image = await picker.pickImage(source: ImageSource.gallery);
       EasyLoading.show(status: 'loading...');
       if (image != null) {
-        final processedImageFile = await processImage(File(image.path));
+        processedImageFile = await processImage(File(image.path));
+
+        // Check if the processed image is blurry
+        img.Image uploadedImage =
+            img.decodeImage(await processedImageFile!.readAsBytes())!;
+        if (isImageBlurry(uploadedImage)) {
+          // If the image is blurry, set the pickerror variable and prompt the user to upload a new image
+          setState(() {
+            _pickerror =
+                "The uploaded image is blurry. Please upload a clearer image.";
+          });
+          EasyLoading.dismiss();
+          return;
+        }
+
+        // If the image is not blurry, proceed with text extraction
         extracted =
             await FlutterTesseractOcr.extractText(processedImageFile!.path);
       } else {
@@ -108,7 +102,8 @@ class _UploadPageState extends State<UploadPage> {
       });
     } catch (e) {
       setState(() {
-        _pickerror = e;
+        _pickerror =
+            "Error: Select An Image (.PNG,.JPG,.JPEG,..) \nand Wait a Few Seconds";
         if (kDebugMode) {
           print(e);
         }
@@ -134,8 +129,39 @@ class _UploadPageState extends State<UploadPage> {
       }
     } else if (_pickerror != null) {
       EasyLoading.dismiss();
+      return Text(
+        _pickerror.toString(),
+        textAlign: TextAlign.center,
+      );
+    } else {
+      EasyLoading.dismiss();
       return const Text(
-        'Error: Select An Image (.PNG,.JPG,.JPEG,..) \nand Wait a Few Seconds',
+        'You have not yet picked an image\nUpload an Image And Wait A few Seconds',
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+
+  Widget afterpreview() {
+    if (processedImageFile != null) {
+      if (kIsWeb) {
+        EasyLoading.dismiss();
+        return Image.network(
+          processedImageFile!.path,
+          fit: BoxFit.cover,
+        );
+      } else {
+        EasyLoading.dismiss();
+        return Semantics(
+            label: 'image_picked_image',
+            child: Image.file(File(
+              processedImageFile!.path,
+            )));
+      }
+    } else if (_pickerror != null) {
+      EasyLoading.dismiss();
+      return Text(
+        _pickerror.toString(),
         textAlign: TextAlign.center,
       );
     } else {
@@ -186,7 +212,14 @@ class _UploadPageState extends State<UploadPage> {
                       decoration: BoxDecoration(color: Colors.grey.shade100),
                       height: 250,
                       width: 650,
-                      child: Center(child: preview()),
+                      child: Center(
+                        child: Row(
+                          children: [
+                            Flexible(child: preview()),
+                            Flexible(child: afterpreview()),
+                          ],
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       height: 8,
@@ -253,5 +286,57 @@ class _UploadPageState extends State<UploadPage> {
         ),
       ),
     );
+  }
+
+  bool isImageBlurry(img.Image resizedImage) {
+    const blurThreshold = 0.005;
+    double blurFactor = calculateBlurFactor(resizedImage);
+    return blurFactor < blurThreshold;
+  }
+
+  double calculateBlurFactor(img.Image resizedImage) {
+    // Convert the image to grayscale
+    img.Image grayscale = img.grayscale(resizedImage);
+
+    // Calculate the variance of Laplacian
+    double variance = calculateVarianceOfLaplacian(grayscale);
+
+    return variance;
+  }
+
+  double calculateVarianceOfLaplacian(img.Image grayscale) {
+    // Calculate the Laplacian
+    List<num> laplacian = [
+      -1,
+      -1,
+      -1,
+      -1,
+      8,
+      -1,
+      -1,
+      -1,
+      -1,
+    ];
+
+    img.Image filtered = img.convolution(grayscale, filter: laplacian);
+
+    // Calculate the variance of the Laplacian
+    double mean = 0.0;
+    for (int y = 0; y < filtered.height; y++) {
+      for (int x = 0; x < filtered.width; x++) {
+        mean += filtered.getPixel(x, y).luminanceNormalized;
+      }
+    }
+    mean /= (filtered.width * filtered.height);
+
+    double variance = 0.0;
+    for (int y = 0; y < filtered.height; y++) {
+      for (int x = 0; x < filtered.width; x++) {
+        variance += (filtered.getPixel(x, y).luminanceNormalized - mean).abs();
+      }
+    }
+    variance /= (filtered.width * filtered.height);
+
+    return variance;
   }
 }
