@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:rajamarkapp/dashboard/extract.dart';
 import 'package:google_vision/google_vision.dart';
+import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
 
@@ -317,6 +318,12 @@ class FilePickerPopup extends StatelessWidget {
           List<EntityAnnotation> annotations = await googleVision.textDetection(
           JsonImage.fromFilePath(filePath!));
           extracted = annotations[0].description;
+      }else{
+          extracted = await FlutterTesseractOcr.extractText(filePath!, args: {
+          "tessedit_char_whitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
+          "preserve_interword_spaces": "1",
+          "tessedit_pageseg_mode": "1",
+        });
       }
 
       if (filePath != null) {
