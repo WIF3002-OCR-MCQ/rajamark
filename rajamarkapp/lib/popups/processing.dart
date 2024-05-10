@@ -3,10 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
-class ExtractingPopup extends StatelessWidget {
+class processingPopup extends StatelessWidget {
   final String? filePath;
+  final bool isUploadMode;
 
-  const ExtractingPopup({Key? key, this.filePath}) : super(key: key);
+  const processingPopup({Key? key, this.filePath, required this.isUploadMode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class ExtractingPopup extends StatelessWidget {
                     },
                   ),
                   Text(
-                    'Extract',
+                    isUploadMode ? 'Upload' : 'Extract',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize:
@@ -80,7 +81,7 @@ class ExtractingPopup extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              'Extracting',
+                              isUploadMode ? 'Uploading' : 'Extracting',
                               style: TextStyle(fontSize: 16.0),
                             ),
                             SizedBox(height: 8.0),

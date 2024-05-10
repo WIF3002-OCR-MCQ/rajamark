@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:rajamarkapp/dashboard/extract.dart';
+import 'package:rajamarkapp/popups/processing.dart';
 import 'package:google_vision/google_vision.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
@@ -260,12 +260,17 @@ class FilePickerPopup extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           if (isUploadMode) {
-                            // TODO: File upload action
+                            showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const processingPopup(isUploadMode:true);
+                            },
+                          );
                           } else {
                             showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return const ExtractingPopup();
+                              return const processingPopup(isUploadMode:false);
                             },
                           );
                           }
