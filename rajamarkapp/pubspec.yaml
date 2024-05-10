@@ -46,6 +46,7 @@ dependencies:
   flutter_dropzone: ^4.0.0
   get: ^4.6.6
   google_vision: ^1.2.0+6
+  flutter_tesseract_ocr: ^0.3.7
 
 dev_dependencies:
   flutter_test:
