@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:rajamarkapp/modal/student_info.dart';
+import 'package:rajamarkapp/modal/StudentInfo.dart';
 import 'package:rajamarkapp/popups/processing.dart';
 import 'package:google_vision/google_vision.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
