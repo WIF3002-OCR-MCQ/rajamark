@@ -18,23 +18,25 @@ import 'package:rajamarkapp/state/GradeState.dart';
 import 'package:rajamarkapp/state/StudentResultState.dart';
 import 'package:rajamarkapp/state/UserState.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:flutter/foundation.dart';
 
 import 'const/constant.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await FirebaseInitialization.initialize();
-  await windowManager.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // await windowManager.ensureInitialized();
   Get.put<GlobalService>(GlobalService());
   Get.put<UserState>(UserState());
   Get.put<StudentResultState>(StudentResultState());
   Get.put<GradeState>(GradeState());
   Get.put<ExamState>(ExamState());
 
-  if (Platform.isWindows) {
-    WindowManager.instance.setMinimumSize(const Size(1200, 850));
-  }
-
+  // if (!kIsWeb && Platform.isWindows) {
+  //   await WindowManager.instance.ensureInitialized();
+  //   WindowManager.instance.setMinimumSize(const Size(1200, 850));
+  // }
   runApp(const MyApp());
 }
 
