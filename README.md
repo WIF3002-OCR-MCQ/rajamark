@@ -1,17 +1,17 @@
 <h1>RajaMark User Manual Documentation</h1>
 
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li><a href="#introduction-">Introduction</a></li>
-    <li><a href="#getting-started-">Getting Started</a></li>
-    <li><a href="#features-">Features</a></li>
-    <li><a href="#troubleshooting-">Troubleshooting</a></li>
-    <li><a href="#best-practices-">Best Practices</a></li>
-    <li><a href="#glossary-">Glossary</a></li>
-    <li><a href="#appendix-">Appendix</a></li>
-  </ol>
-</details>
+  <details>
+    <summary>Table of Contents</summary>
+    <ol>
+      <li><a href="#10-introduction">Introduction</a></li>
+      <li><a href="#20-getting-started">Getting Started</a></li>
+      <li><a href="#30-features">Features</a></li>
+      <li><a href="#40-troubleshooting">Troubleshooting</a></li>
+      <li><a href="#50-best-practices">Best Practices</a></li>
+      <li><a href="#60-glossary">Glossary</a></li>
+      <li><a href="#70-appendix">Appendix</a></li>
+    </ol>
+  </details>
 
 ---
 
