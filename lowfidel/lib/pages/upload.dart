@@ -35,6 +35,7 @@ class _UploadPageState extends State<UploadPage> {
       //Greyscale
       var greyscaleImage = img.grayscale(resizedImage);
 
+      //Sharpen
       image = sharpenImage(greyscaleImage);
 
       final processedImageFile = File('${imageFile.path}_processed.jpg');
