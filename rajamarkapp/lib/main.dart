@@ -8,6 +8,7 @@ import 'package:rajamarkapp/auth/forgot_pass.dart';
 import 'package:rajamarkapp/dashboard/answer_scheme_page.dart';
 import 'package:rajamarkapp/dashboard/create_exam.dart';
 import 'package:rajamarkapp/dashboard/dashboard.dart';
+import 'package:rajamarkapp/dashboard/user_manual.dart';
 import 'package:rajamarkapp/popups/processing.dart';
 import 'package:rajamarkapp/database/database.dart';
 import 'package:rajamarkapp/auth/register.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         '/verify-email': (context) => const VerifyEmailPage(),
         '/createExamPage': (context) => const CreateExamPage(),
         '/answerSchemePage': (context) => const AnswerSchemePage(),
+        '/user-manual': (context) => const UserManual(),
       },
     );
   }

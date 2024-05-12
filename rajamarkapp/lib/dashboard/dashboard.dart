@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rajamarkapp/auth/login.dart';
+import 'package:rajamarkapp/dashboard/user_manual.dart';
 import 'package:rajamarkapp/shared/sidebar.dart';
 import 'package:rajamarkapp/dashboard/exam.dart';
 import 'package:rajamarkapp/dashboard/account.dart';
@@ -36,6 +37,12 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
+  void _userManualView() {
+    setState(() {
+      _currentContent = const UserManual();
+    });
+  }
+
   void _logout() {
     UserState.to.removeUser();
     Navigator.pushReplacement(
@@ -56,6 +63,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 Sidebar(
                   onExamTap: _showExamDashboard,
                   onAccountTap: _showAccountDashboard,
+                  onManualTap: _userManualView, 
                   onLogoutTap: _logout,
                 ),
                 Expanded(
@@ -70,6 +78,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 Sidebar(
                   onExamTap: _showExamDashboard,
                   onAccountTap: _showAccountDashboard,
+                  onManualTap: _userManualView, 
                   onLogoutTap: _logout,
                 ),
                 Expanded(

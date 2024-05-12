@@ -47,6 +47,7 @@ dependencies:
   get: ^4.6.6
   google_vision: ^1.2.0+6
   flutter_tesseract_ocr: ^0.3.7
+  getwidget: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -71,7 +72,48 @@ flutter:
 
   assets:
     - Images/
-    - assets/auth/auth.json
+    - Images/EC1.png
+    - Images/EC2.png
+    - Images/EC3.png
+    - Images/EE1.png
+    - Images/EE2.png
+    - Images/forgetpass2.png
+    - Images/forgetpass3.png
+    - Images/homepage.png
+    - Images/IP1.png
+    - Images/IP2.png
+    - Images/IP3.png
+    - Images/login1.png
+    - Images/logout.png
+    - Images/MSA1.png
+    - Images/MSA2.png
+    - Images/MSA3.png
+    - Images/nav.png
+    - Images/reg1.png
+    - Images/reg2.png
+    - Images/reg3.png
+    - Images/tip1.png
+    - Images/tip2.png
+    - Images/tip3.png
+    - Images/tip4.png
+    - Images/tip5.png
+    - Images/tip6.png
+    - Images/USA1.png
+    - Images/USA2.png
+    - Images/USA3.png
+    - Images/USA4.png
+    - Images/USA5.png
+    - Images/USAns1.png
+    - Images/USAns2.png
+    - Images/USAns3.png
+    - Images/USAns4.png
+    - Images/USAns5.png
+    - Images/USAns6.png
+    - Images/USAns7.png
+    - Images/USAns8.png
+    - Images/VED1.png
+    - Images/VED2.png
+    # - assets/auth/auth.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:
