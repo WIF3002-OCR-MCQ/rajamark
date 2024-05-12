@@ -324,8 +324,15 @@ class FilePickerPopup extends StatelessWidget {
           List<EntityAnnotation> annotations = await googleVision.textDetection(
           JsonImage.fromFilePath(filePath!));
           extracted = annotations[0].description;
+      }else{
+          extracted = await FlutterTesseractOcr.extractText(filePath!, args: {
+          "tessedit_char_whitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
+          "preserve_interword_spaces": "1",
+          "tessedit_pageseg_mode": "1",
+        });
+      }
 
-          // ***** Remove later ******
+      // ***** Remove later ******
           // This is how to access student info object
           StudentInfo studentInfo = parseInputString(extracted);
             print('Student ID: ${studentInfo.studentID}');
@@ -334,14 +341,6 @@ class FilePickerPopup extends StatelessWidget {
             for(var answer in studentInfo.studentAnswers){
               print(answer);
             }   
-          
-      }else{
-          extracted = await FlutterTesseractOcr.extractText(filePath!, args: {
-          "tessedit_char_whitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
-          "preserve_interword_spaces": "1",
-          "tessedit_pageseg_mode": "1",
-        });
-      }
 
       if (filePath != null) {
         // Close initial popup

@@ -18,25 +18,31 @@ StudentInfo parseInputString(String input) {
   List<String> lines = input.split('\n');
 
   for (String line in lines) {
-    String normalizedLine = line.trim().toLowerCase();
+    String normalizedLine = line.trim().toUpperCase();
 
-    if (normalizedLine.startsWith('student id')) {
+    if (normalizedLine.startsWith('STUDENT ID')) {
       studentID = extractValue(line);
     }
 
-    if (normalizedLine.startsWith('student name')) {
+    if (normalizedLine.startsWith('STUDENT NAME')) {
       studentName = extractValue(line);
     }
 
     // Attempt to extract student answers (assuming answers start with a digit followed by a space and a letter)
-     List<String> tokens = normalizedLine.split(RegExp(r'\s+')).where((token) => token.isNotEmpty).toList();
-    if (tokens.isNotEmpty && RegExp(r'^\d+$').hasMatch(tokens.first)) {
-      // Extract individual answer choices
-      for (int i = 0; i < tokens.length; i += 2) {
-        if (i + 1 < tokens.length) {
-          studentAnswers.add(tokens[i + 1]);
-        }
-      }
+    //  List<String> tokens = normalizedLine.split(RegExp(r'\s+')).where((token) => token.isNotEmpty).toList();
+    // if (tokens.isNotEmpty && RegExp(r'^\d+$').hasMatch(tokens.first)) {
+    //   // Extract individual answer choices
+    //   for (int i = 0; i < tokens.length; i += 2) {
+    //     if (i + 1 < tokens.length) {
+    //       studentAnswers.add(tokens[i + 1]);
+    //     }
+    //   }
+    // }
+
+    // Attempt to extract student answers (assuming answers start with a digit followed by a dot and/or space then a letter)
+    List<String> tokens = normalizedLine.split(RegExp(r'\s*\.\s*')).where((token) => token.isNotEmpty).toList();
+    if (tokens.length == 2 && RegExp(r'^\d+$').hasMatch(tokens.first) && tokens.last.length == 1) {
+        studentAnswers.add(tokens.last);
     }
   }
 
