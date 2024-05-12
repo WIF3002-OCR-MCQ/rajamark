@@ -47,11 +47,12 @@ StudentInfo parseInputString(String input) {
   );
 }
 
-// Helper function to extract the value after the ':' character
-String extractValue(String line) {
-  int colonIndex = line.indexOf(':');
-  if (colonIndex != -1) {
-    return line.substring(colonIndex + 1).trim();
-  }
-  return '';
+  // Helper function to extract the value after the some character
+  String extractValue(String line) {
+    RegExp regExp = RegExp(r'Student (Id|Name)\s*[:=-]?\s*(.*)', caseSensitive: false);
+    Match? match = regExp.firstMatch(line);
+    if (match != null && match.groupCount >= 2) {
+      return match.group(2)!; 
+    }
+    return '';
 }
