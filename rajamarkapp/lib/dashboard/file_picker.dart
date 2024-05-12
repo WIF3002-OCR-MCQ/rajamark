@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:rajamarkapp/modal/StudentInfo.dart';
 import 'package:rajamarkapp/popups/processing.dart';
 import 'package:google_vision/google_vision.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
@@ -323,6 +324,17 @@ class FilePickerPopup extends StatelessWidget {
           List<EntityAnnotation> annotations = await googleVision.textDetection(
           JsonImage.fromFilePath(filePath!));
           extracted = annotations[0].description;
+
+          // ***** Remove later ******
+          // This is how to access student info object
+          StudentInfo studentInfo = parseInputString(extracted);
+            print('Student ID: ${studentInfo.studentID}');
+            print('Student Name: ${studentInfo.studentName}');
+            print('Student Answers:'); 
+            for(var answer in studentInfo.studentAnswers){
+              print(answer);
+            }   
+          
       }else{
           extracted = await FlutterTesseractOcr.extractText(filePath!, args: {
           "tessedit_char_whitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
