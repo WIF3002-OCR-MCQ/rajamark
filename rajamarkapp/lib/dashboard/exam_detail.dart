@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:rajamarkapp/dashboard/extract_page.dart';
 import 'package:rajamarkapp/dashboard/student_answer.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
 import 'package:rajamarkapp/modal/StudentResult.dart';
@@ -18,6 +19,7 @@ class ExamDetailsView extends StatelessWidget {
 
   const ExamDetailsView({Key? key, required this.examData}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,14 +30,20 @@ class ExamDetailsView extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton.icon(
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return FilePickerPopup(
-                        isUploadMode:
-                            true); // Pass mode here if true, will show upload else will show extract
-                  },
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ExtractPage(examData: examData),
+                  ),
                 );
+                // showDialog(
+                //   context: context,
+                //   builder: (BuildContext context) {
+                //     return FilePickerPopup(
+                //         isUploadMode:
+                //             true); // Pass mode here if true, will show upload else will show extract
+                //   },
+                // );
               },
               icon: Icon(Icons.upload, color: Colors.white),
               label: Text(

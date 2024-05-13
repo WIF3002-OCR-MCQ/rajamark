@@ -19,13 +19,12 @@ class FirebaseService {
       querySnapshot.docs.forEach((element) {
         final data = element.data() as Map<String, dynamic>;
         examList.add(Exam.fromJson(data));
-        // print("Successfully get Exams");
       });
     } catch (e) {
       print('Error getting exams: $e');
     }
-
     return examList;
+
   }
 
   Future<bool> addExam(Exam examData) async {
@@ -85,11 +84,14 @@ class FirebaseService {
 
   Future<String?> saveStudentResultImage(File imageFile) async {
     try {
+      print("bruh");
       String fileName =
-          'result_${DateTime.now().millisecondsSinceEpoch}.jpg'; // Generate a unique file name for the image
+          'result_${DateTime.now().millisecondsSinceEpoch}'; // Generate a unique file name for the image
+      print(fileName);
       Reference storageReference = FirebaseStorage.instance
           .ref()
           .child('student-result-images/$fileName');
+          print(storageReference.fullPath);
       UploadTask uploadTask = storageReference.putFile(imageFile);
       TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
       String downloadURL = await snapshot.ref.getDownloadURL();

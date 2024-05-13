@@ -16,7 +16,7 @@ class StudentResultState extends GetxService {
 
   void updateStudentResult(StudentResult studentResult) {
     int index = studentResults.indexWhere(
-        (element) => element.studentResultId == studentResult.studentResultId);
+        (element) => element.studentId == studentResult.studentId);
     studentResults[index] = studentResult;
   }
 }

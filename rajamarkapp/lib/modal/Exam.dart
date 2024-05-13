@@ -33,8 +33,10 @@ class Exam {
         courseCode = json['courseCode'],
         session = json['session'],
         sampleAnswer = (json['sampleAnswer'] as List).cast<String>(),
-        meanScore = json['meanScore'],
-        medianScore = json['medianScore'],
+        meanScore =
+            json['meanScore'] != null ? json['meanScore'].toDouble() : 0.0,
+        medianScore =
+            json['medianScore'] != null ? json['medianScore'].toDouble() : 0.0,
         grades =
             (json['grades'] as List).map((g) => Grade.fromJson(g)).toList(),
         studentResults = (json['studentResults'] as List)

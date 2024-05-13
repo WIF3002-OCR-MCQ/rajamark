@@ -617,7 +617,8 @@ class Features extends StatelessWidget {
                   '5. Click the “save” button to create the examination record.',
                   ''),
               SizedBox(height: 15),
-              _buildStepWithImage('6. The examination record is successfully created.', ''),
+              _buildStepWithImage(
+                  '6. The examination record is successfully created.', ''),
             ],
           ),
           SizedBox(height: 20),
@@ -645,15 +646,13 @@ class Features extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Text(
-            'View Exam's Details',
+            "View Exam's Details",
             style: textStyle1,
           ),
           const SizedBox(height: 10),
           Column(
             children: [
-              _buildStepWithImage(
-                  '1. Go to the Exam page',
-                  ''),
+              _buildStepWithImage('1. Go to the Exam page', ''),
               SizedBox(height: 10),
               _buildStepWithImage(
                   '2. Click on the “eye” icon for a specific exam to view the exam’s details..',
@@ -680,13 +679,13 @@ class Features extends StatelessWidget {
               SizedBox(height: 15),
               _buildStepWithImage(
                   '3. Once redirected into the Exam Details page, navigate to the list of students’ records and '
-                  'click on the “eye” icon to view the student’s details, “note” icon to edit the student\'s '
-                  'details or “trash” icon to delete the student\'s information',
+                      'click on the “eye” icon to view the student’s details, “note” icon to edit the student\'s '
+                      'details or “trash” icon to delete the student\'s information',
                   'MSA2.png'),
               SizedBox(height: 15),
               _buildStepWithImage(
                   '4. On the Student’s Details page, click the “Edit Result” button to make changes to the '
-                  'student\'s details.',
+                      'student\'s details.',
                   'MSA3.png'),
             ],
           ),
@@ -736,8 +735,7 @@ class Features extends StatelessWidget {
               _buildStepWithImage('1. Go to the Exam page.', ''),
               SizedBox(height: 10),
               _buildStepWithImage(
-                  '2. Select the exam you wish to grade.',
-                  'USA1.png'),
+                  '2. Select the exam you wish to grade.', 'USA1.png'),
               SizedBox(height: 15),
               _buildStepWithImage(
                   '3. In the student column, locate and click the "Add" button to input student data.',
