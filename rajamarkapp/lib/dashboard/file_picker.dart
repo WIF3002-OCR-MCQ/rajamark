@@ -260,6 +260,12 @@ class FilePickerPopup extends StatelessWidget {
                     const SizedBox(height: 48.0),
                     Center(
                       child: ElevatedButton(
+                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                      ),
                         onPressed: () {
                           if (isUploadMode) {
                             showDialog(
@@ -268,6 +274,8 @@ class FilePickerPopup extends StatelessWidget {
                               return const processingPopup(isUploadMode:true);
                             },
                           );
+                          //TODO, after succesful uploading, close processing popup and do next step
+
                           } else {
                             showDialog(
                             context: context,
@@ -275,16 +283,10 @@ class FilePickerPopup extends StatelessWidget {
                               return const processingPopup(isUploadMode:false);
                             },
                           );
+                          //TODO, after succesful extraction, close processing popup and do next step
+                          
                           }
                         },
-                        style: ButtonStyle(
-                          // backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                           shape: MaterialStateProperty.all<OutlinedBorder>(
-                            const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ),
-                          ),
-                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: 
@@ -345,7 +347,7 @@ class FilePickerPopup extends StatelessWidget {
       if (filePath != null) {
         // Close initial popup
         Navigator.of(context).pop();
-
+        //extract value
         showDialog(
           context: context,
           builder: (BuildContext context) {
