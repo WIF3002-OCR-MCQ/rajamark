@@ -160,6 +160,7 @@ class _UserManualState extends State<UserManual> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('User Manual'),
+          automaticallyImplyLeading: false,
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
