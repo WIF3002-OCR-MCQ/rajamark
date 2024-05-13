@@ -44,3 +44,6 @@ app.*.map.json
 
 # auth.json
 assets/auth/auth.json
+
+# .env
+*.env

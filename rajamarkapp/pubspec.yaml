@@ -48,6 +48,7 @@ dependencies:
   google_vision: ^1.2.0+6
   flutter_tesseract_ocr: ^0.3.7
   getwidget: ^4.0.0
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -113,6 +114,7 @@ flutter:
     - Images/USAns8.png
     - Images/VED1.png
     - Images/VED2.png
+    - .env
     # - assets/auth/auth.json
 
   # To add assets to your application, add an assets section, like this:
