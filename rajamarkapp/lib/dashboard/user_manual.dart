@@ -160,6 +160,7 @@ class _UserManualState extends State<UserManual> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('User Manual'),
+          automaticallyImplyLeading: false,
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +315,6 @@ class Introduction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: key,
       padding: EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,7 +357,6 @@ class GettingStarted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: key,
       padding: EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -585,7 +584,6 @@ class Features extends StatelessWidget {
     final TextStyle textStyle2 = TextStyle(fontSize: 14);
 
     return Container(
-      key: key,
       padding: EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -858,7 +856,6 @@ class Troubleshooting extends StatelessWidget {
     final TextStyle _textStyle2 = TextStyle(fontSize: 14);
 
     return Container(
-      key: key,
       padding: EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1231,7 +1228,6 @@ class Glossary extends StatelessWidget {
     final TextStyle _textStyle2 = TextStyle(fontSize: 14);
 
     return Container(
-      key: key,
       padding: EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
