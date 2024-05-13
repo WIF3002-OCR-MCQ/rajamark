@@ -645,6 +645,27 @@ class Features extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Text(
+            'View Exam's Details',
+            style: textStyle1,
+          ),
+          const SizedBox(height: 10),
+          Column(
+            children: [
+              _buildStepWithImage(
+                  '1. Go to the Exam page',
+                  ''),
+              SizedBox(height: 10),
+              _buildStepWithImage(
+                  '2. Click on the “eye” icon for a specific exam to view the exam’s details..',
+                  'VED1.png'),
+              SizedBox(height: 10),
+              _buildStepWithImage(
+                  '3. You will be directed to the Exam Details page.',
+                  'VED2.png'),
+            ],
+          ),
+          SizedBox(height: 20),
+          Text(
             'Manage student’s answer',
             style: textStyle1,
           ),
