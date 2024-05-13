@@ -115,7 +115,7 @@ flutter:
     - Images/VED1.png
     - Images/VED2.png
     - .env
-    # - assets/auth/auth.json
+    - assets/auth/auth.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:
