@@ -645,7 +645,7 @@ class Features extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Text(
-            'View Exam's Details',
+            'View Exam\'s Details',
             style: textStyle1,
           ),
           const SizedBox(height: 10),
