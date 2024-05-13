@@ -7,6 +7,7 @@ import 'package:google_vision/google_vision.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
+import 'dart:async';
 
 class DropboxWidget extends StatefulWidget {
   @override
@@ -364,13 +365,17 @@ class FilePickerPopup extends StatelessWidget {
           },
         );
 
-        // File picked successfully, show extracting popup
+        // show processing popup for a while (if success do next step if not show error_popup)
         // showDialog(
         //   context: context,
         //   builder: (BuildContext context) {
-        //     return ExtractingPopup(filePath: filePath);
+        //     return processPopup(filePath: filePath);
         //   },
         // );
+        // Automatically dismiss the popup after a delay (e.g., 5 seconds)
+        // Timer(Duration(seconds: 5), () {
+        //   Navigator.pop(context); // Dismiss the popup after 5 seconds
+        // });
       }
     }
   }
