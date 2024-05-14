@@ -243,18 +243,26 @@ class _CreateExamDetailsViewState extends State<ExamDetailsView> {
                 icon: const Icon(Icons.visibility),
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => StudentAnswerPage()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExtractPage(
+                          examData: examData, currentStudentResult: result),
+                    ),
+                  ).then((_) => initialiseGradeAndResult());
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => EditResultPopUp(),
-                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExtractPage(
+                          examData: examData,
+                          currentStudentResult: result,
+                          isEditing: true),
+                    ),
+                  ).then((_) => initialiseGradeAndResult());
                 },
               ),
               IconButton(

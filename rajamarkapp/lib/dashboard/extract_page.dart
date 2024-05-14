@@ -17,8 +17,14 @@ import 'package:rajamarkapp/utils/exam_calculation.dart';
 enum ExamView { general, detail, edit }
 
 class ExtractPage extends StatefulWidget {
-  const ExtractPage({super.key, required this.examData});
+  const ExtractPage(
+      {super.key,
+      required this.examData,
+      this.isEditing = false,
+      this.currentStudentResult});
   final Exam examData;
+  final bool? isEditing;
+  final StudentResult? currentStudentResult;
 
   @override
   State<ExtractPage> createState() => _ExtractPageState();
@@ -44,12 +50,23 @@ class _ExtractPageState extends State<ExtractPage> {
           questionNum: index + 1,
           selectedAnswer: widget.examData.sampleAnswer[index]),
     );
+    sampleAnswerList = tempList;
 
-    setState(() {
-      sampleAnswerList = tempList;
-    });
+    //Check if it is route from the studentList from exam view
+    if (widget.currentStudentResult != null) {
+      currentStudentResult = widget.currentStudentResult;
+      currentView = ExamView.detail;
+      studentNameController.text = currentStudentResult!.studentName;
+      studentIdController.text = currentStudentResult!.studentId;
+    }
 
-    print("${widget.examData.studentResults.length} student results");
+    //Check if it is route from the edit button
+    if (widget.isEditing!) {
+      currentView = ExamView.edit;
+      tempStudentAnswers = currentStudentResult!.answerText;
+    }
+
+    // print("${widget.examData.studentResults.length} student results");
   }
 
   void _uploadStudentData(BuildContext context) async {
@@ -77,6 +94,10 @@ class _ExtractPageState extends State<ExtractPage> {
     studentIdController.text = studentInfo.studentID;
     int score = calculateScore(
         widget.examData.sampleAnswer, studentInfo.studentAnswers);
+
+    print("Id is ${studentInfo.studentID}");
+    print("Name is ${studentInfo.studentName}");
+    print("Answer is ${studentInfo.studentAnswers}");
 
     //Create a student result object
     StudentResult studentResult = StudentResult(
@@ -149,9 +170,17 @@ class _ExtractPageState extends State<ExtractPage> {
   }
 
   void _saveEditedStudentAnswer() {
+    int score =
+        calculateScore(widget.examData.sampleAnswer, tempStudentAnswers);
+    String gradeLabel = calculateGrade(score, widget.examData);
+    currentStudentResult!.score = score;
+    currentStudentResult!.gradeLabel = gradeLabel;
+
     ExamState.to.updateStudentResult(currentStudentResult!, widget.examData);
 
     setState(() {
+      currentStudentResult!.score = score;
+      currentStudentResult!.gradeLabel = gradeLabel;
       currentStudentResult!.studentName = studentNameController.text;
       currentStudentResult!.studentId = studentIdController.text;
       currentStudentResult!.answerText = tempStudentAnswers;
@@ -265,6 +294,17 @@ class _ExtractPageState extends State<ExtractPage> {
     }
     List<String> abcd = ['A', 'B', 'C', 'D'];
 
+    Color getColor(int questionNum, String answer, String sampleAnswer) {
+      if (tempStudentAnswers.isNotEmpty &&
+          questionNum <= tempStudentAnswers.length) {
+        String currentAnswer = tempStudentAnswers[questionNum - 1];
+        if (currentAnswer == answer) {
+          return Colors.red.shade300;
+        }
+      }
+      return backgroundColor;
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(bottom: 16),
@@ -317,10 +357,10 @@ class _ExtractPageState extends State<ExtractPage> {
                           : abcd
                               .map((element) => answerSelection(
                                     element,
-                                    tempStudentAnswers[questionNum - 1] ==
-                                            element
-                                        ? Colors.red.shade300
-                                        : backgroundColor,
+                                    getColor(
+                                        questionNum,
+                                        element,
+                                        sampleAnswer),
                                     questionNum,
                                   ))
                               .toList(),
@@ -452,42 +492,6 @@ class _ExtractPageState extends State<ExtractPage> {
                                                 _deleteStudentResult();
                                               },
                                             ));
-                                    // showDialog<void>(
-                                    //   context: context,
-                                    //   builder: (BuildContext context) {
-                                    //     return AlertDialog(
-                                    //       title: const Text(
-                                    //           "Are you sure want to delete?"),
-                                    //       content: const Text(
-                                    //           "This action cannot be undone"),
-                                    //       actions: <Widget>[
-                                    //         TextButton(
-                                    //           style: TextButton.styleFrom(
-                                    //             textStyle: Theme.of(context)
-                                    //                 .textTheme
-                                    //                 .labelLarge,
-                                    //           ),
-                                    //           child: const Text('Cancel'),
-                                    //           onPressed: () {
-                                    //             Navigator.of(context).pop();
-                                    //           },
-                                    //         ),
-                                    //         TextButton(
-                                    //           style: TextButton.styleFrom(
-                                    //             textStyle: Theme.of(context)
-                                    //                 .textTheme
-                                    //                 .labelLarge,
-                                    //           ),
-                                    //           child: const Text('Yes'),
-                                    //           onPressed: () {
-                                    //             _deleteStudentResult();
-                                    //             Navigator.of(context).pop();
-                                    //           },
-                                    //         ),
-                                    //       ],
-                                    //     );
-                                    //   },
-                                    // );
                                   },
                                   icon: const Icon(
                                     Icons.delete,
