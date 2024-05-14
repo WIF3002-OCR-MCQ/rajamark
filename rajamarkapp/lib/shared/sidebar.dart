@@ -3,14 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Sidebar extends StatelessWidget {
   final VoidCallback onExamTap;
-  final VoidCallback onAccountTap;
   final VoidCallback onManualTap;
   final VoidCallback onLogoutTap;
 
   const Sidebar({
     Key? key,
     required this.onExamTap,
-    required this.onAccountTap,
     required this.onManualTap,
     required this.onLogoutTap,
   }) : super(key: key);
@@ -22,7 +20,6 @@ class Sidebar extends StatelessWidget {
         if (constraints.maxWidth < 700) {
           return MobileTopMenu(
             onExamTap: onExamTap,
-            onAccountTap: onAccountTap,
             onManualTap: onManualTap,
             onLogoutTap: onLogoutTap,
           );
@@ -53,18 +50,6 @@ class Sidebar extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       onTap: onExamTap,
-                    ),
-                    ListTile(
-                      title: Text(
-                        'Account',
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: const Color.fromARGB(255, 0, 0, 0),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      onTap: onAccountTap,
                     ),
                     ListTile(
                       title: Text(
@@ -111,14 +96,12 @@ class Sidebar extends StatelessWidget {
 
 class MobileTopMenu extends StatefulWidget {
   final VoidCallback onExamTap;
-  final VoidCallback onAccountTap;
   final VoidCallback onManualTap;
   final VoidCallback onLogoutTap;
 
   const MobileTopMenu({
     Key? key,
     required this.onExamTap,
-    required this.onAccountTap,
     required this.onManualTap,
     required this.onLogoutTap,
   }) : super(key: key);
@@ -207,18 +190,6 @@ class _MobileTopMenuState extends State<MobileTopMenu> {
                   onPressed: widget.onExamTap,
                   child: Text(
                     'Exams',
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                TextButton(
-                  onPressed: widget.onAccountTap,
-                  child: Text(
-                    'Account',
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

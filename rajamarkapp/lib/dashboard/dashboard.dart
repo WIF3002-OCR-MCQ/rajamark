@@ -31,12 +31,6 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
-  void _showAccountDashboard() {
-    setState(() {
-      _currentContent = const AccountDashboard();
-    });
-  }
-
   void _userManualView() {
     setState(() {
       _currentContent = const UserManual();
@@ -62,7 +56,6 @@ class _DashboardPageState extends State<DashboardPage> {
               children: [
                 Sidebar(
                   onExamTap: _showExamDashboard,
-                  onAccountTap: _showAccountDashboard,
                   onManualTap: _userManualView, 
                   onLogoutTap: _logout,
                 ),
@@ -77,7 +70,6 @@ class _DashboardPageState extends State<DashboardPage> {
               children: [
                 Sidebar(
                   onExamTap: _showExamDashboard,
-                  onAccountTap: _showAccountDashboard,
                   onManualTap: _userManualView, 
                   onLogoutTap: _logout,
                 ),

@@ -25,12 +25,6 @@ class _StudentAnswerPageState extends State<StudentAnswerPage> {
     });
   }
 
-  void _showAccountDashboard() {
-    setState(() {
-      _currentContent = const AccountDashboard();
-    });
-  }
-
   void _userManualView() {
     setState(() {
       _currentContent = const UserManual();
@@ -55,7 +49,6 @@ class _StudentAnswerPageState extends State<StudentAnswerPage> {
               children: [
                 Sidebar(
                   onExamTap: _showExamDashboard,
-                  onAccountTap: _showAccountDashboard,
                   onManualTap: _userManualView, 
                   onLogoutTap: _logout,
                 ),
@@ -70,7 +63,6 @@ class _StudentAnswerPageState extends State<StudentAnswerPage> {
               children: [
                 Sidebar(
                   onExamTap: _showExamDashboard,
-                  onAccountTap: _showAccountDashboard,
                   onManualTap: _userManualView, 
                   onLogoutTap: _logout,
                 ),
