@@ -150,10 +150,15 @@ Future<String?> saveStudentResultImage(File imageFile) async {
   try {
     String fileName =
         'result_${DateTime.now().millisecondsSinceEpoch}.jpg'; // Generate a unique file name for the image
+    print('File name: $fileName');
     Reference storageReference =
         FirebaseStorage.instance.ref().child('student-result-images/$fileName');
+
+    print('Reference: $storageReference');
     UploadTask uploadTask = storageReference.putFile(imageFile);
-    TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
+    print('bruh');
+    TaskSnapshot snapshot =
+        await uploadTask.whenComplete(() => print("Image uploaded"));
     String downloadURL = await snapshot.ref.getDownloadURL();
     return downloadURL;
   } catch (e) {

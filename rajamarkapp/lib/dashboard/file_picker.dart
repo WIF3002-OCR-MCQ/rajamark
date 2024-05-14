@@ -215,7 +215,7 @@ class FilePickerPopup extends StatelessWidget {
                     const SizedBox(height: 8.0),
                     ElevatedButton(
                       onPressed: () {
-                        _showFilePicker(context);
+                        // _showFilePicker(context);
                       },
                       child: const Text('Choose Files'),
                     ),
@@ -315,68 +315,5 @@ class FilePickerPopup extends StatelessWidget {
     );
   }
 
-  void _showFilePicker(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      String? filePath = result.files.single.path;
-      String? extracted;
-
-      if(Platform.isWindows || Platform.isLinux || Platform.isMacOS){
-          final String authString = await rootBundle.loadString('assets/auth/auth.json');
-          final googleVision = await GoogleVision.withJwt(authString);
-          List<EntityAnnotation> annotations = await googleVision.textDetection(
-          JsonImage.fromFilePath(filePath!));
-          extracted = annotations[0].description;
-      }else{
-          extracted = await FlutterTesseractOcr.extractText(filePath!, args: {
-          "tessedit_char_whitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
-          "preserve_interword_spaces": "1",
-          "tessedit_pageseg_mode": "1",
-        });
-      }
-
-      // ***** Remove later ******
-          // This is how to access student info object
-          StudentInfo studentInfo = parseInputString(extracted);
-            print('Student ID: ${studentInfo.studentID}');
-            print('Student Name: ${studentInfo.studentName}');
-            print('Student Answers:'); 
-            for(var answer in studentInfo.studentAnswers){
-              print(answer);
-            }   
-
-      if (filePath != null) {
-        // Close initial popup
-        Navigator.of(context).pop();
-        //extract value
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Extracted Text'),
-              content: Text(extracted.toString()),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('Close'),
-                ),
-              ],
-            );
-          },
-        );
-
-        // show processing popup for a while (if success do next step if not show error_popup)
-        // showDialog(
-        //   context: context,
-        //   builder: (BuildContext context) {
-        //     return processPopup(filePath: filePath);
-        //   },
-        // );
-        // Automatically dismiss the popup after a delay (e.g., 5 seconds)
-        // Timer(Duration(seconds: 5), () {
-        //   Navigator.pop(context); // Dismiss the popup after 5 seconds
-        // });
-      }
-    }
-  }
+  
 }

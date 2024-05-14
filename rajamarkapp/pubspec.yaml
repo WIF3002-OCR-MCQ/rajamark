@@ -38,7 +38,7 @@ dependencies:
   firebase_core: ^2.30.1
   firebase_auth: ^4.19.3
   cloud_firestore: ^4.17.1
-  firebase_storage: ^11.7.3
+  firebase_storage: 11.5.0
   flutter_svg: ^2.0.10+1
   google_fonts: ^6.2.1
   fl_chart: ^0.67.0
@@ -49,6 +49,7 @@ dependencies:
   flutter_tesseract_ocr: ^0.3.7
   getwidget: ^4.0.0
   flutter_dotenv: ^5.0.2
+  image_picker: ^1.1.1
 
 dev_dependencies:
   flutter_test:

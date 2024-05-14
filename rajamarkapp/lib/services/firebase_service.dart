@@ -1,14 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
 import 'package:rajamarkapp/modal/Grade.dart';
 import 'package:rajamarkapp/modal/StudentResult.dart';
 
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<List<Exam>> getExams() async {
     CollectionReference exams = _firestore.collection('exam');
@@ -19,12 +17,10 @@ class FirebaseService {
       querySnapshot.docs.forEach((element) {
         final data = element.data() as Map<String, dynamic>;
         examList.add(Exam.fromJson(data));
-        // print("Successfully get Exams");
       });
     } catch (e) {
       print('Error getting exams: $e');
     }
-
     return examList;
   }
 
@@ -56,6 +52,13 @@ class FirebaseService {
     CollectionReference exams = _firestore.collection('exam');
 
     try {
+      for (var grade in examData.grades) {
+        await exams
+            .doc(examData.examId)
+            .collection('grades')
+            .doc(grade.gradeId)
+            .delete();
+      }
       await exams.doc(examData.examId).delete();
       return true;
     } catch (e) {
@@ -83,32 +86,70 @@ class FirebaseService {
     }
   }
 
-  Future<String?> saveStudentResultImage(File imageFile) async {
-    try {
-      String fileName =
-          'result_${DateTime.now().millisecondsSinceEpoch}.jpg'; // Generate a unique file name for the image
-      Reference storageReference = FirebaseStorage.instance
-          .ref()
-          .child('student-result-images/$fileName');
-      UploadTask uploadTask = storageReference.putFile(imageFile);
-      TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
-      String downloadURL = await snapshot.ref.getDownloadURL();
-      return downloadURL;
-    } catch (e) {
-      print('Error saving student result image: $e');
-      return null;
-    }
-  }
+  // Future<String?> saveStudentResultImage(File imageFile) async {
+  //   try {
+  //     print("bruh");
+  //     String fileName =
+  //         'result_${DateTime.now().millisecondsSinceEpoch}'; // Generate a unique file name for the image
+  //     print(fileName);
+  //     Reference storageReference = FirebaseStorage.instance
+  //         .ref()
+  //         .child('student-result-images/$fileName');
+  //     print(storageReference.fullPath);
+  //     UploadTask uploadTask = storageReference.putFile(imageFile);
+
+  //     await uploadTask.onError((error, stackTrace) => print('Error uploading image: $error'));
+  //     TaskSnapshot snapshot =
+  //         await uploadTask.whenComplete(() => print("Completed"));
+  //     String downloadURL = await snapshot.ref.getDownloadURL();
+  //     return downloadURL;
+  //   } catch (e) {
+  //     print('Error saving student result image: $e');
+  //     return null;
+  //   }
+  // }
 
   Future<bool> addStudentResult(StudentResult studentData) async {
-    CollectionReference student_result =
+    CollectionReference studentResult =
         FirebaseFirestore.instance.collection('student_result');
 
     try {
-      await student_result.doc().set(studentData.toJson());
+      await studentResult
+          .doc("${studentData.examId}_${studentData.studentId}")
+          .set(studentData.toJson());
       return true;
     } catch (e) {
-      print('Error creating exam: $e');
+      print('Error adding student result: $e');
+      return false;
+    }
+  }
+
+  Future<bool> removeStudentResult(StudentResult studentData) async {
+    CollectionReference studentResult =
+        FirebaseFirestore.instance.collection('student_result');
+
+    try {
+      await studentResult
+          .doc("${studentData.examId}_${studentData.studentId}")
+          .delete();
+      return true;
+    } catch (e) {
+      print('Error adding student result: $e');
+      return false;
+    }
+  }
+
+  Future<bool> updateStudentResult(StudentResult studentResultData) async {
+    CollectionReference studentResult =
+        FirebaseFirestore.instance.collection('student_result');
+
+    try {
+      await studentResult
+          .doc("${studentResultData.examId}_${studentResultData.studentId}")
+          .update(studentResultData.toJson());
+      return true;
+    } catch (e) {
+      print('Error updating student result: $e');
       return false;
     }
   }
@@ -141,7 +182,7 @@ class FirebaseService {
 
     try {
       QuerySnapshot querySnapshot =
-          await resultsCollection.where('exam_id', isEqualTo: examId).get();
+          await resultsCollection.where('examId', isEqualTo: examId).get();
       for (var doc in querySnapshot.docs) {
         studentResults
             .add(StudentResult.fromJson(doc.data() as Map<String, dynamic>));
@@ -246,8 +287,8 @@ class FirebaseService {
   //------------------- GRADE -------------------
 
   Future<bool> addGrade(Grade gradeData) async {
-    CollectionReference grades =
-        FirebaseFirestore.instance.collection('exam/${gradeData.examId}/grades');
+    CollectionReference grades = FirebaseFirestore.instance
+        .collection('exam/${gradeData.examId}/grades');
 
     try {
       await grades.doc(gradeData.gradeId).set(gradeData.toJson());
@@ -259,22 +300,20 @@ class FirebaseService {
   }
 
   Future<List<Grade>> getGradesByExamId(String examId) async {
-    CollectionReference grade = FirebaseFirestore.instance.collection('grade');
+    CollectionReference grade = FirebaseFirestore.instance.collection('exam');
     List<Grade> gradeList = [];
 
     try {
       QuerySnapshot querySnapshot =
-          await grade.where('exam_id', isEqualTo: examId).get();
+          await grade.doc(examId).collection("grades").get();
       querySnapshot.docs.forEach((element) {
         final data = element.data() as Map<String, dynamic>;
         gradeList.add(Grade.fromJson(data));
-        print("Successfully get Grades");
       });
-      return gradeList;
     } catch (e) {
-      print('Error getting grade: $e');
-      return [];
+      print('Error getting exams: $e');
     }
+    return gradeList;
   }
 
   Future<List<Grade>> getGradeByExamIdAndGradeLabel(

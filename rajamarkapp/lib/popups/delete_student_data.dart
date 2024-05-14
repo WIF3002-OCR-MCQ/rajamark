@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:rajamarkapp/const/constant.dart';
 
 class DeleteStudentDataPopup extends StatelessWidget {
-  const DeleteStudentDataPopup({
+  DeleteStudentDataPopup({
     super.key,
+    required this.onDelete,
   });
+
+  Function() onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +16,7 @@ class DeleteStudentDataPopup extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
-      content: Text(
+      content: const Text(
         ("Are you sure you want to delete this student record?"),
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
@@ -23,7 +26,7 @@ class DeleteStudentDataPopup extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                // TODO: Add Functionality
+                Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: backgroundColor,
@@ -32,14 +35,15 @@ class DeleteStudentDataPopup extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              child: Text("No"),
+              child: const Text("No"),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10.0,
             ),
             ElevatedButton(
               onPressed: () {
-                // TODO: Add functionality
+                onDelete();
+                Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: warningColour,
@@ -48,7 +52,7 @@ class DeleteStudentDataPopup extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              child: Text("Yes"),
+              child: const Text("Yes"),
             )
           ],
         ),
