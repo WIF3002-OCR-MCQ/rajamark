@@ -10,7 +10,7 @@ class StudentInfo {
   });
 }
 
-StudentInfo parseInputString(String input) {
+StudentInfo parseInputString(String input, int answerLength) {
   String studentID = '';
   String studentName = '';
   List<String> studentAnswers = [];
@@ -48,6 +48,12 @@ StudentInfo parseInputString(String input) {
         RegExp(r'^\d+$').hasMatch(tokens.first) &&
         tokens.last.length == 1) {
       studentAnswers.add(tokens.last);
+    }
+  }
+
+  if (studentAnswers.length != answerLength) {
+    while (studentAnswers.length < answerLength) {
+      studentAnswers.add('');
     }
   }
 

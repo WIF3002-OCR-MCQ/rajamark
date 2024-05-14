@@ -86,8 +86,7 @@ class _ExtractPageState extends State<ExtractPage> {
     }
 
     //Parse the extracted text
-
-    StudentInfo studentInfo = parseInputString(extracted);
+    StudentInfo studentInfo = parseInputString(extracted, sampleAnswerList.length);
 
     //Calculate the score and update student name and id
     studentNameController.text = studentInfo.studentName;
