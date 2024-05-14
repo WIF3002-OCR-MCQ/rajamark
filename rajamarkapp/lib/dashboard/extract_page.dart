@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
@@ -71,22 +73,23 @@ class _ExtractPageState extends State<ExtractPage> {
 
   void _uploadStudentData(BuildContext context) async {
     //Pick File from the path
-    String? path = await _showFilePicker(context);
-    if (path == null) {
-      print("File is not picked!");
-      return;
-    }
-    print("File picked");
+    // String? path = await _showFilePicker(context);
+    // if (path == null) {
+    //   print("File is not picked!");
+    //   return;
+    // }
+    // print("File picked");
 
     //Extract text from the image
-    String? extracted = await _ocr(path);
+    String? extracted = await _showFilePicker(context);
     if (extracted == null) {
       print("Error extracting text from image");
       return;
     }
 
     //Parse the extracted text
-    StudentInfo studentInfo = parseInputString(extracted, sampleAnswerList.length);
+    StudentInfo studentInfo =
+        parseInputString(extracted, sampleAnswerList.length);
 
     //Calculate the score and update student name and id
     studentNameController.text = studentInfo.studentName;
@@ -130,35 +133,66 @@ class _ExtractPageState extends State<ExtractPage> {
 
   Future<String?> _showFilePicker(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      filePath = result.files.single.path;
-      return filePath;
-    }
-    return null;
-  }
-
-  Future<String?> _ocr(String filePath) async {
+    String? filePath = '';
+    Uint8List? fileBytes;
     String? extracted;
+    if (result != null) {
+      if (kIsWeb) {
+        // Handle web platform
+        fileBytes = result.files.first.bytes;
 
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      final String authString =
-          await rootBundle.loadString('assets/auth/auth.json');
-      final googleVision = await gv.GoogleVision.withJwt(authString);
-      List<gv.EntityAnnotation> annotations = await googleVision
-          .textDetection(gv.JsonImage.fromFilePath(filePath!));
-      extracted = annotations[0].description;
-    } else {
-      //Web Ocr
-      extracted = await FlutterTesseractOcr.extractText(filePath!, args: {
-        "tessedit_char_whitelist":
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
-        "preserve_interword_spaces": "1",
-        "tessedit_pageseg_mode": "1",
-      });
+        if (fileBytes != null) {
+          // Convert Uint8List to ByteBuffer
+          ByteBuffer buffer = fileBytes.buffer;
+          gv.JsonImage jsonImage = gv.JsonImage.fromBuffer(buffer);
+
+          // Assuming Google Vision can process JsonImage directly
+          final String authString =
+              await rootBundle.loadString('assets/auth/auth.json');
+          final googleVision = await gv.GoogleVision.withJwt(authString);
+          List<gv.EntityAnnotation> annotations =
+              await googleVision.textDetection(jsonImage);
+          extracted = annotations[0].description;
+        }
+      } else {
+        // Handle non-web platforms
+        filePath = result.files.single.path;
+
+        if (filePath != null) {
+          final String authString =
+              await rootBundle.loadString('assets/auth/auth.json');
+          final googleVision = await gv.GoogleVision.withJwt(authString);
+          List<gv.EntityAnnotation> annotations = await googleVision
+              .textDetection(gv.JsonImage.fromFilePath(filePath));
+          extracted = annotations[0].description;
+        }
+      }
     }
-
     return extracted;
   }
+
+  // Future<String?> _ocr(String filePath) async {
+  //   String? extracted;
+
+  //   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+  //     final String authString =
+  //         await rootBundle.loadString('assets/auth/auth.json');
+  //     final googleVision = await gv.GoogleVision.withJwt(authString);
+  //     List<gv.EntityAnnotation> annotations = await googleVision
+  //         .textDetection(gv.JsonImage.fromFilePath(filePath!));
+  //     extracted = annotations[0].description;
+  //   } else {
+  //     //Web Ocr
+  //     extracted = await FlutterTesseractOcr.extractText(filePath!, args: {
+  //       "tessedit_char_whitelist":
+  //           "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
+  //       "preserve_interword_spaces": "1",
+  //       "tessedit_pageseg_mode": "1",
+  //     });
+  //   }
+
+  //   return extracted;
+  // }
 
   void back() {
     setState(() {
@@ -357,9 +391,7 @@ class _ExtractPageState extends State<ExtractPage> {
                               .map((element) => answerSelection(
                                     element,
                                     getColor(
-                                        questionNum,
-                                        element,
-                                        sampleAnswer),
+                                        questionNum, element, sampleAnswer),
                                     questionNum,
                                   ))
                               .toList(),
