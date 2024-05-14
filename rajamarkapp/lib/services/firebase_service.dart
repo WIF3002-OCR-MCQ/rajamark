@@ -105,14 +105,40 @@ class FirebaseService {
   // }
 
   Future<bool> addStudentResult(StudentResult studentData) async {
-    CollectionReference student_result =
+    CollectionReference studentResult =
         FirebaseFirestore.instance.collection('student_result');
 
     try {
-      await student_result.doc().set(studentData.toJson());
+      await studentResult.doc().set(studentData.toJson());
       return true;
     } catch (e) {
-      print('Error creating exam: $e');
+      print('Error adding student result: $e');
+      return false;
+    }
+  }
+
+  Future<bool> removeStudentResult(StudentResult studentData) async {
+    CollectionReference studentResult =
+        FirebaseFirestore.instance.collection('student_result');
+
+    try {
+      await studentResult.doc().set(studentData.toJson());
+      return true;
+    } catch (e) {
+      print('Error adding student result: $e');
+      return false;
+    }
+  }
+
+  Future<bool> updateStudentResult(StudentResult studentData) async {
+    CollectionReference studentResult =
+        FirebaseFirestore.instance.collection('student_result');
+
+    try {
+      await studentResult.doc().update(studentData.toJson());
+      return true;
+    } catch (e) {
+      print('Error adding student result: $e');
       return false;
     }
   }
