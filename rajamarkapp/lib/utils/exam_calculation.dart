@@ -26,7 +26,7 @@ int calculateScore(List<String> sampleAnswer, List<String> studentAnswer) {
 
 String calculateGrade(int score, Exam examData) {
   for (var grade in examData.grades) {
-    if (score > grade.lowerScore && score < grade.upperScore) {
+    if (score >= grade.lowerScore && score <= grade.upperScore) {
       return grade.gradeLabel;
     }
   }

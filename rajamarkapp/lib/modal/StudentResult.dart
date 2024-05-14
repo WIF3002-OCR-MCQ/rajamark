@@ -6,7 +6,6 @@ class StudentResult {
   List<String> answerText; // This is to store the student extracted answer
   String gradeLabel;
   DateTime date;
-  String imgId;
 
   StudentResult({
     required this.studentId,
@@ -16,7 +15,6 @@ class StudentResult {
     required this.answerText,
     required this.gradeLabel,
     required this.date,
-    required this.imgId,
   });
 
   StudentResult.fromJson(Map<String, dynamic> json)
@@ -26,8 +24,7 @@ class StudentResult {
         score = json['score'],
         answerText = (json['answerText'] as List<dynamic>).cast<String>(),
         gradeLabel = json['gradeLabel'],
-        date = DateTime.parse(json['date']),
-        imgId = json['imgId'];
+        date = DateTime.parse(json['date']);
 
   Map<String, dynamic> toJson() => {
         'studentId': studentId,
@@ -36,13 +33,12 @@ class StudentResult {
         'score': score,
         'answerText': answerText,
         'gradeLabel': gradeLabel,
-        'date': date.toString(),
-        'imgId': imgId,
+        'date': date.toString()
       };
 
   @override
   String toString() {
     return 'StudentResult{studentId: $studentId, examId: $examId, studentName: $studentName, '
-        'score: $score, answerText: $answerText, gradeLabel: $gradeLabel, date: $date, imgId: $imgId}';
+        'score: $score, answerText: $answerText, gradeLabel: $gradeLabel, date: $date}';
   }
 }

@@ -9,7 +9,7 @@ class StudentInfo {
     required this.studentAnswers,
   });
 }
- 
+
 StudentInfo parseInputString(String input) {
   String studentID = '';
   String studentName = '';
@@ -40,25 +40,31 @@ StudentInfo parseInputString(String input) {
     // }
 
     // Attempt to extract student answers (assuming answers start with a digit followed by a dot and/or space then a letter)
-    List<String> tokens = normalizedLine.split(RegExp(r'\s*\.\s*')).where((token) => token.isNotEmpty).toList();
-    if (tokens.length == 2 && RegExp(r'^\d+$').hasMatch(tokens.first) && tokens.last.length == 1) {
-        studentAnswers.add(tokens.last);
+    List<String> tokens = normalizedLine
+        .split(RegExp(r'\s*\.\s*'))
+        .where((token) => token.isNotEmpty)
+        .toList();
+    if (tokens.length == 2 &&
+        RegExp(r'^\d+$').hasMatch(tokens.first) &&
+        tokens.last.length == 1) {
+      studentAnswers.add(tokens.last);
     }
   }
 
   return StudentInfo(
-    studentID: studentID.trim(),
+    studentID: studentID.trim().replaceAll(' ', ''),
     studentName: studentName.trim(),
     studentAnswers: studentAnswers,
   );
 }
 
-  // Helper function to extract the value after the some character
-  String extractValue(String line) {
-    RegExp regExp = RegExp(r'Student (Id|Name)\s*[:=-]?\s*(.*)', caseSensitive: false);
-    Match? match = regExp.firstMatch(line);
-    if (match != null && match.groupCount >= 2) {
-      return match.group(2)!; 
-    }
-    return '';
+// Helper function to extract the value after the some character
+String extractValue(String line) {
+  RegExp regExp =
+      RegExp(r'Student (Id|Name)\s*[:=-]?\s*(.*)', caseSensitive: false);
+  Match? match = regExp.firstMatch(line);
+  if (match != null && match.groupCount >= 2) {
+    return match.group(2)!;
+  }
+  return '';
 }

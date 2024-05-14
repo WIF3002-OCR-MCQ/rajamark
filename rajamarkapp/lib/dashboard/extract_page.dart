@@ -1,19 +1,17 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_vision/google_vision.dart' as gv;
-import 'package:image_picker/image_picker.dart';
 import 'package:rajamarkapp/const/constant.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
 import 'package:rajamarkapp/modal/StudentInfo.dart';
 import 'package:rajamarkapp/modal/StudentResult.dart';
+import 'package:rajamarkapp/popups/delete_student_data.dart';
+import 'package:rajamarkapp/state/ExamState.dart';
 import 'package:rajamarkapp/utils/exam_calculation.dart';
 
 enum ExamView { general, detail, edit }
@@ -28,16 +26,14 @@ class ExtractPage extends StatefulWidget {
 
 class _ExtractPageState extends State<ExtractPage> {
   List<QuestionModal> sampleAnswerList = [];
-  List<StudentResult> studentResults = [];
+  List<String> tempStudentAnswers = []; //Used for editing
 
   TextEditingController studentNameController = TextEditingController();
   TextEditingController studentIdController = TextEditingController();
 
   ExamView currentView = ExamView.general;
   String? filePath = '';
-  StudentInfo? studentInfo;
-
-  List<String> tempStudentAnswers = [];
+  StudentResult? currentStudentResult;
 
   @override
   void initState() {
@@ -53,173 +49,125 @@ class _ExtractPageState extends State<ExtractPage> {
       sampleAnswerList = tempList;
     });
 
-    print("length is ${sampleAnswerList.length}");
+    print("${widget.examData.studentResults.length} student results");
   }
 
   void _uploadStudentData(BuildContext context) async {
-    // String? path = await _showFilePicker(context);
-    // if (path == null) {
-    //   print("File is not picked!");
-    //   return;
-    // }
-    // print("File picked");
-    String? url;
+    //Pick File from the path
+    String? path = await _showFilePicker(context);
+    if (path == null) {
+      print("File is not picked!");
+      return;
+    }
+    print("File picked");
 
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
-      await FirebaseStorage.instance.ref('uploads/upload.jpg').putData(bytes);
-      url =
-          await FirebaseStorage.instance.ref('uploads/upload.jpg').getDownloadURL();
+    //Extract text from the image
+    String? extracted = await _ocr(path);
+    if (extracted == null) {
+      print("Error extracting text from image");
+      return;
     }
 
-    String? extracted;
+    //Parse the extracted text
 
-    print("Picked file path: ${url}");
-    extracted = await FlutterTesseractOcr.extractText(url!, args: {
-      "tessedit_char_whitelist":
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
-      "preserve_interword_spaces": "1",
-      "tessedit_pageseg_mode": "1",
-    });
+    StudentInfo studentInfo = parseInputString(extracted);
 
-    print("Extracted text: $extracted");
+    //Calculate the score and update student name and id
+    studentNameController.text = studentInfo.studentName;
+    studentIdController.text = studentInfo.studentID;
+    int score = calculateScore(
+        widget.examData.sampleAnswer, studentInfo.studentAnswers);
 
+    //Create a student result object
+    StudentResult studentResult = StudentResult(
+      studentId: studentInfo.studentID,
+      examId: widget.examData.examId,
+      studentName: studentInfo.studentName,
+      score: score,
+      answerText: studentInfo.studentAnswers,
+      gradeLabel: calculateGrade(score, widget.examData),
+      date: DateTime.now(),
+    );
+
+    //Add the student result to the exam state
+    ExamState.to.addStudentResult(studentResult, widget.examData);
+
+    //Change the current page state
     setState(() {
       currentView = ExamView.detail;
-      studentInfo = parseInputString(extracted!);
+      currentStudentResult = studentResult;
     });
-
-    // studentNameController.text = studentInfo!.studentName;
-    // studentIdController.text = studentInfo!.studentID;
-
-    // int score = calculateScore(
-    //     widget.examData.sampleAnswer, studentInfo!.studentAnswers);
-
-    // String? downloadUrl = await addImageToFirebase(
-    //     File(path), "${studentInfo!.studentID}_${widget.examData.examId}");
-
-    // print("File Uplaoded ${downloadUrl}");
-
-    // //Upload to firestore cloud storage first to retrive the image url
-    // //Then create a student result object
-
-    // StudentResult studentResult = StudentResult(
-    //   studentId: studentInfo!.studentID,
-    //   examId: widget.examData.examId,
-    //   studentName: studentInfo!.studentName,
-    //   score: score,
-    //   answerText: studentInfo!.studentAnswers,
-    //   gradeLabel: calculateGrade(score, widget.examData),
-    //   date: DateTime.now(),
-    //   imgId: downloadUrl,
-    // );
-
-    // print(studentResult);
   }
 
-  Future<String?> addImageToFirebase(File imageFile, String fileName) async {
-    final destination = 'files/$fileName';
-    try {
-      final ref = firebase_storage.FirebaseStorage.instance
-          .ref(destination)
-          .child('file/');
-      await ref.putFile(imageFile);
-      return await ref.getDownloadURL();
-    } catch (e) {
-      print('error occured');
+  void _viewStudentDetails(StudentResult studentResult) {
+    setState(() {
+      currentView = ExamView.detail;
+      currentStudentResult = studentResult;
+      studentNameController.text = studentResult.studentName;
+      studentIdController.text = studentResult.studentId;
+    });
+  }
+
+  Future<String?> _showFilePicker(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      filePath = result.files.single.path;
+      return filePath;
     }
     return null;
   }
 
-  // Future<String> saveStudentResultImage(File imageFile, String fileName) async {
-  //   try {
-  //     // String fileName =
-  //     //     'result_${DateTime.now().millisecondsSinceEpoch}'; // Generate a unique file name for the image
-  //     Reference storageReference =
-  //         FirebaseStorage.instance.ref().child('student-answers/$fileName');
-  //     UploadTask uploadTask = storageReference.putFile(imageFile);
+  Future<String?> _ocr(String filePath) async {
+    String? extracted;
 
-  //     TaskSnapshot snapshot = await uploadTask;
-  //     String downloadURL = await snapshot.ref.getDownloadURL();
-  //     return downloadURL;
-  //   } catch (e) {
-  //     print('Error saving student result image: $e');
-  //     throw e; // Rethrow the exception
-  //   }
-  // }
-
-  Future<String?> _showFilePicker(BuildContext context) async {
-    // FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      // filePath = result.files.single.path;
-      String? extracted;
-
-      // if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      //   final String authString =
-      //       await rootBundle.loadString('assets/auth/auth.json');
-      //   final googleVision = await gv.GoogleVision.withJwt(authString);
-      //   List<gv.EntityAnnotation> annotations = await googleVision
-      //       .textDetection(gv.JsonImage.fromFilePath(filePath!));
-      //   extracted = annotations[0].description;
-      // } else {
-
-      print("Picked file path: ${pickedFile.path}");
-      extracted = await FlutterTesseractOcr.extractText(pickedFile.path, args: {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      final String authString =
+          await rootBundle.loadString('assets/auth/auth.json');
+      final googleVision = await gv.GoogleVision.withJwt(authString);
+      List<gv.EntityAnnotation> annotations = await googleVision
+          .textDetection(gv.JsonImage.fromFilePath(filePath!));
+      extracted = annotations[0].description;
+    } else {
+      //Web Ocr
+      extracted = await FlutterTesseractOcr.extractText(filePath!, args: {
         "tessedit_char_whitelist":
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
         "preserve_interword_spaces": "1",
         "tessedit_pageseg_mode": "1",
       });
-      // }
-
-      setState(() {
-        currentView = ExamView.detail;
-        studentInfo = parseInputString(extracted!);
-      });
-
-      return filePath;
-
-      // This is how to access student info object
-      // StudentInfo studentInfo = parseInputString(extracted);
-      // print('Student ID: ${studentInfo.studentID}');
-      // print('Student Name: ${studentInfo.studentName}');
-      // print('Student Answers:');
-      // for (var answer in studentInfo.studentAnswers) {
-      //   print(answer);
-      // }
     }
-    return null;
+
+    return extracted;
   }
 
   void back() {
     setState(() {
       currentView = ExamView.general;
       filePath = "";
-      studentInfo = null;
+      currentStudentResult = null;
     });
   }
 
   void _saveEditedStudentAnswer() {
-    StudentInfo newStudentInfo = StudentInfo(
-        studentName: studentNameController.text,
-        studentID: studentIdController.text,
-        studentAnswers: tempStudentAnswers);
+    ExamState.to.updateStudentResult(currentStudentResult!, widget.examData);
+
     setState(() {
-      studentInfo = newStudentInfo;
+      currentStudentResult!.studentName = studentNameController.text;
+      currentStudentResult!.studentId = studentIdController.text;
+      currentStudentResult!.answerText = tempStudentAnswers;
       currentView = ExamView.detail;
       tempStudentAnswers = [];
     });
-
-    //TODO save the edited student answer to firestore
   }
 
-  void _deleteStudentAnswer() {}
+  void _deleteStudentResult() {
+    ExamState.to.removeStudentResult(currentStudentResult!, widget.examData);
+    setState(() {
+      widget.examData.studentResults.remove(currentStudentResult);
+      currentView = ExamView.general;
+      currentStudentResult = null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +179,7 @@ class _ExtractPageState extends State<ExtractPage> {
             children: [
               answerScheme(),
               currentView == ExamView.general
-                  ? allStudentList(studentResults)
+                  ? allStudentList(widget.examData.studentResults)
                   : uploadedImageView(filePath!),
             ],
           ),
@@ -309,7 +257,12 @@ class _ExtractPageState extends State<ExtractPage> {
   }
 
   Widget questionAnswers(int questionNum, String sampleAnswer) {
-    String? currentAnswer = studentInfo?.studentAnswers[questionNum - 1];
+    String? currentAnswer;
+    try {
+      currentAnswer = currentStudentResult?.answerText[questionNum - 1];
+    } catch (e) {
+      print('Error: $e');
+    }
     List<String> abcd = ['A', 'B', 'C', 'D'];
 
     return Container(
@@ -382,30 +335,40 @@ class _ExtractPageState extends State<ExtractPage> {
 
   Widget studentAnswers(StudentResult studentResult) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(8)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Student ID: ${studentResult.studentId}',
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => _viewStudentDetails(studentResult),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            margin: const EdgeInsets.only(bottom: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Student ID: ${studentResult.studentId}',
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Name: ${studentResult.studentName}',
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
-          Text(
-            'Name: ${studentResult.studentName}',
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -459,6 +422,7 @@ class _ExtractPageState extends State<ExtractPage> {
                   color: const Color(0xffbfd7ed)),
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     currentView == ExamView.detail
                         ? Row(
@@ -466,7 +430,7 @@ class _ExtractPageState extends State<ExtractPage> {
                               IconButton(
                                   onPressed: () => back(),
                                   icon: const Icon(Icons.arrow_back)),
-                              Text(studentInfo?.studentName ?? "",
+                              Text(currentStudentResult?.studentName ?? "",
                                   style: GoogleFonts.poppins(fontSize: 20)),
                               const Spacer(),
                               IconButton(
@@ -474,13 +438,56 @@ class _ExtractPageState extends State<ExtractPage> {
                                     setState(() {
                                       currentView = ExamView.edit;
                                       tempStudentAnswers =
-                                          studentInfo!.studentAnswers;
+                                          currentStudentResult!.answerText;
                                     });
                                   },
                                   icon: const Icon(Icons.edit)),
                               IconButton(
                                   onPressed: () {
-                                    _deleteStudentAnswer();
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            DeleteStudentDataPopup(
+                                              onDelete: () {
+                                                _deleteStudentResult();
+                                              },
+                                            ));
+                                    // showDialog<void>(
+                                    //   context: context,
+                                    //   builder: (BuildContext context) {
+                                    //     return AlertDialog(
+                                    //       title: const Text(
+                                    //           "Are you sure want to delete?"),
+                                    //       content: const Text(
+                                    //           "This action cannot be undone"),
+                                    //       actions: <Widget>[
+                                    //         TextButton(
+                                    //           style: TextButton.styleFrom(
+                                    //             textStyle: Theme.of(context)
+                                    //                 .textTheme
+                                    //                 .labelLarge,
+                                    //           ),
+                                    //           child: const Text('Cancel'),
+                                    //           onPressed: () {
+                                    //             Navigator.of(context).pop();
+                                    //           },
+                                    //         ),
+                                    //         TextButton(
+                                    //           style: TextButton.styleFrom(
+                                    //             textStyle: Theme.of(context)
+                                    //                 .textTheme
+                                    //                 .labelLarge,
+                                    //           ),
+                                    //           child: const Text('Yes'),
+                                    //           onPressed: () {
+                                    //             _deleteStudentResult();
+                                    //             Navigator.of(context).pop();
+                                    //           },
+                                    //         ),
+                                    //       ],
+                                    //     );
+                                    //   },
+                                    // );
                                   },
                                   icon: const Icon(
                                     Icons.delete,
@@ -507,19 +514,22 @@ class _ExtractPageState extends State<ExtractPage> {
                             ],
                           ),
                     const SizedBox(height: 16),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: SizedBox(
-                        child: Image.file(
-                          File(path),
-                          fit: BoxFit.cover,
-                          width: double
-                              .infinity, // Set a specific width for the image
-                        ),
-                      ),
-                    ),
+                    filePath == ''
+                        ? const Text("Student answer is extracted",
+                            textAlign: TextAlign.start)
+                        : Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: SizedBox(
+                              child: Image.file(
+                                File(path),
+                                fit: BoxFit.cover,
+                                width: double
+                                    .infinity, // Set a specific width for the image
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -584,9 +594,6 @@ class _ExtractPageState extends State<ExtractPage> {
                         ),
                       ),
                     )
-                    // ElevatedButton(
-                    //     onPressed: () => addQuestion(),
-                    //     child: Text("Add question")),
                   ],
                 ),
               ),

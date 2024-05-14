@@ -22,9 +22,10 @@ class Exam {
     required this.sampleAnswer,
     this.meanScore = 0.0,
     this.medianScore = 0.0,
-    required this.grades,
-    required this.studentResults,
-  });
+    List<Grade>? grades,
+    List<StudentResult>? studentResults,
+  })  : grades = grades ?? [],
+        studentResults = studentResults ?? [];
 
   Exam.fromJson(Map<String, dynamic> json)
       : examId = json['examId'],
@@ -37,11 +38,16 @@ class Exam {
             json['meanScore'] != null ? json['meanScore'].toDouble() : 0.0,
         medianScore =
             json['medianScore'] != null ? json['medianScore'].toDouble() : 0.0,
-        grades =
-            (json['grades'] as List).map((g) => Grade.fromJson(g)).toList(),
-        studentResults = (json['studentResults'] as List)
-            .map((r) => StudentResult.fromJson(r))
-            .toList();
+        grades = json['grades'] != null
+            ? (json['grades'] as List)
+                .map((item) => Grade.fromJson(item))
+                .toList()
+            : [],
+        studentResults = json['studentResults'] != null
+            ? (json['studentResults'] as List)
+                .map((item) => StudentResult.fromJson(item))
+                .toList()
+            : [];
 
   Map<String, dynamic> toJson() => {
         'examId': examId,
@@ -52,38 +58,7 @@ class Exam {
         'sampleAnswer': sampleAnswer,
         'meanScore': meanScore,
         'medianScore': medianScore,
-        'grades': grades.map((g) => g.toJson()).toList(),
-        'studentResults': studentResults.map((r) => r.toJson()).toList(),
       };
 
-  void calculateMean() {
-    if (studentResults.isEmpty) {
-      meanScore = 0.0;
-    } else {
-      double totalScore = 0.0;
-      for (var result in studentResults) {
-        totalScore += result.score;
-      }
-      meanScore = totalScore / studentResults.length;
-    }
-  }
-
-  // Calculate median
-  void calculateMedian() {
-    if (studentResults.isEmpty) {
-      medianScore = 0.0;
-    } else {
-      List<int> scores = studentResults.map((result) => result.score).toList();
-      scores.sort();
-
-      int middleIndex = (scores.length / 2).floor();
-      if (scores.length % 2 == 0) {
-        // Even number of scores
-        medianScore = (scores[middleIndex - 1] + scores[middleIndex]) / 2;
-      } else {
-        // Odd number of scores
-        medianScore = scores[middleIndex].toDouble();
-      }
-    }
-  }
+  
 }

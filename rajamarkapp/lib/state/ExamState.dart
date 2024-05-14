@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:get/get.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
+import 'package:rajamarkapp/modal/Grade.dart';
 import 'package:rajamarkapp/modal/StudentResult.dart';
 import 'package:rajamarkapp/services/firebase_service.dart';
 // import 'package:rajamarkapp/state/GradeState.dart';
@@ -14,13 +15,6 @@ class ExamState extends GetxService {
 
   void getExams() async {
     exams.value = await firebaseService.getExams();
-    for (Exam exam in exams) {
-      List<StudentResult> studentResults =
-          await firebaseService.getStudentResultByExamId(exam.examId);
-
-      exam.studentResults = studentResults;
-    }
-
     filteredExams.value = exams;
   }
 
@@ -62,6 +56,35 @@ class ExamState extends GetxService {
     }
   }
 
+  Future<List<StudentResult>> getStudentResultByExamId(String examId) async {
+    List<StudentResult> studentResults =
+        await firebaseService.getStudentResultByExamId(examId);
+    for (var exam in exams) {
+      if (exam.examId == examId) {
+        exam.studentResults = studentResults;
+        print("Student results found for $examId");
+        return studentResults;
+      }
+    }
+    print("Student results not found for $examId");
+    return [];
+  }
+
+  Future<List<Grade>> getGradesByExamId(String examId) async {
+    List<Grade> grade = await firebaseService.getGradesByExamId(examId);
+
+    for (var exam in exams) {
+      if (exam.examId == examId) {
+        exam.grades = grade;
+        print("Grades found for $examId");
+        print("Grade length ${grade.length}");
+        return grade;
+      }
+    }
+    print("Grades not found for $examId");
+    return [];
+  }
+
   void addStudentResult(StudentResult studentResult, Exam currentExam) async {
     bool isAdded = await firebaseService.addStudentResult(studentResult);
 
@@ -71,6 +94,7 @@ class ExamState extends GetxService {
         exam.studentResults.add(studentResult);
       }
     }
+    print("Student result added");
   }
 
   void removeStudentResult(

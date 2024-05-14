@@ -1,130 +1,110 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:rajamarkapp/dashboard/extract_page.dart';
 import 'package:rajamarkapp/dashboard/student_answer.dart';
-import 'package:rajamarkapp/database/database.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
+import 'package:rajamarkapp/modal/Grade.dart';
 import 'package:rajamarkapp/modal/StudentResult.dart';
 import 'package:rajamarkapp/popups/delete_student_data.dart';
 import 'package:rajamarkapp/popups/edit_result_popup.dart';
-import 'package:rajamarkapp/popups/sample_answer_first_popup.dart';
-import 'package:rajamarkapp/popups/sample_answer_second_popup.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:rajamarkapp/state/ExamState.dart';
 
-import '../popups/delete_popup.dart';
-import 'package:rajamarkapp/dashboard/file_picker.dart';
-
-class ExamDetailsView extends StatelessWidget {
-  final Exam examData;
-
+class ExamDetailsView extends StatefulWidget {
   const ExamDetailsView({Key? key, required this.examData}) : super(key: key);
 
-  Future<String?> _showFilePicker(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      final filePath = result.files.single.path;
-      return filePath;
-    }
-    return null;
+  final Exam examData;
+
+  @override
+  State<ExamDetailsView> createState() => _CreateExamDetailsViewState();
+}
+
+class _CreateExamDetailsViewState extends State<ExamDetailsView> {
+  late Exam examData;
+
+  @override
+  void initState() {
+    super.initState();
+    examData = widget.examData;
+    initialiseGradeAndResult();
   }
 
-  Future<String?> addImageToFirebase(File imageFile, String fileName) async {
-    final destination = 'files/$fileName';
-    try {
-      final ref = firebase_storage.FirebaseStorage.instance
-          .ref(destination)
-          .child('file/');
-      await ref.putFile(imageFile);
-      return await ref.getDownloadURL();
-    } catch (e) {
-      print('error occured');
-    }
-    return null;
+  void initialiseGradeAndResult() async {
+    examData = ExamState.to.exams
+        .firstWhere((element) => element.examId == examData.examId);
+    List<StudentResult> studentResult =
+        await ExamState.to.getStudentResultByExamId(examData.examId);
+    List<Grade> grade = await ExamState.to.getGradesByExamId(examData.examId);
+    setState(() {
+      examData.studentResults = studentResult;
+      examData.grades = grade;
+    });
+    calculateMean();
+    calculateMedian();
   }
 
-  Uint8List readFileBytes(String filePath) {
-    return File(filePath).readAsBytesSync();
+  void calculateMean() {
+    List<StudentResult> studentResults = examData.studentResults;
+    if (examData.studentResults.isEmpty) return;
+
+    //calculate mean score
+    double totalScore = 0.0;
+    for (var result in studentResults) {
+      totalScore += result.score;
+    }
+    double meanScore = totalScore / studentResults.length;
+    setState(() {
+      examData.meanScore = meanScore;
+    });
+  }
+
+  // Calculate median
+  void calculateMedian() {
+    List<StudentResult> studentResults = examData.studentResults;
+    if (studentResults.isEmpty) return;
+
+    double medianScore = 0.0;
+
+    List<int> scores = studentResults.map((result) => result.score).toList();
+    scores.sort();
+    int middleIndex = (scores.length / 2).floor();
+    if (scores.length % 2 == 0) {
+      // Even number of scores
+      medianScore = (scores[middleIndex - 1] + scores[middleIndex]) / 2;
+    } else {
+      // Odd number of scores
+      medianScore = scores[middleIndex].toDouble();
+    }
+    setState(() {
+      examData.medianScore = medianScore;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Exam Details'),
+        title: const Text('Exam Details'),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton.icon(
               onPressed: () async {
-                // print("bruh");
-                // final result = await FilePicker.platform
-                //     .pickFiles(type: FileType.any, allowMultiple: false);
-
-                // if (result != null && result.files.isNotEmpty) {
-                //   final filePath = result.files.first.path;
-                //   final fileName = result.files.first.name;
-
-                //   if (filePath != null) {
-                //     // Read file bytes in a background isolate
-                //     Uint8List bytes = await compute(readFileBytes, filePath);
-
-                //     // Upload file to Firebase Storage
-                //     await FirebaseStorage.instance
-                //         .ref('uploads/$fileName')
-                //         .putFile(File(filePath));
-                //   } else {
-                //     print('File path is null');
-                //   }
-                // } else {
-                //   print('No file picked');
-                // }
-
-                // if (kIsWeb) {
-                //   print("web");
-                // } else {
-                //   print("Windows");
-                //   _showFilePicker(context).then((path) async {
-                //     if (path != null) {
-                //       final file = File(path);
-                //       print('File path: $path');
-                //       String? url = await saveStudentResultImage(file);
-                //       print('File uploaded successfully $url');
-                //       // addImageToFirebase(file, examData.title).then((url) {
-                //       //   if (url != null) {
-                //       //     print('File uploaded successfully $url');
-                //       //   } else {
-                //       //     print('File upload failed');
-                //       //   }
-                //       // });
-                //     }
-                //   });
-                // }
-
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ExtractPage(examData: examData),
                   ),
-                );
-                // showDialog(
-                //   context: context,
-                //   builder: (BuildContext context) {
-                //     return FilePickerPopup(
-                //         isUploadMode:
-                //             true); // Pass mode here if true, will show upload else will show extract
-                //   },
-                // );
+                ).then((_) => initialiseGradeAndResult());
               },
-              icon: Icon(Icons.upload, color: Colors.white),
+              icon: const Icon(Icons.remove_red_eye, color: Colors.white),
               label: Text(
-                'Upload Answer',
+                'View Answer',
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -140,94 +120,93 @@ class ExamDetailsView extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.9,
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width:
-                  double.infinity, // Makes the Container span the entire width
-              padding: const EdgeInsets.all(
-                  16.0), // Keeps the text inside left-aligned
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(8.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Exam Title: ${examData.title}',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text('Exam Description: ${examData.description}'),
+                    Text('Course Code:  ${examData.courseCode}'),
+                    Text('Session: ${examData.session}'),
+                  ],
+                ),
               ),
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Keeps the text left-aligned
+              const SizedBox(height: 16.0),
+              Container(
+                height: 400,
+                child: Center(
+                  child: statisticWidget(examData),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              // Column headers
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Exam Title: ${examData.title}',
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      'Student ID',
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Text('Exam Description: ${examData.description}'),
-                  Text('Course Code:  ${examData.courseCode}'),
-                  Text('Session: ${examData.session}'),
+                  Expanded(
+                    child: Text(
+                      'Name',
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      'Result',
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Actions',
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
                 ],
               ),
-            ),
-            SizedBox(height: 16.0),
-            Container(
-              height: 400,
-              child: Center(
-                child: statisticWidget(
-                    examData), //Mean Score, Median Score with vertical divider
-              ),
-            ),
-            SizedBox(height: 16.0),
-            // Column headers
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    'Student ID',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    'Name',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    'Result',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Expanded(
-                  // Actions header takes more space due to buttons
-                  flex: 2,
-                  child: Text(
-                    'Actions',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-                child: examData.studentResults.length == 0
-                    ? const Center(
-                        child: Text("No student data"),
-                      )
-                    : ListView.separated(
-                        itemCount:
-                            examData.studentResults.length, // Number of items
-                        separatorBuilder: (context, index) =>
-                            Divider(color: Colors.grey),
-                        itemBuilder: (context, index) {
-                          StudentResult result = examData.studentResults[index];
-                          return studentResultRow(result, context);
-                        },
-                      )),
-          ],
+              examData.studentResults.isEmpty
+                  ? const Center(
+                      child: Text("No student data"),
+                    )
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: examData.studentResults.length,
+                      separatorBuilder: (context, index) =>
+                          const Divider(color: Colors.grey),
+                      itemBuilder: (context, index) {
+                        StudentResult result = examData.studentResults[index];
+                        return studentResultRow(result, context);
+                      },
+                    ),
+            ],
+          ),
         ),
       ),
     );
@@ -245,23 +224,23 @@ class ExamDetailsView extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            result.studentId,
+            result.studentName,
             style: GoogleFonts.poppins(),
           ),
         ),
         Expanded(
+          flex: 2,
           child: Text(
             result.gradeLabel,
             style: GoogleFonts.poppins(),
           ),
         ),
         Expanded(
-          flex: 2,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            // mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
-                icon: Icon(Icons.visibility),
+                icon: const Icon(Icons.visibility),
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -270,7 +249,7 @@ class ExamDetailsView extends StatelessWidget {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.edit),
+                icon: const Icon(Icons.edit),
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -279,11 +258,19 @@ class ExamDetailsView extends StatelessWidget {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.delete, color: Colors.red),
+                icon: const Icon(Icons.delete, color: Colors.red),
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (context) => DeleteStudentDataPopup(),
+                    builder: (context) =>
+                        DeleteStudentDataPopup(onDelete: () async {
+                      ExamState.to.removeStudentResult(result, widget.examData);
+                      List<StudentResult> studentResult = await ExamState.to
+                          .getStudentResultByExamId(examData.examId);
+                      setState(() {
+                        examData.studentResults = studentResult;
+                      });
+                    }),
                   );
                 },
               ),

@@ -1,14 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
 import 'package:rajamarkapp/modal/Grade.dart';
 import 'package:rajamarkapp/modal/StudentResult.dart';
 
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<List<Exam>> getExams() async {
     CollectionReference exams = _firestore.collection('exam');
@@ -54,6 +52,13 @@ class FirebaseService {
     CollectionReference exams = _firestore.collection('exam');
 
     try {
+      for (var grade in examData.grades) {
+        await exams
+            .doc(examData.examId)
+            .collection('grades')
+            .doc(grade.gradeId)
+            .delete();
+      }
       await exams.doc(examData.examId).delete();
       return true;
     } catch (e) {
@@ -109,7 +114,9 @@ class FirebaseService {
         FirebaseFirestore.instance.collection('student_result');
 
     try {
-      await studentResult.doc().set(studentData.toJson());
+      await studentResult
+          .doc("${studentData.examId}_${studentData.studentId}")
+          .set(studentData.toJson());
       return true;
     } catch (e) {
       print('Error adding student result: $e');
@@ -122,7 +129,9 @@ class FirebaseService {
         FirebaseFirestore.instance.collection('student_result');
 
     try {
-      await studentResult.doc().set(studentData.toJson());
+      await studentResult
+          .doc("${studentData.examId}_${studentData.studentId}")
+          .delete();
       return true;
     } catch (e) {
       print('Error adding student result: $e');
@@ -130,15 +139,17 @@ class FirebaseService {
     }
   }
 
-  Future<bool> updateStudentResult(StudentResult studentData) async {
+  Future<bool> updateStudentResult(StudentResult studentResultData) async {
     CollectionReference studentResult =
         FirebaseFirestore.instance.collection('student_result');
 
     try {
-      await studentResult.doc().update(studentData.toJson());
+      await studentResult
+          .doc("${studentResultData.examId}_${studentResultData.studentId}")
+          .update(studentResultData.toJson());
       return true;
     } catch (e) {
-      print('Error adding student result: $e');
+      print('Error updating student result: $e');
       return false;
     }
   }
@@ -171,7 +182,7 @@ class FirebaseService {
 
     try {
       QuerySnapshot querySnapshot =
-          await resultsCollection.where('exam_id', isEqualTo: examId).get();
+          await resultsCollection.where('examId', isEqualTo: examId).get();
       for (var doc in querySnapshot.docs) {
         studentResults
             .add(StudentResult.fromJson(doc.data() as Map<String, dynamic>));
@@ -289,22 +300,20 @@ class FirebaseService {
   }
 
   Future<List<Grade>> getGradesByExamId(String examId) async {
-    CollectionReference grade = FirebaseFirestore.instance.collection('grade');
+    CollectionReference grade = FirebaseFirestore.instance.collection('exam');
     List<Grade> gradeList = [];
 
     try {
       QuerySnapshot querySnapshot =
-          await grade.where('exam_id', isEqualTo: examId).get();
+          await grade.doc(examId).collection("grades").get();
       querySnapshot.docs.forEach((element) {
         final data = element.data() as Map<String, dynamic>;
         gradeList.add(Grade.fromJson(data));
-        print("Successfully get Grades");
       });
-      return gradeList;
     } catch (e) {
-      print('Error getting grade: $e');
-      return [];
+      print('Error getting exams: $e');
     }
+    return gradeList;
   }
 
   Future<List<Grade>> getGradeByExamIdAndGradeLabel(
