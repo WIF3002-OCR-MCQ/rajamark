@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:file_picker/file_picker.dart';
@@ -317,23 +321,47 @@ class FilePickerPopup extends StatelessWidget {
 
   void _showFilePicker(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
+    String? filePath = '';
     if (result != null) {
-      String? filePath = result.files.single.path;
-      String? extracted;
+      String extracted='';
 
-      if(Platform.isWindows || Platform.isLinux || Platform.isMacOS){
+    if (kIsWeb) {
+      // Handle web platform
+      Uint8List? fileBytes = result.files.first.bytes;
+      String fileName = result.files.first.name;
+
+       if (fileBytes != null) {
+        // Convert Uint8List to ByteBuffer
+        ByteBuffer buffer = fileBytes.buffer;
+        JsonImage jsonImage = JsonImage.fromBuffer(buffer);
+        
+        // Assuming Google Vision can process JsonImage directly
+        final String authString = await rootBundle.loadString('assets/auth/auth.json');
+        final googleVision = await GoogleVision.withJwt(authString);
+        List<EntityAnnotation> annotations = await googleVision.textDetection(jsonImage);
+        extracted = annotations[0].description;
+      }
+    } else {
+      // Handle non-web platforms
+      filePath = result.files.single.path;
+
+      if (filePath != null) {
+        if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
           final String authString = await rootBundle.loadString('assets/auth/auth.json');
           final googleVision = await GoogleVision.withJwt(authString);
           List<EntityAnnotation> annotations = await googleVision.textDetection(
-          JsonImage.fromFilePath(filePath!));
+            JsonImage.fromFilePath(filePath)
+          );
           extracted = annotations[0].description;
-      }else{
-          extracted = await FlutterTesseractOcr.extractText(filePath!, args: {
-          "tessedit_char_whitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
-          "preserve_interword_spaces": "1",
-          "tessedit_pageseg_mode": "1",
-        });
+        } else {
+          extracted = await FlutterTesseractOcr.extractText(filePath, args: {
+            "tessedit_char_whitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
+            "preserve_interword_spaces": "1",
+            "tessedit_pageseg_mode": "1",
+          });
+        }
       }
+    }
 
       // ***** Remove later ******
           // This is how to access student info object
@@ -345,7 +373,7 @@ class FilePickerPopup extends StatelessWidget {
               print(answer);
             }   
 
-      if (filePath != null) {
+      if (filePath != null && filePath.isNotEmpty) {
         // Close initial popup
         Navigator.of(context).pop();
         //extract value
