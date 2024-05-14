@@ -28,7 +28,6 @@ class _CreateExamPageState extends State<CreateExamPage> {
   final _courseCodeController = TextEditingController();
   final _sessionController = TextEditingController();
 
-
   List<QuestionModal> questionList = [
     QuestionModal(questionNum: 1, selectedAnswer: "D"),
     QuestionModal(questionNum: 2, selectedAnswer: "D"),
@@ -47,54 +46,53 @@ class _CreateExamPageState extends State<CreateExamPage> {
   Map<String, List<TextEditingController>> gradeMap = {};
 
   _CreateExamPageState() {
-  gradeName.forEach((grade) {
-    //0 is lowerscore, 1 is higherscore
-    gradeMap[grade] = [TextEditingController(), TextEditingController()];
+    gradeName.forEach((grade) {
+      //0 is lowerscore, 1 is higherscore
+      gradeMap[grade] = [TextEditingController(), TextEditingController()];
 
-    switch (grade) {
-      case "A":
-        gradeMap[grade]![0].text = "90";
-        gradeMap[grade]![1].text = "100";
-        break;
-      case "A-":
-        gradeMap[grade]![0].text = "85";
-        gradeMap[grade]![1].text = "89";
-        break;
-      case "B+":
-        gradeMap[grade]![0].text = "80";
-        gradeMap[grade]![1].text = "84";
-        break;
-      case "B":
-        gradeMap[grade]![0].text = "75";
-        gradeMap[grade]![1].text = "79";
-        break;
-      case "B-":
-        gradeMap[grade]![0].text = "70";
-        gradeMap[grade]![1].text = "74";
-        break;
-      case "C+":
-        gradeMap[grade]![0].text = "65";
-        gradeMap[grade]![1].text = "69";
-        break;
-      case "C":
-        gradeMap[grade]![0].text = "60";
-        gradeMap[grade]![1].text = "64";
-        break;
-      case "D":
-        gradeMap[grade]![0].text = "50";
-        gradeMap[grade]![1].text = "59";
-        break;
-      case "F":
-        gradeMap[grade]![0].text = "0";
-        gradeMap[grade]![1].text = "49";
-        break;
-      default:
-        gradeMap[grade]![0].text = "0";
-        gradeMap[grade]![1].text = "0";
-    }
-  });
-}
-
+      switch (grade) {
+        case "A":
+          gradeMap[grade]![0].text = "90";
+          gradeMap[grade]![1].text = "100";
+          break;
+        case "A-":
+          gradeMap[grade]![0].text = "85";
+          gradeMap[grade]![1].text = "89";
+          break;
+        case "B+":
+          gradeMap[grade]![0].text = "80";
+          gradeMap[grade]![1].text = "84";
+          break;
+        case "B":
+          gradeMap[grade]![0].text = "75";
+          gradeMap[grade]![1].text = "79";
+          break;
+        case "B-":
+          gradeMap[grade]![0].text = "70";
+          gradeMap[grade]![1].text = "74";
+          break;
+        case "C+":
+          gradeMap[grade]![0].text = "65";
+          gradeMap[grade]![1].text = "69";
+          break;
+        case "C":
+          gradeMap[grade]![0].text = "60";
+          gradeMap[grade]![1].text = "64";
+          break;
+        case "D":
+          gradeMap[grade]![0].text = "50";
+          gradeMap[grade]![1].text = "59";
+          break;
+        case "F":
+          gradeMap[grade]![0].text = "0";
+          gradeMap[grade]![1].text = "49";
+          break;
+        default:
+          gradeMap[grade]![0].text = "0";
+          gradeMap[grade]![1].text = "0";
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -270,319 +268,242 @@ class _CreateExamPageState extends State<CreateExamPage> {
       appBar: AppBar(
         title: TopRowWidget(),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
-              child: Text(
-                "Create Exam",
-                style: GoogleFonts.poppins(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
+                child: Text(
+                  "Create Exam",
+                  style: GoogleFonts.poppins(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            Divider(
-              color: Colors.grey, // Customize the color of the divider
-              thickness: 1, // Adjust the thickness of the divider
-              height: 20.0,
-            ),
-            SizedBox(height: 20), // Add some spacing
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
-                      child: Text(
-                        "Exam Details",
+              Divider(
+                color: Colors.grey, // Customize the color of the divider
+                thickness: 1, // Adjust the thickness of the divider
+                height: 20.0,
+              ),
+              SizedBox(height: 20), // Add some spacing
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
+                child: Text(
+                  "Exam Details",
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  color: Color(0xFFBFD7ED),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: Text(
+                          'Exam Title: ',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        child: TextField(
+                          controller: _titleController,
+                          decoration: InputDecoration(
+                            hintText: 'Enter title here',
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                          ),
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: Text(
+                          'Exam Description: ',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        child: TextField(
+                          controller: _descriptionController,
+                          decoration: InputDecoration(
+                            hintText: 'Enter description here',
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                          ),
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: Text(
+                          'Course Code: ',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        child: TextField(
+                          controller: _courseCodeController,
+                          decoration: InputDecoration(
+                            hintText: 'Enter course code here',
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                          ),
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Session: ',
                         style: GoogleFonts.poppins(
-                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                    Container(
-                      height: 800,
-                      width: double.infinity,
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFBFD7ED),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 50.0), // Adjusted spacing
-                                  child: Text(
-                                    'Exam Title: ',
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 50.0), // Adjusted spacing
-                                  child: Text(
-                                    'Exam Description: ',
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 50.0), // Adjusted spacing
-                                  child: Text(
-                                    'Course Code: ',
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Session: ',
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ), // No space added below this text
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width:
-                                      200, // Set the width of the text input box
-                                  child: TextField(
-                                    controller: _titleController,
-                                    // onChanged: (value) {
-                                    //   setState(() {
-                                    //     textFieldValue = value;
-                                    //   });
-                                    // },
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter title here',
-                                      border: OutlineInputBorder(),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              10), // Changed the fill color
-                                    ),
-                                    style: TextStyle(
-                                        color: Colors
-                                            .black), // Changed the text color
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                SizedBox(
-                                  width:
-                                      200, // Set the width of the text input box
-                                  child: TextField(
-                                    controller: _descriptionController,
-                                    // onChanged: (value) {
-                                    //   setState(() {
-                                    //     textFieldValue = value;
-                                    //   });
-                                    // },
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter description here',
-                                      border: OutlineInputBorder(),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              10), // Changed the fill color
-                                    ),
-                                    style: TextStyle(
-                                        color: Colors
-                                            .black), // Changed the text color
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                SizedBox(
-                                  width:
-                                      200, // Set the width of the text input box
-                                  child: TextField(
-                                    controller: _courseCodeController,
-                                    // onChanged: (value) {
-                                    //   setState(() {
-                                    //     textFieldValue = value;
-                                    //   });
-                                    // },
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter course code here',
-                                      border: OutlineInputBorder(),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              10), // Changed the fill color
-                                    ),
-                                    style: TextStyle(
-                                        color: Colors
-                                            .black), // Changed the text color
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                SizedBox(
-                                  width:
-                                      200, // Set the width of the text input box
-                                  child: TextField(
-                                    controller: _sessionController,
-                                    // onChanged: (value) {
-                                    //   setState(() {
-                                    //     textFieldValue = value;
-                                    //   });
-                                    // },
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter session here',
-                                      border: OutlineInputBorder(),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              10), // Changed the fill color
-                                    ),
-                                    style: TextStyle(
-                                        color: Colors
-                                            .black), // Changed the text color
-                                  ),
-                                ),
-                              ],
-                            ),
-                            // Corrected placement of Row widget
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    'Grading System:',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  margin: EdgeInsets.only(
-                                      right: 7.0), // Adjust margin as needed
-                                ),
-                                SizedBox(height: 20),
-                                ...gradeName.map((grade) {
-                                  return gradeRow(grade, gradeMap[grade]!);
-                                }).toList(),
-                              ],
-                            ),
-                          ],
+                      SizedBox(
+                        child: TextField(
+                          controller: _sessionController,
+                          decoration: InputDecoration(
+                            hintText: 'Enter session here',
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                          ),
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
-                    ),
-                    Container(
-                      // Added container for "Answer Scheme"
-                      margin: EdgeInsets.all(20),
-                      child: Text(
-                        "Answer Scheme",
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
+                      SizedBox(height: 20),
+                      Text(
+                        'Grading System:',
+                        style: TextStyle(
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                    Container(
-                      height: 1000,
-                      width: double.infinity,
-                      padding: EdgeInsets.all(20),
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 200, vertical: 0),
+                      SizedBox(height: 20),
+                      ...gradeName.map((grade) {
+                        return gradeRow(grade, gradeMap[grade]!);
+                      }).toList(),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.all(20),
+                child: Text(
+                  "Answer Scheme",
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                height: 1000,
+                width: double.infinity,
+                padding: EdgeInsets.all(20),
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Color(0xffbfd7ed),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ...questionList
+                          .map((question) => questionAnswers(
+                                question.questionNum,
+                                question.selectedAnswer,
+                              ))
+                          .toList(),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () => addQuestion(),
+                        child: Text("Add question"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to the previous page
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Color(0xffbfd7ed)),
-                      child: SizedBox(
-                        width: 546,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              ...questionList
-                                  .map((question) => questionAnswers(
-                                        question.questionNum,
-                                        question.selectedAnswer,
-                                      ))
-                                  .toList(),
-                              ElevatedButton(
-                                  onPressed: () => addQuestion(),
-                                  child: Text("Add question")),
-                            ],
-                          ),
+                        color: Color(0xFF0074B7),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                      child: Text(
+                        "Back",
+                        style: GoogleFonts.poppins(
+                          fontSize: 20,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-                    Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 300.0, vertical: 0),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              // Navigate to the previous page
-                              Navigator.of(context).pop();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Color(0xFF0074B7),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              padding: EdgeInsets.all(20.0),
-                              margin: EdgeInsets.all(20.0),
-                              child: Text(
-                                "Back",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 20,
-                                  color: Colors.white, // Text color
-                                ),
-                              ),
-                            ),
-                          ),
-                          Spacer(), // Use Spacer widget to distribute space
-                          GestureDetector(
-                            onTap: () => isEditing
-                                ? editExam(context)
-                                : createExam(context),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Color(0xFF0074B7),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              padding: EdgeInsets.all(20.0),
-                              margin: EdgeInsets.all(20.0),
-                              child: Text(
-                                isEditing ? "Update" : "Save",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 20,
-                                  color: Colors.white, // Text color
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        isEditing ? editExam(context) : createExam(context),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFF0074B7),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                      child: Text(
+                        isEditing ? "Update" : "Save",
+                        style: GoogleFonts.poppins(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -595,28 +516,24 @@ class _CreateExamPageState extends State<CreateExamPage> {
         children: [
           SizedBox(width: 32, child: Text(grade)),
           SizedBox(width: 10),
-          SizedBox(
-            width: 200,
+          Expanded(
             child: TextField(
               keyboardType: TextInputType.number,
               controller: controllers[0],
-
               decoration: const InputDecoration(
                 hintText: 'Lower score',
                 border: OutlineInputBorder(),
                 filled: true,
                 fillColor: Colors.white,
-                contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10), // Changed the fill color
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
               ),
-              style: TextStyle(color: Colors.black), // Changed the text color
+              style: TextStyle(color: Colors.black),
             ),
           ),
           SizedBox(width: 20),
           Text("-"),
           SizedBox(width: 20),
-          SizedBox(
-            width: 200,
+          Expanded(
             child: TextField(
               keyboardType: TextInputType.number,
               controller: controllers[1],
@@ -625,10 +542,9 @@ class _CreateExamPageState extends State<CreateExamPage> {
                 border: OutlineInputBorder(),
                 filled: true,
                 fillColor: Colors.white,
-                contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10), // Changed the fill color
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
               ),
-              style: TextStyle(color: Colors.black), // Changed the text color
+              style: TextStyle(color: Colors.black),
             ),
           ),
         ],
@@ -641,58 +557,40 @@ class _CreateExamPageState extends State<CreateExamPage> {
       padding: EdgeInsets.all(15),
       margin: EdgeInsets.only(bottom: 17),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
-      child: SizedBox(
-        width: 750,
-        height: 70,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Question $questionNum',
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Question $questionNum',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          answerSelection(
-                              "A", selectedAnswer == "A", questionNum),
-                          answerSelection(
-                              "B", selectedAnswer == "B", questionNum),
-                          answerSelection(
-                              "C", selectedAnswer == "C", questionNum),
-                          answerSelection(
-                              "D", selectedAnswer == "D", questionNum),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            IconButton(
-                onPressed: () {
-                  deleteQuestion(questionNum);
-                },
-                icon: const Icon(Icons.delete))
-          ],
-        ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  answerSelection("A", selectedAnswer == "A", questionNum),
+                  answerSelection("B", selectedAnswer == "B", questionNum),
+                  answerSelection("C", selectedAnswer == "C", questionNum),
+                  answerSelection("D", selectedAnswer == "D", questionNum),
+                ],
+              ),
+            ],
+          ),
+          IconButton(
+            onPressed: () {
+              deleteQuestion(questionNum);
+            },
+            icon: Icon(Icons.delete),
+          ),
+        ],
       ),
     );
   }
@@ -703,8 +601,10 @@ class _CreateExamPageState extends State<CreateExamPage> {
       child: InkWell(
         onTap: () {
           setState(() {
-            questionList[questionNum - 1] =
-                QuestionModal(questionNum: questionNum, selectedAnswer: letter);
+            questionList[questionNum - 1] = QuestionModal(
+              questionNum: questionNum,
+              selectedAnswer: letter,
+            );
           });
         },
         child: Container(
@@ -731,11 +631,4 @@ class QuestionModal {
   final String selectedAnswer;
 
   QuestionModal({required this.questionNum, required this.selectedAnswer});
-}
-
-class GradeModal {
-  final String grade;
-  final int marks;
-
-  GradeModal({required this.grade, required this.marks});
 }

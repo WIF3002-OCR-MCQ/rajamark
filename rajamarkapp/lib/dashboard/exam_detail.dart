@@ -86,12 +86,18 @@ class ExamDetailsView extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.0),
-            Container(
-              height: 400,
-              child: Center(
-                child: statisticWidget(
-                    examData), //Mean Score, Median Score with vertical divider
-              ),
+            LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final double width = constraints.maxWidth;
+                final bool isSmallScreen = width < 700;
+
+                return Container(
+                  height: isSmallScreen ? 200 : 400,
+                  child: Center(
+                    child: statisticWidget(examData, isSmallScreen),
+                  ),
+                );
+              },
             ),
             SizedBox(height: 16.0),
             // Column headers
@@ -209,23 +215,25 @@ class ExamDetailsView extends StatelessWidget {
     );
   }
 
-  Widget statisticWidget(Exam examData) {
+  Widget statisticWidget(Exam examData, bool isSmallScreen) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        //Change values for each chart to API value
         MeanDonutChart(
           value: examData.meanScore,
+          isSmallScreen: isSmallScreen,
         ),
-        const SizedBox(
-            height: 312,
-            child: VerticalDivider(
-              thickness: 2,
-              width: 20,
-              color: Color(0xff88899D),
-            )),
+        SizedBox(
+          height: isSmallScreen ? 156 : 312,
+          child: VerticalDivider(
+            thickness: 2,
+            width: 20,
+            color: Color(0xff88899D),
+          ),
+        ),
         MedianDonutChart(
           value: examData.medianScore,
+          isSmallScreen: isSmallScreen,
         ),
       ],
     );
@@ -233,8 +241,11 @@ class ExamDetailsView extends StatelessWidget {
 }
 
 class MeanDonutChart extends StatefulWidget {
-  const MeanDonutChart({super.key, required this.value});
+  const MeanDonutChart(
+      {super.key, required this.value, required this.isSmallScreen});
   final double value;
+  final bool isSmallScreen;
+
   @override
   State<MeanDonutChart> createState() => _MeanDonutChartState();
 }
@@ -258,8 +269,8 @@ class _MeanDonutChartState extends State<MeanDonutChart> {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SizedBox(
-          width: 362,
-          height: 312,
+          width: widget.isSmallScreen ? 156 : 362,
+          height: widget.isSmallScreen ? 156 : 312,
           child: Column(
             children: [
               const Center(
@@ -271,8 +282,8 @@ class _MeanDonutChartState extends State<MeanDonutChart> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: SizedBox(
-                    height: 247,
-                    width: 247,
+                    height: widget.isSmallScreen ? 110 : 247,
+                    width: widget.isSmallScreen ? 110 : 247,
                     child: Stack(
                       children: [
                         PieChart(PieChartData(
@@ -287,7 +298,7 @@ class _MeanDonutChartState extends State<MeanDonutChart> {
                               PieChartSectionData(
                                   value: 100 - widget.value,
                                   color: Color(0xffF0E5FC),
-                                  radius: 40,
+                                  radius: widget.isSmallScreen ? 10 : 40,
                                   showTitle: false)
                             ])),
                         Positioned.fill(
@@ -295,8 +306,8 @@ class _MeanDonutChartState extends State<MeanDonutChart> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                height: 180,
-                                width: 150,
+                                height: widget.isSmallScreen ? 75 : 180,
+                                width: widget.isSmallScreen ? 75 : 150,
                                 decoration: const BoxDecoration(
                                   color: Colors.transparent,
                                   shape: BoxShape.circle,
@@ -304,7 +315,9 @@ class _MeanDonutChartState extends State<MeanDonutChart> {
                                 child: Center(
                                   child: Text(
                                     percentage,
-                                    style: const TextStyle(fontSize: 40),
+                                    style: TextStyle(
+                                        fontSize:
+                                            widget.isSmallScreen ? 20 : 40),
                                   ),
                                 ),
                               )
@@ -323,8 +336,10 @@ class _MeanDonutChartState extends State<MeanDonutChart> {
 }
 
 class MedianDonutChart extends StatefulWidget {
-  const MedianDonutChart({super.key, required this.value});
+  const MedianDonutChart(
+      {super.key, required this.value, required this.isSmallScreen});
   final double value;
+  final bool isSmallScreen;
 
   @override
   State<MedianDonutChart> createState() => _MedianDonutChartState();
@@ -349,8 +364,8 @@ class _MedianDonutChartState extends State<MedianDonutChart> {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SizedBox(
-          width: 362,
-          height: 312,
+          width: widget.isSmallScreen ? 156 : 362,
+          height: widget.isSmallScreen ? 156 : 312,
           child: Column(
             children: [
               const Center(
@@ -362,8 +377,8 @@ class _MedianDonutChartState extends State<MedianDonutChart> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: SizedBox(
-                    height: 247,
-                    width: 247,
+                    height: widget.isSmallScreen ? 110 : 247,
+                    width: widget.isSmallScreen ? 110 : 247,
                     child: Stack(
                       children: [
                         PieChart(PieChartData(
@@ -378,7 +393,7 @@ class _MedianDonutChartState extends State<MedianDonutChart> {
                               PieChartSectionData(
                                   value: 100 - widget.value,
                                   color: Color(0xffF0E5FC),
-                                  radius: 40,
+                                  radius: widget.isSmallScreen ? 10 : 40,
                                   showTitle: false)
                             ])),
                         Positioned.fill(
@@ -386,8 +401,8 @@ class _MedianDonutChartState extends State<MedianDonutChart> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                height: 180,
-                                width: 150,
+                                height: widget.isSmallScreen ? 75 : 180,
+                                width: widget.isSmallScreen ? 75 : 150,
                                 decoration: const BoxDecoration(
                                   color: Colors.transparent,
                                   shape: BoxShape.circle,
@@ -395,7 +410,9 @@ class _MedianDonutChartState extends State<MedianDonutChart> {
                                 child: Center(
                                   child: Text(
                                     percentage,
-                                    style: const TextStyle(fontSize: 40),
+                                    style: TextStyle(
+                                        fontSize:
+                                            widget.isSmallScreen ? 20 : 40),
                                   ),
                                 ),
                               )
