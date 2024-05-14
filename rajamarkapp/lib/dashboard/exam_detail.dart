@@ -151,11 +151,18 @@ class _CreateExamDetailsViewState extends State<ExamDetailsView> {
                 ),
               ),
               const SizedBox(height: 16.0),
-              Container(
-                height: 400,
-                child: Center(
-                  child: statisticWidget(examData),
-                ),
+              LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  final double width = constraints.maxWidth;
+                  final bool isSmallScreen = width < 700;
+
+                  return Container(
+                    height: isSmallScreen ? 200 : 400,
+                    child: Center(
+                      child: statisticWidget(examData, isSmallScreen),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 16.0),
               // Column headers
