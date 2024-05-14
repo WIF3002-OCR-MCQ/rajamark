@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -322,58 +321,50 @@ class FilePickerPopup extends StatelessWidget {
   void _showFilePicker(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     String? filePath = '';
+    Uint8List? fileBytes;
+    String? extracted;
     if (result != null) {
-      String extracted='';
+      
 
-    if (kIsWeb) {
-      // Handle web platform
-      Uint8List? fileBytes = result.files.first.bytes;
-      String fileName = result.files.first.name;
+      if (kIsWeb) {
+        // Handle web platform
+        fileBytes = result.files.first.bytes;
 
-       if (fileBytes != null) {
-        // Convert Uint8List to ByteBuffer
-        ByteBuffer buffer = fileBytes.buffer;
-        JsonImage jsonImage = JsonImage.fromBuffer(buffer);
-        
-        // Assuming Google Vision can process JsonImage directly
-        final String authString = await rootBundle.loadString('assets/auth/auth.json');
-        final googleVision = await GoogleVision.withJwt(authString);
-        List<EntityAnnotation> annotations = await googleVision.textDetection(jsonImage);
-        extracted = annotations[0].description;
-      }
-    } else {
-      // Handle non-web platforms
-      filePath = result.files.single.path;
-
-      if (filePath != null) {
-        if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        if (fileBytes != null) {
+          // Convert Uint8List to ByteBuffer
+          ByteBuffer buffer = fileBytes.buffer;
+          JsonImage jsonImage = JsonImage.fromBuffer(buffer);
+          
+          // Assuming Google Vision can process JsonImage directly
           final String authString = await rootBundle.loadString('assets/auth/auth.json');
           final googleVision = await GoogleVision.withJwt(authString);
-          List<EntityAnnotation> annotations = await googleVision.textDetection(
-            JsonImage.fromFilePath(filePath)
-          );
+          List<EntityAnnotation> annotations = await googleVision.textDetection(jsonImage);
           extracted = annotations[0].description;
-        } else {
-          extracted = await FlutterTesseractOcr.extractText(filePath, args: {
-            "tessedit_char_whitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
-            "preserve_interword_spaces": "1",
-            "tessedit_pageseg_mode": "1",
-          });
+        }
+      } else {
+        // Handle non-web platforms
+        filePath = result.files.single.path;
+
+        if (filePath != null) {
+            final String authString = await rootBundle.loadString('assets/auth/auth.json');
+            final googleVision = await GoogleVision.withJwt(authString);
+            List<EntityAnnotation> annotations = await googleVision.textDetection(
+              JsonImage.fromFilePath(filePath)
+            );
+            extracted = annotations[0].description;
         }
       }
-    }
 
-      // ***** Remove later ******
-          // This is how to access student info object
-          StudentInfo studentInfo = parseInputString(extracted);
-            print('Student ID: ${studentInfo.studentID}');
-            print('Student Name: ${studentInfo.studentName}');
-            print('Student Answers:'); 
-            for(var answer in studentInfo.studentAnswers){
-              print(answer);
-            }   
+      // This is how to split the extracted text into separated variables
+      StudentInfo studentInfo = parseInputString(extracted!);
+      print('Student ID: ${studentInfo.studentID}');
+      print('Student Name: ${studentInfo.studentName}');
+      print('Student Answers:'); 
+      for(var answer in studentInfo.studentAnswers){
+        print(answer);
+      }   
 
-      if (filePath != null && filePath.isNotEmpty) {
+      if (filePath != null || fileBytes != null) {
         // Close initial popup
         Navigator.of(context).pop();
         //extract value
