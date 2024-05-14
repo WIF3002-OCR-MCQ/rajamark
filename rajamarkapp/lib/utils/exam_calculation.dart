@@ -1,16 +1,25 @@
 import 'package:rajamarkapp/modal/Exam.dart';
 
 int calculateScore(List<String> sampleAnswer, List<String> studentAnswer) {
-  if (studentAnswer.length != sampleAnswer.length) {
-    throw ArgumentError('Length of sampleAnswer must match answerText');
-  }
+  // if (studentAnswer.length != sampleAnswer.length) {
+  //   throw ArgumentError('Length of sampleAnswer must match answerText');
+  // }
 
   int score = 0;
-  for (int i = 0; i < studentAnswer.length; i++) {
-    if (studentAnswer[i].toLowerCase() == sampleAnswer[i].toLowerCase()) {
-      score++;
+  if (sampleAnswer.length > studentAnswer.length) {
+    for (int i = 0; i < studentAnswer.length; i++) {
+      if (studentAnswer[i].toLowerCase() == sampleAnswer[i].toLowerCase()) {
+        score++;
+      }
+    }
+  } else {
+    for (int i = 0; i < sampleAnswer.length; i++) {
+      if (studentAnswer[i].toLowerCase() == sampleAnswer[i].toLowerCase()) {
+        score++;
+      }
     }
   }
+
   int convertedFullMark = (score / sampleAnswer.length * 100).floor();
   return convertedFullMark;
 }

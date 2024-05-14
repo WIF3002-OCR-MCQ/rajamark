@@ -221,10 +221,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_storage
-      sha256: "67a01a9c81830f636d63744639bf82023ed0395d80ded7440f478dd6a7fbcef4"
+      sha256: be556c6fe60f30ac5d8160f6645ebb74699094322fc4c6a59a7698c0ed40a494
       url: "https://pub.dev"
     source: hosted
-    version: "11.7.3"
+    version: "11.5.0"
   firebase_storage_platform_interface:
     dependency: transitive
     description:

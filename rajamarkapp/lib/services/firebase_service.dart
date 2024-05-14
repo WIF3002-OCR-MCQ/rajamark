@@ -24,7 +24,6 @@ class FirebaseService {
       print('Error getting exams: $e');
     }
     return examList;
-
   }
 
   Future<bool> addExam(Exam examData) async {
@@ -82,25 +81,28 @@ class FirebaseService {
     }
   }
 
-  Future<String?> saveStudentResultImage(File imageFile) async {
-    try {
-      print("bruh");
-      String fileName =
-          'result_${DateTime.now().millisecondsSinceEpoch}'; // Generate a unique file name for the image
-      print(fileName);
-      Reference storageReference = FirebaseStorage.instance
-          .ref()
-          .child('student-result-images/$fileName');
-          print(storageReference.fullPath);
-      UploadTask uploadTask = storageReference.putFile(imageFile);
-      TaskSnapshot snapshot = await uploadTask.whenComplete(() => null);
-      String downloadURL = await snapshot.ref.getDownloadURL();
-      return downloadURL;
-    } catch (e) {
-      print('Error saving student result image: $e');
-      return null;
-    }
-  }
+  // Future<String?> saveStudentResultImage(File imageFile) async {
+  //   try {
+  //     print("bruh");
+  //     String fileName =
+  //         'result_${DateTime.now().millisecondsSinceEpoch}'; // Generate a unique file name for the image
+  //     print(fileName);
+  //     Reference storageReference = FirebaseStorage.instance
+  //         .ref()
+  //         .child('student-result-images/$fileName');
+  //     print(storageReference.fullPath);
+  //     UploadTask uploadTask = storageReference.putFile(imageFile);
+
+  //     await uploadTask.onError((error, stackTrace) => print('Error uploading image: $error'));
+  //     TaskSnapshot snapshot =
+  //         await uploadTask.whenComplete(() => print("Completed"));
+  //     String downloadURL = await snapshot.ref.getDownloadURL();
+  //     return downloadURL;
+  //   } catch (e) {
+  //     print('Error saving student result image: $e');
+  //     return null;
+  //   }
+  // }
 
   Future<bool> addStudentResult(StudentResult studentData) async {
     CollectionReference student_result =
@@ -248,8 +250,8 @@ class FirebaseService {
   //------------------- GRADE -------------------
 
   Future<bool> addGrade(Grade gradeData) async {
-    CollectionReference grades =
-        FirebaseFirestore.instance.collection('exam/${gradeData.examId}/grades');
+    CollectionReference grades = FirebaseFirestore.instance
+        .collection('exam/${gradeData.examId}/grades');
 
     try {
       await grades.doc(gradeData.gradeId).set(gradeData.toJson());

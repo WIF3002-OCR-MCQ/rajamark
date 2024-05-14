@@ -1,15 +1,22 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:rajamarkapp/dashboard/extract_page.dart';
 import 'package:rajamarkapp/dashboard/student_answer.dart';
+import 'package:rajamarkapp/database/database.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
 import 'package:rajamarkapp/modal/StudentResult.dart';
 import 'package:rajamarkapp/popups/delete_student_data.dart';
 import 'package:rajamarkapp/popups/edit_result_popup.dart';
 import 'package:rajamarkapp/popups/sample_answer_first_popup.dart';
 import 'package:rajamarkapp/popups/sample_answer_second_popup.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import '../popups/delete_popup.dart';
 import 'package:rajamarkapp/dashboard/file_picker.dart';
@@ -19,6 +26,32 @@ class ExamDetailsView extends StatelessWidget {
 
   const ExamDetailsView({Key? key, required this.examData}) : super(key: key);
 
+  Future<String?> _showFilePicker(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      final filePath = result.files.single.path;
+      return filePath;
+    }
+    return null;
+  }
+
+  Future<String?> addImageToFirebase(File imageFile, String fileName) async {
+    final destination = 'files/$fileName';
+    try {
+      final ref = firebase_storage.FirebaseStorage.instance
+          .ref(destination)
+          .child('file/');
+      await ref.putFile(imageFile);
+      return await ref.getDownloadURL();
+    } catch (e) {
+      print('error occured');
+    }
+    return null;
+  }
+
+  Uint8List readFileBytes(String filePath) {
+    return File(filePath).readAsBytesSync();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +62,51 @@ class ExamDetailsView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton.icon(
-              onPressed: () {
+              onPressed: () async {
+                // print("bruh");
+                // final result = await FilePicker.platform
+                //     .pickFiles(type: FileType.any, allowMultiple: false);
+
+                // if (result != null && result.files.isNotEmpty) {
+                //   final filePath = result.files.first.path;
+                //   final fileName = result.files.first.name;
+
+                //   if (filePath != null) {
+                //     // Read file bytes in a background isolate
+                //     Uint8List bytes = await compute(readFileBytes, filePath);
+
+                //     // Upload file to Firebase Storage
+                //     await FirebaseStorage.instance
+                //         .ref('uploads/$fileName')
+                //         .putFile(File(filePath));
+                //   } else {
+                //     print('File path is null');
+                //   }
+                // } else {
+                //   print('No file picked');
+                // }
+
+                // if (kIsWeb) {
+                //   print("web");
+                // } else {
+                //   print("Windows");
+                //   _showFilePicker(context).then((path) async {
+                //     if (path != null) {
+                //       final file = File(path);
+                //       print('File path: $path');
+                //       String? url = await saveStudentResultImage(file);
+                //       print('File uploaded successfully $url');
+                //       // addImageToFirebase(file, examData.title).then((url) {
+                //       //   if (url != null) {
+                //       //     print('File uploaded successfully $url');
+                //       //   } else {
+                //       //     print('File upload failed');
+                //       //   }
+                //       // });
+                //     }
+                //   });
+                // }
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
