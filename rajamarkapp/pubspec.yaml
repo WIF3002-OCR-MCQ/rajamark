@@ -49,6 +49,7 @@ dependencies:
   flutter_tesseract_ocr: ^0.3.7
   getwidget: ^4.0.0
   flutter_dotenv: ^5.0.2
+  image_picker: ^1.1.1
 
 dev_dependencies:
   flutter_test:

@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_vision/google_vision.dart' as gv;
+import 'package:image_picker/image_picker.dart';
 import 'package:rajamarkapp/const/constant.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
 import 'package:rajamarkapp/modal/StudentInfo.dart';
@@ -55,23 +57,50 @@ class _ExtractPageState extends State<ExtractPage> {
   }
 
   void _uploadStudentData(BuildContext context) async {
-    String? path = await _showFilePicker(context);
-    if (path == null) {
-      print("File is not picked!");
-      return;
+    // String? path = await _showFilePicker(context);
+    // if (path == null) {
+    //   print("File is not picked!");
+    //   return;
+    // }
+    // print("File picked");
+    String? url;
+
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      await FirebaseStorage.instance.ref('uploads/upload.jpg').putData(bytes);
+      url =
+          await FirebaseStorage.instance.ref('uploads/upload.jpg').getDownloadURL();
     }
-    print("File picked");
 
-    studentNameController.text = studentInfo!.studentName;
-    studentIdController.text = studentInfo!.studentID;
+    String? extracted;
 
-    int score = calculateScore(
-        widget.examData.sampleAnswer, studentInfo!.studentAnswers);
+    print("Picked file path: ${url}");
+    extracted = await FlutterTesseractOcr.extractText(url!, args: {
+      "tessedit_char_whitelist":
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
+      "preserve_interword_spaces": "1",
+      "tessedit_pageseg_mode": "1",
+    });
 
-    String? downloadUrl = await addImageToFirebase(
-        File(path), "${studentInfo!.studentID}_${widget.examData.examId}");
+    print("Extracted text: $extracted");
 
-    print("File Uplaoded ${downloadUrl}");
+    setState(() {
+      currentView = ExamView.detail;
+      studentInfo = parseInputString(extracted!);
+    });
+
+    // studentNameController.text = studentInfo!.studentName;
+    // studentIdController.text = studentInfo!.studentID;
+
+    // int score = calculateScore(
+    //     widget.examData.sampleAnswer, studentInfo!.studentAnswers);
+
+    // String? downloadUrl = await addImageToFirebase(
+    //     File(path), "${studentInfo!.studentID}_${widget.examData.examId}");
+
+    // print("File Uplaoded ${downloadUrl}");
 
     // //Upload to firestore cloud storage first to retrive the image url
     // //Then create a student result object
@@ -122,42 +151,33 @@ class _ExtractPageState extends State<ExtractPage> {
   // }
 
   Future<String?> _showFilePicker(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      var fileBytes = result.files.first.bytes;
-      var fileName = result.files.first.name;
-      String fileContent = "";
+    // FilePickerResult? result = await FilePicker.platform.pickFiles();
 
-      if (fileBytes != null) {
-        // Attempt to print the file content as a string
-        try {
-          fileContent = String.fromCharCodes(fileBytes);
-          print(fileContent);
-        } catch (e) {
-          print('Error converting file bytes to string: $e');
-        }
-      } else {
-        print('File bytes are null.');
-      }
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
+    if (pickedFile != null) {
       // filePath = result.files.single.path;
       String? extracted;
 
-      if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-        final String authString =
-            await rootBundle.loadString('assets/auth/auth.json');
-        final googleVision = await gv.GoogleVision.withJwt(authString);
-        List<gv.EntityAnnotation> annotations = await googleVision
-            .textDetection(gv.JsonImage.fromFilePath(filePath!));
-        extracted = annotations[0].description;
-      } else {
-        extracted = await FlutterTesseractOcr.extractText(fileContent, args: {
-          "tessedit_char_whitelist":
-              "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
-          "preserve_interword_spaces": "1",
-          "tessedit_pageseg_mode": "1",
-        });
-      }
+      // if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      //   final String authString =
+      //       await rootBundle.loadString('assets/auth/auth.json');
+      //   final googleVision = await gv.GoogleVision.withJwt(authString);
+      //   List<gv.EntityAnnotation> annotations = await googleVision
+      //       .textDetection(gv.JsonImage.fromFilePath(filePath!));
+      //   extracted = annotations[0].description;
+      // } else {
+
+      print("Picked file path: ${pickedFile.path}");
+      extracted = await FlutterTesseractOcr.extractText(pickedFile.path, args: {
+        "tessedit_char_whitelist":
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
+        "preserve_interword_spaces": "1",
+        "tessedit_pageseg_mode": "1",
+      });
+      // }
+
       setState(() {
         currentView = ExamView.detail;
         studentInfo = parseInputString(extracted!);
