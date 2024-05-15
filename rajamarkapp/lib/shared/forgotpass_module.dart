@@ -14,7 +14,7 @@ class _ForgotPassModuleState extends State<ForgotPassModule> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isLinkSent = false;
-String errorMessage = '';
+  String errorMessage = '';
   Future<void> _sendPasswordResetEmail() async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(
@@ -39,15 +39,19 @@ String errorMessage = '';
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 32.0),
-          Center (
-            child: Text(
-              'Forgot Your Password?',
-              style: GoogleFonts.poppins(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              BackButton(),
+              Text(
+                'Forgot Your Password?',
+                style: GoogleFonts.poppins(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-        ),
+            ],
+          ),
           const SizedBox(height: 32.0),
           TextField(
             controller: _emailController,
@@ -64,7 +68,7 @@ String errorMessage = '';
             style: GoogleFonts.poppins(),
           ),
           const SizedBox(height: 16.0),
-           if (isLinkSent)
+          if (isLinkSent)
             Center(
               child: Text(
                 'Reset email link sent!',
@@ -90,10 +94,9 @@ String errorMessage = '';
                 fontSize: 18.0,
                 color: Colors.white,
               ),
-              
             ),
-          ),   
-          const SizedBox(height: 32.0),   
+          ),
+          const SizedBox(height: 32.0),
         ],
       ),
     );

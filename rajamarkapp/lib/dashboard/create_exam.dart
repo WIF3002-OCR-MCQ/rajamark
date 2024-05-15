@@ -9,6 +9,7 @@ import 'package:rajamarkapp/modal/Grade.dart';
 import 'package:rajamarkapp/shared/top_row_widget.dart';
 import 'package:rajamarkapp/const/constant.dart';
 import 'package:rajamarkapp/state/ExamState.dart';
+import 'package:rajamarkapp/state/UserState.dart';
 
 class CreateExamPage extends StatefulWidget {
   const CreateExamPage({Key? key, this.examData}) : super(key: key);
@@ -46,8 +47,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
   Map<String, List<TextEditingController>> gradeMap = {};
 
   _CreateExamPageState() {
-    gradeName.forEach((grade) {
-      //0 is lowerscore, 1 is higherscore
+    for (var grade in gradeName) {
       gradeMap[grade] = [TextEditingController(), TextEditingController()];
 
       switch (grade) {
@@ -91,7 +91,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
           gradeMap[grade]![0].text = "0";
           gradeMap[grade]![1].text = "0";
       }
-    });
+    }
   }
 
   @override
@@ -107,10 +107,10 @@ class _CreateExamPageState extends State<CreateExamPage> {
     _courseCodeController.text = widget.examData!.courseCode;
     _sessionController.text = widget.examData!.session;
 
-    widget.examData!.grades.forEach((grade) {
+    for (var grade in widget.examData!.grades) {
       gradeMap[grade.gradeLabel]![0].text = grade.lowerScore.toString();
       gradeMap[grade.gradeLabel]![1].text = grade.upperScore.toString();
-    });
+    }
 
     questionList = widget.examData!.sampleAnswer
         .asMap()
@@ -173,9 +173,9 @@ class _CreateExamPageState extends State<CreateExamPage> {
 
     List<Grade> grades = [];
 
-    gradeName.forEach((grade) {
+    for (var grade in gradeName) {
       int gradeIdInt = random.nextInt(100001);
-      String gradeId = "g" + gradeIdInt.toString();
+      String gradeId = "g$gradeIdInt";
 
       grades.add(Grade(
           gradeId: gradeId,
@@ -183,7 +183,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
           gradeLabel: grade,
           lowerScore: int.parse(gradeMap[grade]![0].text),
           upperScore: int.parse(gradeMap[grade]![1].text)));
-    });
+    }
 
     Exam newExam = Exam(
         examId: examId.toString(), // Firestore will auto-generate an ID
@@ -193,7 +193,8 @@ class _CreateExamPageState extends State<CreateExamPage> {
         session: _sessionController.text,
         grades: grades, // Initialize with an empty list of grades
         studentResults: [], // Initialize with an empty list of student results
-        sampleAnswer: sampleAnswers);
+        sampleAnswer: sampleAnswers,
+        teacherId: UserState.to.getUser()!.uid);
 
     try {
       ExamState.to.addExam(newExam);
@@ -248,7 +249,8 @@ class _CreateExamPageState extends State<CreateExamPage> {
         grades: grades, // Initialize with an empty list of grades
         studentResults: widget.examData!
             .studentResults, // Initialize with an empty list of student results
-        sampleAnswer: sampleAnswers);
+        sampleAnswer: sampleAnswers,
+        teacherId: widget.examData!.teacherId);
 
     try {
       ExamState.to.updateExam(currentExam);
@@ -278,9 +280,10 @@ class _CreateExamPageState extends State<CreateExamPage> {
                 children: [
                   const BackButton(),
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 0, horizontal: 20.0),
                     child: Text(
-                      "Create Exam",
+                      isEditing ? "Edit Exam" : "Create Exam",
                       style: GoogleFonts.poppins(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -289,14 +292,15 @@ class _CreateExamPageState extends State<CreateExamPage> {
                   ),
                 ],
               ),
-              Divider(
+              const Divider(
                 color: Colors.grey, // Customize the color of the divider
                 thickness: 1, // Adjust the thickness of the divider
                 height: 20.0,
               ),
-              SizedBox(height: 20), // Add some spacing
+              const SizedBox(height: 20), // Add some spacing
               Container(
-                margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
                 child: Text(
                   "Exam Details",
                   style: GoogleFonts.poppins(
@@ -306,9 +310,9 @@ class _CreateExamPageState extends State<CreateExamPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  color: Color(0xFFBFD7ED),
+                  color: const Color(0xFFBFD7ED),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
@@ -328,7 +332,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
                       SizedBox(
                         child: TextField(
                           controller: _titleController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Enter title here',
                             border: OutlineInputBorder(),
                             filled: true,
@@ -336,10 +340,10 @@ class _CreateExamPageState extends State<CreateExamPage> {
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 10),
                           ),
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: Text(
@@ -352,7 +356,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
                       SizedBox(
                         child: TextField(
                           controller: _descriptionController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Enter description here',
                             border: OutlineInputBorder(),
                             filled: true,
@@ -360,10 +364,10 @@ class _CreateExamPageState extends State<CreateExamPage> {
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 10),
                           ),
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: Text(

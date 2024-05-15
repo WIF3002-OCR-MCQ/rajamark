@@ -38,10 +38,38 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _logout() {
-    UserState.to.removeUser();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Logout"),
+          content: Text("Are you sure you want to logout?"),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Log out'),
+              onPressed: () {
+                UserState.to.removeUser();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -56,7 +84,7 @@ class _DashboardPageState extends State<DashboardPage> {
               children: [
                 Sidebar(
                   onExamTap: _showExamDashboard,
-                  onManualTap: _userManualView, 
+                  onManualTap: _userManualView,
                   onLogoutTap: _logout,
                 ),
                 Expanded(
@@ -70,7 +98,7 @@ class _DashboardPageState extends State<DashboardPage> {
               children: [
                 Sidebar(
                   onExamTap: _showExamDashboard,
-                  onManualTap: _userManualView, 
+                  onManualTap: _userManualView,
                   onLogoutTap: _logout,
                 ),
                 Expanded(

@@ -55,15 +55,7 @@ class ExamDashboard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(width: 8),
-
-                      //TODO user avatar
-                      // CircleAvatar(
-                      //   backgroundImage: NetworkImage(
-                      //       UserState.to.getUser()!.photoURL ??
-                      //           ""), // Placeholder image URL
-                      //   radius: 16,
-                      // ),
+                      const SizedBox(width: 8),
                     ],
                   ),
                 ),
@@ -93,7 +85,7 @@ class ExamDashboard extends StatelessWidget {
                     ),
                   );
                 },
-                icon: Icon(Icons.add,
+                icon: const Icon(Icons.add,
                     color:
                         const Color.fromARGB(255, 0, 0, 0)), // Dark blue icon
                 label: Text(

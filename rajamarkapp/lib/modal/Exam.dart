@@ -12,6 +12,7 @@ class Exam {
   double medianScore;
   List<Grade> grades;
   List<StudentResult> studentResults;
+  String teacherId;
 
   Exam({
     required this.examId,
@@ -24,6 +25,7 @@ class Exam {
     this.medianScore = 0.0,
     List<Grade>? grades,
     List<StudentResult>? studentResults,
+    required this.teacherId,
   })  : grades = grades ?? [],
         studentResults = studentResults ?? [];
 
@@ -47,7 +49,8 @@ class Exam {
             ? (json['studentResults'] as List)
                 .map((item) => StudentResult.fromJson(item))
                 .toList()
-            : [];
+            : [],
+        teacherId = json['teacherId'];
 
   Map<String, dynamic> toJson() => {
         'examId': examId,
@@ -58,7 +61,6 @@ class Exam {
         'sampleAnswer': sampleAnswer,
         'meanScore': meanScore,
         'medianScore': medianScore,
+        'teacherId': teacherId,
       };
-
-  
 }

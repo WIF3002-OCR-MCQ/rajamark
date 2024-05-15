@@ -89,7 +89,13 @@ class _CreateExamDetailsViewState extends State<ExamDetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exam Details'),
+        title: Text(
+          'Exam Details',
+          style: GoogleFonts.poppins(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),

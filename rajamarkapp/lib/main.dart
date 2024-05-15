@@ -3,23 +3,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rajamarkapp/GlobalService.dart';
 import 'package:rajamarkapp/auth/forgot_pass.dart';
 import 'package:rajamarkapp/dashboard/answer_scheme_page.dart';
 import 'package:rajamarkapp/dashboard/create_exam.dart';
 import 'package:rajamarkapp/dashboard/dashboard.dart';
 import 'package:rajamarkapp/dashboard/user_manual.dart';
-import 'package:rajamarkapp/popups/processing.dart';
 import 'package:rajamarkapp/database/database.dart';
 import 'package:rajamarkapp/auth/register.dart';
 import 'package:rajamarkapp/auth/login.dart';
 import 'package:rajamarkapp/auth/verify_email.dart';
 import 'package:rajamarkapp/state/ExamState.dart';
-// import 'package:rajamarkapp/state/GradeState.dart';
-// import 'package:rajamarkapp/state/StudentResultState.dart';
 import 'package:rajamarkapp/state/UserState.dart';
-import 'package:window_manager/window_manager.dart';
-import 'package:flutter/foundation.dart';
 
 import 'const/constant.dart';
 
@@ -28,10 +22,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // await windowManager.ensureInitialized();
-  Get.put<GlobalService>(GlobalService());
   Get.put<UserState>(UserState());
-  // Get.put<StudentResultState>(StudentResultState());
-  // Get.put<GradeState>(GradeState());
   Get.put<ExamState>(ExamState());
 
   // if (!kIsWeb && Platform.isWindows) {
@@ -60,7 +51,7 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => const DashboardPage(),
         '/verify-email': (context) => const VerifyEmailPage(),
         '/createExamPage': (context) => const CreateExamPage(),
-        '/answerSchemePage': (context) => const AnswerSchemePage(),
+        // '/answerSchemePage': (context) => const AnswerSchemePage(),
         '/user-manual': (context) => const UserManual(),
       },
     );

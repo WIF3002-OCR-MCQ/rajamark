@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rajamarkapp/GlobalService.dart';
 import 'package:rajamarkapp/auth/forgot_pass.dart';
 import 'package:rajamarkapp/auth/register.dart';
-import 'package:rajamarkapp/auth/verify_email.dart';
 import 'package:rajamarkapp/dashboard/dashboard.dart';
-import 'package:rajamarkapp/popups/error_popup.dart';
 import 'package:rajamarkapp/services/auth_service.dart';
-import 'package:rajamarkapp/shared/forgotpass_module.dart';
-import 'package:rajamarkapp/shared/verifyemail_module.dart';
 import 'package:rajamarkapp/state/UserState.dart';
 
 class LoginModule extends StatefulWidget {
@@ -28,7 +22,7 @@ class _LoginModuleState extends State<LoginModule> {
   final AuthService _authService = AuthService();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _emailController.text = 'abc@gmail.com';
     _passwordController.text = 'abc123';
@@ -50,8 +44,10 @@ class _LoginModuleState extends State<LoginModule> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => DashboardPage()))
                 }
-                else{
-                  widget.dialogBuilder(context, "Login fail",  'Email or password wrong')
+              else
+                {
+                  widget.dialogBuilder(
+                      context, "Login fail", 'Email or password wrong')
                 }
             });
   }
