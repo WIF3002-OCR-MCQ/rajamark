@@ -537,7 +537,7 @@ class GettingStarted extends StatelessWidget {
             width: 700,
           ),
           Text(
-            '\n\t\t2. If you wish to log out, navigate to the navigation bar located at the leftmost of the screen and click on the “LogOut” button. You will then be redirected to the Login page again.',
+            '\n\t\t2. If you wish to log out, navigate to the navigation bar located at the leftmost of the screen and click on the “Logout” button. You will then be redirected to the Login page again.',
             style: _textStyle2,
           ),
 
@@ -554,7 +554,7 @@ class GettingStarted extends StatelessWidget {
           Text(
             '1.\t\tExam Page\n\nThe Exam Page contains all exams that have been created. The exams can be edited or deleted from this table. The date of creation will also be displayed on this page. It is also possible to create a new exam from this page.\n\n'
             '2.\t\tUser Manual Page\n\nThe User Manual Page contains the documentation of the user manual that provides detailed instructions on how to use this system effectively.\n\n'
-            '3.\t\tLogout\n\nNavigate to the navigation bar located at the leftmost of the screen and click on the “LogOut” button if you wish to log out from your account.',
+            '3.\t\tLogout\n\nNavigate to the navigation bar located at the leftmost of the screen and click on the “Logout” button if you wish to log out from your account.',
             style: _textStyle2,
           ),
         ],
@@ -672,8 +672,7 @@ class Features extends StatelessWidget {
                   'MSA2.png'),
               SizedBox(height: 15),
               _buildStepWithImage(
-                  '4. On the Student’s Details page, click the “Edit Result” button to make changes to the '
-                      'student\'s details.',
+                  '4. On the Student’s Details page, make the changes and click the “Save” button to save changes to the student\'s answer.',
                   'MSA3.png'),
             ],
           ),
@@ -1025,6 +1024,20 @@ class BestPractices extends StatelessWidget {
             description:
                 '6. For best OCR text extraction, use white blank paper only instead of foolscap paper or grid-lined paper.',
             imagePath: 'Images/tip0.jpg',
+          ),
+        ],
+      ),
+      BestPracticeItem(
+        title: 'Sample Answer Guidelines',
+        items: [
+          PracticeItem(
+            description:
+                '1. Sample answers must be written in vertical format and each answer is separated by a new line.',
+          ),
+          PracticeItem(
+            description:
+                '2. For each line, include the question number and answer, separated by a space.',
+                imagePath: 'Images/tip7.png',
           ),
         ],
       ),

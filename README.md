@@ -142,17 +142,17 @@ detailed instructions on how to use this system effectively.</p>
 1. Go to the Exam page.
 2. Click on the “Create” button to create a new examination/quiz.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/b694fd6a-f5f9-4305-993c-2372a246033a">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EC1.png">
 </p>
 
 3. Enter the examination’s details and grading’s criteria.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/ee2a3ccf-cfdd-4c3d-b8cc-8a08d4c7d266">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EC2.png">
 </p>
 
 4. Scroll down to enter the answer scheme.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/56d5ea26-ddeb-44a7-b549-430550b7e651">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EC3.png">
 </p>
 
 5. Click the “save” button to create the examination record.
@@ -162,12 +162,12 @@ detailed instructions on how to use this system effectively.</p>
 1. Go to the Exam page.
 2. Click on the “edit” icon for the specific exam to be edited.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/107c81a4-ef80-49ca-852c-d76ea706699a">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EE1.png">
 </p>
 
 3. Enter the changes required in the Edit Exam page.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/8e247047-530c-44ad-af5f-80aacf80ffd6">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EE2.png">
 </p>
 
 4. Scroll down and click the “save” button to apply the changes.
@@ -176,32 +176,31 @@ detailed instructions on how to use this system effectively.</p>
 1. Go to the Exam page.
 2. Click on the “eye” icon for a specific exam to view the exam’s details.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/4ae48f2d-d9b2-4dba-84a0-dd08936fcf07">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/VED1.png">
 </p>
 
 3. You will be directed to the Exam Details page.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/53bbf15d-bc32-4430-9ac4-1f250666cff7">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/VED2.png">
 </p>
 
 ### 3.4 Manage student's answer
 1. Go to the Exam page.
 2. Click on the “eye” icon to view the exam’s details.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/797ff1ec-be8c-4269-820b-2d74847da7e6">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/MSA1.png">
 </p>
 
 3. Once redirected into the Exam Details page, navigate to the list of students’ records and
 click on the “eye” icon to view the student’s details, “note” icon to edit the student's
 details or “trash” icon to delete the student's information.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/2bc11354-f104-4864-b1f9-21c88467d1c7">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/MSA2.png">
 </p>
 
-4. On the Student’s Details page, click the “Edit Result” button to make changes to the
-student's details.
+4. On the Student’s Details page, make the changes and click the “Save” button to save changes to the student's answer.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/78d37576-664e-4c94-a02d-eb826ef5831e">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/MSA3.png">
 </p>
 
 ### 3.5 Upload Sample Answer
@@ -248,68 +247,46 @@ scheme.
 
 ### 3.6 Upload Student Answer
 1. Go to the Exam page.
-2. Select the exam you wish to grade.
+2. Select the “eye icon” of the exam you wish to grade.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/bc023b65-5b04-49e9-a8d9-b695870c968b">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/9d7069b81541027fa16fc51b3e4946ec6ceecf97/rajamarkapp/Images/USA2.png">
 </p>
 
-3. In the student column, locate and click the "Add" button to input student data.
+3. Click the “View Answer” button at the top right corner. 
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/6ace77ef-f8b6-4b35-8687-ca9afa883f00">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/9d7069b81541027fa16fc51b3e4946ec6ceecf97/rajamarkapp/Images/USA3.png">
+</p>
+4. Click the "+" button to upload the student's answer sheet.
+<p align="center">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/9d7069b81541027fa16fc51b3e4946ec6ceecf97/rajamarkapp/Images/USA4.png">
+</p>
+5. After selecting a file, the system will automatically extract the data from the image. (Please refer to Best Practices to learn more about the guidelines for uploading the answer sheet)
+<p></p>
+6. The extracted student's answer sheet will be displayed.
+<p align="center">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/9d7069b81541027fa16fc51b3e4946ec6ceecf97/rajamarkapp/Images/USA6.png">
 </p>
 
-4. Enter the student's ID and name into the designated fields.
-5. Click the "Upload" button to update the student's answer sheet.
+#### 6.1 If the user wants to edit the answer sheet.
+6.1.1 Click the pen icon to edit.
 <p align="center">
-  <img width="50%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/0e280d67-df9a-41bf-b89f-cf1abb8f4622">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/9d7069b81541027fa16fc51b3e4946ec6ceecf97/rajamarkapp/Images/USA6.1.1.png">
 </p>
-
-6. To add the student's answer sheet, either drag a file or use the "Choose files" option to
-select the file from your computer.
-7. After selecting a file, refer to _Image Preprocessing_ for more details.
+6.1.2 Modify the answer sheet and click on the save button to save the changes made.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/86575efa-f8d6-494a-bc26-eb58724fdd69">
-</p>
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/9d7069b81541027fa16fc51b3e4946ec6ceecf97/rajamarkapp/Images/USA6.1.2.png">
 
-8. The student's details will be displayed on the page for confirmation.
-9. Repeat steps 2 to 7 to add more students as necessary.
-10. Once you have finished adding all students, click the "Save" button to save the student
-records.
+#### 6.2 If the user wants to delete the record: 
+6.2.1 Click on the trash icon.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/b4d76378-e211-4a10-ab68-5a7fde91c9f4">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/9d7069b81541027fa16fc51b3e4946ec6ceecf97/rajamarkapp/Images/USA6.2.1.png">
 </p>
-
-### 3.7 Image Preprocessing
-1. Once a file is selected for upload, the system will begin processing the image.
+6.2.2 A confirmation dialog will be shown.
 <p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/68fefce6-774c-4f62-bba3-966c779bdc79">
-</p>
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/9d7069b81541027fa16fc51b3e4946ec6ceecf97/rajamarkapp/Images/USA6.2.2.png">
 
-2. After successful processing, users are required to enter a file name for saving and the
-author's name. (In case of processing failure, refer to _Troubleshooting_ for more info)
-3. Click on "Extract this file" to initiate OCR processing.
-<p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/7b1f96e5-0698-49b9-893d-e3d2f6cf9ac8">
-</p>
+7. Repeat steps 4 to 6 to add more students as necessary.
 
-4. The system will commence extracting text from the image.
-<p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/9685f6b5-0be6-49f7-84c0-aa0c465ddc10">
-</p>
-
-5. Upon successful extraction, the extracted text (answers) will be displayed.
-6. If the extracted data is incorrect, users may request a reupload. Otherwise, proceed to
-Step 7 of _Upload Student Answer_ if no issues arise.
-
-### 3.8 Score Calculation and Reporting
-1. Go to the Exam page.
-2. Select the eye icon of the exam you wish to view.
-3. Upon uploading students' answers, the system will automatically calculate the score for
-each student and calculate the mean and median score of the class. (Refer to _Upload
-Student Answer_ to know more about uploading student’s answer)
-4. To generate a report, click on the "Generate Report" button.
-5. The report will include statistical measures such as the median, mean, and other relevant
-statistics.
 
 ---
 

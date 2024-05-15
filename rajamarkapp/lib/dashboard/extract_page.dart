@@ -75,7 +75,7 @@ class _ExtractPageState extends State<ExtractPage> {
     //Extract text from the image
     String? extracted = await _showFilePicker(context);
     if (extracted == null) {
-      print("Error extracting text from image");
+      print("File picker closed");
       return;
     }
 
@@ -119,11 +119,32 @@ class _ExtractPageState extends State<ExtractPage> {
     //Add the student result to the exam state
     ExamState.to.addStudentResult(studentResult, widget.examData);
 
-    //Change the current page state
+    //Check if all the result is all extracted
+    ExamView nextView = ExamView.detail;
+    if (!isAllDetailsExtracted(studentResult)) {
+      _showAlertDialog(context, 'Incomplete Details',
+          'Please fill in the student details manually');
+      nextView = ExamView.edit;
+    }
+
     setState(() {
-      currentView = ExamView.detail;
+      currentView = nextView;
       currentStudentResult = studentResult;
     });
+
+    _showAlertDialog(context, 'Success', 'Student result added successfully!');
+  }
+
+  bool isAllDetailsExtracted(StudentResult studentResult) {
+    for (var result in studentResult.answerText) {
+      if (result == '') {
+        return false;
+      }
+    }
+    if (studentResult.studentName == '' || studentResult.studentId == '') {
+      return false;
+    }
+    return true;
   }
 
   void _viewStudentDetails(StudentResult studentResult) {
@@ -135,8 +156,32 @@ class _ExtractPageState extends State<ExtractPage> {
     });
   }
 
+  Future<void> _showAlertDialog(BuildContext context, title, message) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<String?> _showFilePicker(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.image);
     String? filePath = '';
     Uint8List? fileBytes;
     String? extracted;
@@ -147,35 +192,39 @@ class _ExtractPageState extends State<ExtractPage> {
       if (kIsWeb) {
         // Handle web platform
         fileBytes = result.files.first.bytes;
-
         if (fileBytes != null) {
           // Convert Uint8List to ByteBuffer
           ByteBuffer buffer = fileBytes.buffer;
           gv.JsonImage jsonImage = gv.JsonImage.fromBuffer(buffer);
-
-          // Assuming Google Vision can process JsonImage directly
-          final String authString =
-              await rootBundle.loadString('assets/auth/auth.json');
-          final googleVision = await gv.GoogleVision.withJwt(authString);
-          List<gv.EntityAnnotation> annotations =
-              await googleVision.textDetection(jsonImage);
-          extracted = annotations[0].description;
+          extracted = await _ocr(context, jsonImage);
         }
       } else {
         // Handle non-web platforms
         filePath = result.files.single.path;
-
         if (filePath != null) {
-          final String authString =
-              await rootBundle.loadString('assets/auth/auth.json');
-          final googleVision = await gv.GoogleVision.withJwt(authString);
-          List<gv.EntityAnnotation> annotations = await googleVision
-              .textDetection(gv.JsonImage.fromFilePath(filePath));
-          extracted = annotations[0].description;
+          gv.JsonImage jsonImage = gv.JsonImage.fromFilePath(filePath);
+          extracted = await _ocr(context, jsonImage);
         }
       }
     }
     return extracted;
+  }
+
+  Future<String?> _ocr(BuildContext context, gv.JsonImage jsonImage) async {
+    // Assuming Google Vision can process JsonImage directly
+    final String authString =
+        await rootBundle.loadString('assets/auth/auth.json');
+    final googleVision = await gv.GoogleVision.withJwt(authString);
+    List<gv.EntityAnnotation> annotations =
+        await googleVision.textDetection(jsonImage);
+    if (annotations.isEmpty) {
+      _showAlertDialog(
+          context, 'No text detected', 'Please upload another image');
+      setState(() {
+        currentView = ExamView.general;
+      });
+    }
+    return annotations[0].description;
   }
 
   void back() {
@@ -219,6 +268,9 @@ class _ExtractPageState extends State<ExtractPage> {
         currentView = ExamView.detail;
         tempStudentAnswers = [];
       });
+
+      _showAlertDialog(
+          context, 'Success', 'Student result edited successfully!');
     } else {
       //Performing adding function
       int score =
@@ -238,8 +290,7 @@ class _ExtractPageState extends State<ExtractPage> {
 
       //Check if the student is already uplaoded
       for (StudentResult result in widget.examData.studentResults) {
-        if (result.examId == studentResult.examId &&
-            result.studentId == studentResult.studentId) {
+        if (result.studentId == studentResult.studentId) {
           print("Result Added before!");
           setState(() {
             currentView = ExamView.detail;
@@ -258,6 +309,9 @@ class _ExtractPageState extends State<ExtractPage> {
         tempStudentAnswers = [];
         isAdding = false;
       });
+
+      _showAlertDialog(
+          context, 'Success', 'Student result added successfully!');
     }
   }
 
@@ -276,68 +330,84 @@ class _ExtractPageState extends State<ExtractPage> {
         appBar: AppBar(title: Text(widget.examData.title)),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Row(
-            children: [
-              answerScheme(),
-              currentView == ExamView.general
-                  ? allStudentList(widget.examData.studentResults)
-                  : currentView == ExamView.loading
-                      ? loadingScreen()
-                      : uploadedImageView(filePath!),
-            ],
-          ),
+          child: LayoutBuilder(builder: (context, constraints) {
+            bool isMobile = constraints.maxWidth > 600 ? false : true;
+            if (!isMobile) {
+              return Row(
+                children: [
+                  Expanded(child: answerScheme()),
+                  Expanded(
+                    child: currentView == ExamView.general
+                        ? allStudentList(widget.examData.studentResults)
+                        : currentView == ExamView.loading
+                            ? loadingScreen()
+                            : uploadedImageView(filePath!),
+                  ),
+                ],
+              );
+            } else {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    answerScheme(),
+                    currentView == ExamView.general
+                        ? allStudentList(widget.examData.studentResults)
+                        : currentView == ExamView.loading
+                            ? loadingScreen()
+                            : uploadedImageView(filePath!),
+                  ],
+                ),
+              );
+            }
+          }),
         ));
   }
 
   Widget loadingScreen() {
-    return Expanded(
-      child: Column(
-        children: [
-          Text("", style: GoogleFonts.poppins(fontSize: 20)),
-          const SizedBox(height: 16),
-          Container(
-              height: MediaQuery.of(context).size.height - 160,
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              margin: const EdgeInsets.only(right: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: const Color(0xffbfd7ed)),
-              child: const Center(child: CircularProgressIndicator())),
-        ],
-      ),
+    return Column(
+      children: [
+        Text("", style: GoogleFonts.poppins(fontSize: 20)),
+        const SizedBox(height: 16),
+        Container(
+            height: MediaQuery.of(context).size.height - 160,
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.only(right: 8),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: const Color(0xffbfd7ed)),
+            child: const Center(child: CircularProgressIndicator())),
+      ],
     );
   }
 
   Widget answerScheme() {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Answer Scheme", style: GoogleFonts.poppins(fontSize: 20)),
-          const SizedBox(height: 16),
-          Container(
-            height: MediaQuery.of(context).size.height - 160,
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            margin: const EdgeInsets.only(right: 16),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: const Color(0xffbfd7ed)),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  currentView == ExamView.edit ? editingRow() : Container(),
-                  ...sampleAnswerList.map((question) => questionAnswers(
-                        question.questionNum,
-                        question.selectedAnswer,
-                      )),
-                ],
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Answer Scheme", style: GoogleFonts.poppins(fontSize: 20)),
+        const SizedBox(height: 16),
+        Container(
+          height: MediaQuery.of(context).size.height - 160,
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: const Color(0xffbfd7ed)),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                currentView == ExamView.edit ? editingRow() : Container(),
+                ...sampleAnswerList.map((question) => questionAnswers(
+                      question.questionNum,
+                      question.selectedAnswer,
+                    )),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -538,113 +608,7 @@ class _ExtractPageState extends State<ExtractPage> {
   //===========================================Right Section===========================================
   Widget uploadedImageView(String path) {
     try {
-      return Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Students", style: GoogleFonts.poppins(fontSize: 20)),
-            const SizedBox(height: 16),
-            Container(
-              height: MediaQuery.of(context).size.height - 160,
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              margin: const EdgeInsets.only(right: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: const Color(0xffbfd7ed)),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    currentView == ExamView.detail
-                        ? Row(
-                            children: [
-                              IconButton(
-                                  onPressed: () => back(),
-                                  icon: const Icon(Icons.arrow_back)),
-                              Text(currentStudentResult?.studentName ?? "",
-                                  style: GoogleFonts.poppins(fontSize: 20)),
-                              const Spacer(),
-                              IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      currentView = ExamView.edit;
-                                      tempStudentAnswers =
-                                          currentStudentResult!.answerText;
-                                    });
-                                  },
-                                  icon: const Icon(Icons.edit)),
-                              IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            DeleteStudentDataPopup(
-                                              onDelete: () {
-                                                _deleteStudentResult();
-                                              },
-                                            ));
-                                  },
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  )),
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              Text(isAdding ? "Add student result" : "Editing",
-                                  style: GoogleFonts.poppins(fontSize: 20)),
-                              const Spacer(),
-                              FilledButton.tonal(
-                                  onPressed: () {
-                                    setState(() {
-                                      currentView = ExamView.detail;
-                                    });
-                                  },
-                                  child: const Text("Cancel")),
-                              const SizedBox(width: 8),
-                              FilledButton(
-                                  onPressed: () => _saveEditedStudentAnswer(),
-                                  child: Text(isAdding ? "Add" : "Save")),
-                            ],
-                          ),
-                    const SizedBox(height: 16),
-                    filePath == ''
-                        ? Text(
-                            isAdding
-                                ? "Fill the student details into the textfield on the left."
-                                : "Student answer is extracted",
-                            textAlign: TextAlign.start)
-                        : Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: SizedBox(
-                              child: Image.file(
-                                File(path),
-                                fit: BoxFit.cover,
-                                width: double
-                                    .infinity, // Set a specific width for the image
-                              ),
-                            ),
-                          ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    } catch (e) {
-      // print('Error loading image: $e');
-      return const Text('Error loading image');
-    }
-  }
-
-  Widget allStudentList(List<StudentResult> studentResults) {
-    return Expanded(
-      child: Column(
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Students", style: GoogleFonts.poppins(fontSize: 20)),
@@ -657,80 +621,194 @@ class _ExtractPageState extends State<ExtractPage> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: const Color(0xffbfd7ed)),
-            child: SizedBox(
-              width: 546,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ...studentResults.map((results) => studentAnswers(results)),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () => _uploadStudentData(context),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(16),
-                            margin: const EdgeInsets.only(bottom: 16),
-                            child: const Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(Icons.add, size: 50, color: Colors.grey),
-                                Text(
-                                  'Click to upload answer sheet',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  currentView == ExamView.detail
+                      ? Row(
+                          children: [
+                            IconButton(
+                                onPressed: () => back(),
+                                icon: const Icon(Icons.arrow_back)),
+                            Text(currentStudentResult?.studentName ?? "",
+                                style: GoogleFonts.poppins(fontSize: 20)),
+                            const Spacer(),
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    currentView = ExamView.edit;
+                                    tempStudentAnswers =
+                                        currentStudentResult!.answerText;
+                                  });
+                                },
+                                icon: const Icon(Icons.edit)),
+                            IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          DeleteStudentDataPopup(
+                                            onDelete: () {
+                                              _deleteStudentResult();
+                                            },
+                                          ));
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                )),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Text(isAdding ? "Add student result" : "Editing",
+                                style: GoogleFonts.poppins(fontSize: 20)),
+                            const Spacer(),
+                            FilledButton.tonal(
+                                onPressed: () {
+                                  setState(() {
+                                    currentView = isAdding
+                                        ? ExamView.general
+                                        : ExamView.detail;
+                                  });
+                                },
+                                child: const Text("Cancel")),
+                            const SizedBox(width: 8),
+                            FilledButton(
+                                onPressed: () => _saveEditedStudentAnswer(),
+                                child: Text(isAdding ? "Add" : "Save")),
+                          ],
+                        ),
+                  const SizedBox(height: 16),
+                  filePath == ''
+                      ? Text(
+                          isAdding
+                              ? "Fill the student details into the textfield on the left."
+                              : "Student answer is extracted",
+                          textAlign: TextAlign.start)
+                      : Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: SizedBox(
+                            child: Image.file(
+                              File(path),
+                              fit: BoxFit.cover,
+                              width: double
+                                  .infinity, // Set a specific width for the image
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () => _addStudentResult(),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(16),
-                            margin: const EdgeInsets.only(bottom: 16),
-                            child: const Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(Icons.add, size: 50, color: Colors.grey),
-                                Text(
-                                  'Click to fill in manually',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                ],
               ),
             ),
           ),
         ],
-      ),
+      );
+    } catch (e) {
+      // print('Error loading image: $e');
+      return const Text('Error loading image');
+    }
+  }
+
+  Widget allStudentList(List<StudentResult> studentResults) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Students", style: GoogleFonts.poppins(fontSize: 20)),
+        const SizedBox(height: 16),
+        Container(
+          height: MediaQuery.of(context).size.height - 160,
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: const Color(0xffbfd7ed)),
+          child: SizedBox(
+            width: 546,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ...studentResults.map((results) => studentAnswers(results)),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () => _uploadStudentData(context),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(16),
+                                margin: const EdgeInsets.only(bottom: 16),
+                                child: const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add,
+                                        size: 50, color: Colors.grey),
+                                    Text(
+                                      'Upload answer sheet',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () => _addStudentResult(),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(16),
+                                margin: const EdgeInsets.only(bottom: 16),
+                                child: const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add,
+                                        size: 50, color: Colors.grey),
+                                    Text(
+                                      'Fill student result',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
