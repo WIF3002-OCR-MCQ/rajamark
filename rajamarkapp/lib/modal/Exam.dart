@@ -29,28 +29,27 @@ class Exam {
   })  : grades = grades ?? [],
         studentResults = studentResults ?? [];
 
-  Exam.fromJson(Map<String, dynamic> json)
-      : examId = json['examId'],
-        title = json['title'],
-        description = json['description'],
-        courseCode = json['courseCode'],
-        session = json['session'],
-        sampleAnswer = (json['sampleAnswer'] as List).cast<String>(),
-        meanScore =
-            json['meanScore'] != null ? json['meanScore'].toDouble() : 0.0,
-        medianScore =
-            json['medianScore'] != null ? json['medianScore'].toDouble() : 0.0,
-        grades = json['grades'] != null
-            ? (json['grades'] as List)
-                .map((item) => Grade.fromJson(item))
-                .toList()
-            : [],
-        studentResults = json['studentResults'] != null
-            ? (json['studentResults'] as List)
-                .map((item) => StudentResult.fromJson(item))
-                .toList()
-            : [],
-        teacherId = json['teacherId'];
+  factory Exam.fromJson(Map<String, dynamic> json) {
+    return Exam(
+      examId: json['examId'],
+      title: json['title'],
+      description: json['description'],
+      courseCode: json['courseCode'],
+      session: json['session'],
+      sampleAnswer: (json['sampleAnswer'] as List).cast<String>(),
+      meanScore: json['meanScore']?.toDouble() ?? 0.0,
+      medianScore: json['medianScore']?.toDouble() ?? 0.0,
+      grades: (json['grades'] as List?)
+              ?.map((item) => Grade.fromJson(item))
+              .toList() ??
+          [],
+      studentResults: (json['studentResults'] as List?)
+              ?.map((item) => StudentResult.fromJson(item))
+              .toList() ??
+          [],
+      teacherId: json['teacherId'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'examId': examId,

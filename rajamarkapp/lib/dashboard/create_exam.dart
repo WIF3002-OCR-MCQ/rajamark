@@ -192,7 +192,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
         courseCode: _courseCodeController.text,
         session: _sessionController.text,
         grades: grades, // Initialize with an empty list of grades
-        studentResults: [], // Initialize with an empty list of student results
+        studentResults: [], 
         sampleAnswer: sampleAnswers,
         teacherId: UserState.to.getUser()!.uid);
 

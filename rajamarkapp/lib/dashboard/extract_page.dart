@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_vision/google_vision.dart' as gv;
 import 'package:rajamarkapp/const/constant.dart';
@@ -16,7 +15,7 @@ import 'package:rajamarkapp/popups/delete_student_data.dart';
 import 'package:rajamarkapp/state/ExamState.dart';
 import 'package:rajamarkapp/utils/exam_calculation.dart';
 
-enum ExamView { general, detail, edit }
+enum ExamView { general, detail, edit, loading }
 
 class ExtractPage extends StatefulWidget {
   const ExtractPage(
@@ -72,14 +71,6 @@ class _ExtractPageState extends State<ExtractPage> {
   }
 
   void _uploadStudentData(BuildContext context) async {
-    //Pick File from the path
-    // String? path = await _showFilePicker(context);
-    // if (path == null) {
-    //   print("File is not picked!");
-    //   return;
-    // }
-    // print("File picked");
-
     //Extract text from the image
     String? extracted = await _showFilePicker(context);
     if (extracted == null) {
@@ -112,6 +103,18 @@ class _ExtractPageState extends State<ExtractPage> {
       date: DateTime.now(),
     );
 
+    //Check if the student is already uplaoded
+    for (StudentResult result in widget.examData.studentResults) {
+      if (result.examId == studentResult.examId &&
+          result.studentId == studentResult.studentId) {
+        print("Result Added before!");
+        setState(() {
+          currentView = ExamView.detail;
+          currentStudentResult = studentResult;
+        });
+        return;
+      }
+    }
     //Add the student result to the exam state
     ExamState.to.addStudentResult(studentResult, widget.examData);
 
@@ -137,6 +140,9 @@ class _ExtractPageState extends State<ExtractPage> {
     Uint8List? fileBytes;
     String? extracted;
     if (result != null) {
+      setState(() {
+        currentView = ExamView.loading;
+      });
       if (kIsWeb) {
         // Handle web platform
         fileBytes = result.files.first.bytes;
@@ -170,29 +176,6 @@ class _ExtractPageState extends State<ExtractPage> {
     }
     return extracted;
   }
-
-  // Future<String?> _ocr(String filePath) async {
-  //   String? extracted;
-
-  //   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-  //     final String authString =
-  //         await rootBundle.loadString('assets/auth/auth.json');
-  //     final googleVision = await gv.GoogleVision.withJwt(authString);
-  //     List<gv.EntityAnnotation> annotations = await googleVision
-  //         .textDetection(gv.JsonImage.fromFilePath(filePath!));
-  //     extracted = annotations[0].description;
-  //   } else {
-  //     //Web Ocr
-  //     extracted = await FlutterTesseractOcr.extractText(filePath!, args: {
-  //       "tessedit_char_whitelist":
-  //           "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:. ",
-  //       "preserve_interword_spaces": "1",
-  //       "tessedit_pageseg_mode": "1",
-  //     });
-  //   }
-
-  //   return extracted;
-  // }
 
   void back() {
     setState(() {
@@ -242,10 +225,32 @@ class _ExtractPageState extends State<ExtractPage> {
               answerScheme(),
               currentView == ExamView.general
                   ? allStudentList(widget.examData.studentResults)
-                  : uploadedImageView(filePath!),
+                  : currentView == ExamView.loading
+                      ? loadingScreen()
+                      : uploadedImageView(filePath!),
             ],
           ),
         ));
+  }
+
+  Widget loadingScreen() {
+    return Expanded(
+      child: Column(
+        children: [
+          Text("", style: GoogleFonts.poppins(fontSize: 20)),
+          const SizedBox(height: 16),
+          Container(
+              height: MediaQuery.of(context).size.height - 160,
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.only(right: 8),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: const Color(0xffbfd7ed)),
+              child: const Center(child: CircularProgressIndicator())),
+        ],
+      ),
+    );
   }
 
   Widget answerScheme() {

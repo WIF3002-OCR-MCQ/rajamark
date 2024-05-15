@@ -32,6 +32,9 @@ class ExamState extends GetxService {
 
   void addExam(Exam exam) async {
     await firebaseService.addExam(exam);
+    for (Grade grade in exam.grades) {
+      await firebaseService.addGrade(grade);
+    }
     exams.add(exam);
   }
 

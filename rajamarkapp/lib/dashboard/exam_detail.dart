@@ -1,18 +1,11 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:rajamarkapp/dashboard/extract_page.dart';
-import 'package:rajamarkapp/dashboard/student_answer.dart';
 import 'package:rajamarkapp/modal/Exam.dart';
 import 'package:rajamarkapp/modal/Grade.dart';
 import 'package:rajamarkapp/modal/StudentResult.dart';
 import 'package:rajamarkapp/popups/delete_student_data.dart';
-import 'package:rajamarkapp/popups/edit_result_popup.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:rajamarkapp/state/ExamState.dart';
 
 class ExamDetailsView extends StatefulWidget {
