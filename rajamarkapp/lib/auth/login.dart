@@ -108,10 +108,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildMobileLayout() {
-    return Column(
-      children: [
-        Expanded(
-          child: Container(
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
             color: Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -134,23 +134,19 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                Expanded(
-                  child: FractionallySizedBox(
-                    widthFactor: 1.0,
-                    child: FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: SvgPicture.asset(
-                        'images/examIllustration.svg',
-                      ),
+                FractionallySizedBox(
+                  widthFactor: 1.0,
+                  child: FittedBox(
+                    fit: BoxFit.fitHeight,
+                    child: SvgPicture.asset(
+                      'images/examIllustration.svg',
                     ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-        Expanded(
-          child: Container(
+          Container(
             color: const Color.fromARGB(255, 255, 255, 255),
             child: Center(
               child: Container(
@@ -159,14 +155,15 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                  child:
-                      Center(child: LoginModule(dialogBuilder: _dialogBuilder)),
+                  child: Center(
+                    child: LoginModule(dialogBuilder: _dialogBuilder),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

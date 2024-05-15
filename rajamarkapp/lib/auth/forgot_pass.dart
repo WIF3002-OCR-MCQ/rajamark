@@ -13,7 +13,7 @@ class ForgotPassPage extends StatefulWidget {
 class _ForgotPassPageState extends State<ForgotPassPage> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(
@@ -28,7 +28,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
     );
   }
 
- Widget _buildDesktopLayout() {
+  Widget _buildDesktopLayout() {
     return Stack(
       children: [
         Row(
@@ -81,63 +81,65 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
   }
 
   Widget _buildMobileLayout() {
-    return Column(
-      children: [
-        Expanded(
-          child: Container(
-            color: Colors.white,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'images/1.png',
-                      width: 60,
-                      height: 60,
-                    ),
-                    Text(
-                      'RajaMark',
-                      style: GoogleFonts.poppins(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'images/1.png',
+                        width: 60,
+                        height: 60,
                       ),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: FractionallySizedBox(
-                    widthFactor: 1.0,
-                    child: FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: SvgPicture.asset(
-                        'images/examIllustration.svg',
+                      Text(
+                        'RajaMark',
+                        style: GoogleFonts.poppins(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: FractionallySizedBox(
+                      widthFactor: 1.0,
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: SvgPicture.asset(
+                          'images/examIllustration.svg',
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Container(
-            color: const Color.fromARGB(255, 255, 255, 255),
-            child: Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 700,
-                color: Colors.white,
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                  child: Center(child: ForgotPassModule()),
+          Expanded(
+            child: Container(
+              color: const Color.fromARGB(255, 255, 255, 255),
+              child: Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 700,
+                  color: Colors.white,
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                    child: Center(child: ForgotPassModule()),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
