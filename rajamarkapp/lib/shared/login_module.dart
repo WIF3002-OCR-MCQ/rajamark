@@ -24,8 +24,6 @@ class _LoginModuleState extends State<LoginModule> {
   @override
   void initState() {
     super.initState();
-    _emailController.text = 'abc@gmail.com';
-    _passwordController.text = 'abc123';
   }
 
   void login(BuildContext context) {

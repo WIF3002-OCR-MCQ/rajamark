@@ -338,7 +338,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
             quesNumTracker++;
             break;
           }
-        }else{
+        } else {
           print("cannot parse");
         }
       }
@@ -595,6 +595,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
                 ),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
                     margin: EdgeInsets.all(20),
