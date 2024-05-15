@@ -167,7 +167,7 @@ detailed instructions on how to use this system effectively.</p>
 
 3. Enter the changes required in the Edit Exam page.
 <p align="center">
-  <img width="60%" src="(https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EE2.png">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EE2.png">
 </p>
 
 4. Scroll down and click the “save” button to apply the changes.
