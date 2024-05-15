@@ -6,6 +6,7 @@ import 'package:rajamarkapp/auth/forgot_pass.dart';
 import 'package:rajamarkapp/auth/register.dart';
 import 'package:rajamarkapp/auth/verify_email.dart';
 import 'package:rajamarkapp/dashboard/dashboard.dart';
+import 'package:rajamarkapp/popups/error_popup.dart';
 import 'package:rajamarkapp/services/auth_service.dart';
 import 'package:rajamarkapp/shared/forgotpass_module.dart';
 import 'package:rajamarkapp/shared/verifyemail_module.dart';
@@ -49,8 +50,10 @@ class _LoginModuleState extends State<LoginModule> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => DashboardPage()))
                 }
-            })
-        .catchError((e) => print('Error signing in: $e'));
+                else{
+                  widget.dialogBuilder(context, "Login fail",  'Email or password wrong')
+                }
+            });
   }
 
   @override
