@@ -52,40 +52,40 @@ class _CreateExamPageState extends State<CreateExamPage> {
 
       switch (grade) {
         case "A":
-          gradeMap[grade]![0].text = "90";
+          gradeMap[grade]![0].text = "80";
           gradeMap[grade]![1].text = "100";
           break;
         case "A-":
-          gradeMap[grade]![0].text = "85";
-          gradeMap[grade]![1].text = "89";
-          break;
-        case "B+":
-          gradeMap[grade]![0].text = "80";
-          gradeMap[grade]![1].text = "84";
-          break;
-        case "B":
           gradeMap[grade]![0].text = "75";
           gradeMap[grade]![1].text = "79";
           break;
-        case "B-":
+        case "B+":
           gradeMap[grade]![0].text = "70";
           gradeMap[grade]![1].text = "74";
           break;
-        case "C+":
+        case "B":
           gradeMap[grade]![0].text = "65";
           gradeMap[grade]![1].text = "69";
           break;
-        case "C":
+        case "B-":
           gradeMap[grade]![0].text = "60";
           gradeMap[grade]![1].text = "64";
           break;
-        case "D":
-          gradeMap[grade]![0].text = "50";
+        case "C+":
+          gradeMap[grade]![0].text = "55";
           gradeMap[grade]![1].text = "59";
+          break;
+        case "C":
+          gradeMap[grade]![0].text = "50";
+          gradeMap[grade]![1].text = "54";
+          break;
+        case "D":
+          gradeMap[grade]![0].text = "40";
+          gradeMap[grade]![1].text = "49";
           break;
         case "F":
           gradeMap[grade]![0].text = "0";
-          gradeMap[grade]![1].text = "49";
+          gradeMap[grade]![1].text = "39";
           break;
         default:
           gradeMap[grade]![0].text = "0";
@@ -157,7 +157,25 @@ class _CreateExamPageState extends State<CreateExamPage> {
     );
   }
 
+  bool validateGradeRanges(List<Grade> gradeMap) {
+    for (var i = 0; i < gradeMap.length; i++) {
+      if (i == gradeMap.length - 1) {
+        return true;
+      }
+
+      int minValue = gradeMap[i].lowerScore;
+      int maxValue = gradeMap[i + 1].upperScore;
+
+      if (minValue <= maxValue) {
+        print("Error: $minValue >= $maxValue");
+        return false;
+      }
+    }
+    return true;
+  }
+
   Future<void> createExam(BuildContext context) async {
+    // Check if any of the fields are empty
     if (_titleController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
         _courseCodeController.text.isEmpty ||
@@ -165,14 +183,23 @@ class _CreateExamPageState extends State<CreateExamPage> {
       _dialogBuilder(context, "Error", "Please fill in all the details");
       return;
     }
+
+    //check if they fill in overlap grade value
+    for (var grade in gradeName) {
+      if (int.parse(gradeMap[grade]![0].text) >=
+          int.parse(gradeMap[grade]![1].text)) {
+        _dialogBuilder(context, "Error", "Please fill in correct grade value");
+        return;
+      }
+    }
+
+    // Generate a random exam ID
     int examIdint = random.nextInt(100001);
     String examId = "e$examIdint";
 
-    List<String> sampleAnswers =
-        questionList.map((question) => question.selectedAnswer).toList();
-
     List<Grade> grades = [];
 
+    // Create a grade object for each grade and add into list
     for (var grade in gradeName) {
       int gradeIdInt = random.nextInt(100001);
       String gradeId = "g$gradeIdInt";
@@ -185,6 +212,16 @@ class _CreateExamPageState extends State<CreateExamPage> {
           upperScore: int.parse(gradeMap[grade]![1].text)));
     }
 
+    //validate grade ranges
+    if (!validateGradeRanges(grades)) {
+      _dialogBuilder(context, "Error", "Please fill in correct grade value");
+      return;
+    }
+
+    // Get the selected answers from the question list
+    List<String> sampleAnswers =
+        questionList.map((question) => question.selectedAnswer).toList();
+
     Exam newExam = Exam(
         examId: examId.toString(), // Firestore will auto-generate an ID
         title: _titleController.text,
@@ -192,7 +229,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
         courseCode: _courseCodeController.text,
         session: _sessionController.text,
         grades: grades, // Initialize with an empty list of grades
-        studentResults: [], 
+        studentResults: [],
         sampleAnswer: sampleAnswers,
         teacherId: UserState.to.getUser()!.uid);
 
@@ -239,6 +276,12 @@ class _CreateExamPageState extends State<CreateExamPage> {
 
       grades.add(existingGrade);
     });
+
+    //validate grade ranges
+    if (!validateGradeRanges(grades)) {
+      _dialogBuilder(context, "Error", "Please fill in correct grade value");
+      return;
+    }
 
     Exam currentExam = Exam(
         examId: examId.toString(), // Firestore will auto-generate an ID
@@ -439,30 +482,25 @@ class _CreateExamPageState extends State<CreateExamPage> {
                 ),
               ),
               Container(
-                height: 1000,
                 width: double.infinity,
-                padding: EdgeInsets.all(20),
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                padding: const EdgeInsets.all(20),
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Color(0xffbfd7ed),
+                  color: const Color(0xffbfd7ed),
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ...questionList
-                          .map((question) => questionAnswers(
-                                question.questionNum,
-                                question.selectedAnswer,
-                              ))
-                          .toList(),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () => addQuestion(),
-                        child: Text("Add question"),
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    ...questionList.map((question) => questionAnswers(
+                          question.questionNum,
+                          question.selectedAnswer,
+                        )),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () => addQuestion(),
+                      child: const Text("Add question"),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 40),
