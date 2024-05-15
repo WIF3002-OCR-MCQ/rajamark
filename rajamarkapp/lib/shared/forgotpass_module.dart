@@ -43,7 +43,13 @@ class _ForgotPassModuleState extends State<ForgotPassModule> {
       });
     } on FirebaseAuthException catch (e) {
       setState(() {
+        isLinkSent = false;
         errorMessage = e.message ?? 'An error occurred';
+      });
+    } catch(e){
+      setState(() {
+        isLinkSent = false;
+        errorMessage = 'An unknown error occurred, please try again later.';
       });
     }
   }
