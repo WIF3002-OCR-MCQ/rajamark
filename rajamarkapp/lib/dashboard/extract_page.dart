@@ -136,7 +136,7 @@ class _ExtractPageState extends State<ExtractPage> {
   }
 
   Future<String?> _showFilePicker(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
     String? filePath = '';
     Uint8List? fileBytes;
     String? extracted;
