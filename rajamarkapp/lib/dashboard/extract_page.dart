@@ -34,6 +34,7 @@ class ExtractPage extends StatefulWidget {
 class _ExtractPageState extends State<ExtractPage> {
   List<QuestionModal> sampleAnswerList = [];
   List<String> tempStudentAnswers = []; //Used for editing
+  bool isAdding = false; //Used for adding student result manually
 
   TextEditingController studentNameController = TextEditingController();
   TextEditingController studentIdController = TextEditingController();
@@ -88,9 +89,9 @@ class _ExtractPageState extends State<ExtractPage> {
     int score = calculateScore(
         widget.examData.sampleAnswer, studentInfo.studentAnswers);
 
-    print("Id is ${studentInfo.studentID}");
-    print("Name is ${studentInfo.studentName}");
-    print("Answer is ${studentInfo.studentAnswers}");
+    // print("Id is ${studentInfo.studentID}");
+    // print("Name is ${studentInfo.studentName}");
+    // print("Answer is ${studentInfo.studentAnswers}");
 
     //Create a student result object
     StudentResult studentResult = StudentResult(
@@ -185,29 +186,79 @@ class _ExtractPageState extends State<ExtractPage> {
     });
   }
 
-  void _saveEditedStudentAnswer() {
-    int score =
-        calculateScore(widget.examData.sampleAnswer, tempStudentAnswers);
-    String gradeLabel = calculateGrade(score, widget.examData);
-
-    currentStudentResult!.score = score;
-    currentStudentResult!.gradeLabel = gradeLabel;
-    currentStudentResult!.studentName = studentNameController.text;
-    currentStudentResult!.studentId = studentIdController.text;
-    currentStudentResult!.answerText = tempStudentAnswers;
-
-
-    ExamState.to.updateStudentResult(currentStudentResult!, widget.examData);
-
+  void _addStudentResult() {
     setState(() {
+      isAdding = true;
+      currentView = ExamView.edit;
+      tempStudentAnswers =
+          List.generate(sampleAnswerList.length, (index) => '');
+    });
+  }
+
+  void _saveEditedStudentAnswer() {
+    if (!isAdding) {
+      //Performing editing function
+      int score =
+          calculateScore(widget.examData.sampleAnswer, tempStudentAnswers);
+      String gradeLabel = calculateGrade(score, widget.examData);
+
       currentStudentResult!.score = score;
       currentStudentResult!.gradeLabel = gradeLabel;
       currentStudentResult!.studentName = studentNameController.text;
       currentStudentResult!.studentId = studentIdController.text;
       currentStudentResult!.answerText = tempStudentAnswers;
-      currentView = ExamView.detail;
-      tempStudentAnswers = [];
-    });
+
+      ExamState.to.updateStudentResult(currentStudentResult!, widget.examData);
+
+      setState(() {
+        currentStudentResult!.score = score;
+        currentStudentResult!.gradeLabel = gradeLabel;
+        currentStudentResult!.studentName = studentNameController.text;
+        currentStudentResult!.studentId = studentIdController.text;
+        currentStudentResult!.answerText = tempStudentAnswers;
+        currentView = ExamView.detail;
+        tempStudentAnswers = [];
+      });
+    } else {
+      //Performing adding function
+      int score =
+          calculateScore(widget.examData.sampleAnswer, tempStudentAnswers);
+      String gradeLabel = calculateGrade(score, widget.examData);
+
+      //Create a student result object
+      StudentResult studentResult = StudentResult(
+        studentId: studentIdController.text,
+        examId: widget.examData.examId,
+        studentName: studentNameController.text,
+        score: score,
+        answerText: tempStudentAnswers,
+        gradeLabel: gradeLabel,
+        date: DateTime.now(),
+      );
+
+      //Check if the student is already uplaoded
+      for (StudentResult result in widget.examData.studentResults) {
+        if (result.examId == studentResult.examId &&
+            result.studentId == studentResult.studentId) {
+          print("Result Added before!");
+          setState(() {
+            currentView = ExamView.detail;
+            currentStudentResult = studentResult;
+          });
+          return;
+        }
+      }
+      //Add the student result to the exam state
+      ExamState.to.addStudentResult(studentResult, widget.examData);
+
+      //Change the current page state
+      setState(() {
+        currentView = ExamView.detail;
+        currentStudentResult = studentResult;
+        tempStudentAnswers = [];
+        isAdding = false;
+      });
+    }
   }
 
   void _deleteStudentResult() {
@@ -542,7 +593,7 @@ class _ExtractPageState extends State<ExtractPage> {
                           )
                         : Row(
                             children: [
-                              Text("Editing",
+                              Text(isAdding ? "Add student result" : "Editing",
                                   style: GoogleFonts.poppins(fontSize: 20)),
                               const Spacer(),
                               FilledButton.tonal(
@@ -555,12 +606,15 @@ class _ExtractPageState extends State<ExtractPage> {
                               const SizedBox(width: 8),
                               FilledButton(
                                   onPressed: () => _saveEditedStudentAnswer(),
-                                  child: const Text("Save")),
+                                  child: Text(isAdding ? "Add" : "Save")),
                             ],
                           ),
                     const SizedBox(height: 16),
                     filePath == ''
-                        ? const Text("Student answer is extracted",
+                        ? Text(
+                            isAdding
+                                ? "Fill the student details into the textfield on the left."
+                                : "Student answer is extracted",
                             textAlign: TextAlign.start)
                         : Container(
                             decoration: BoxDecoration(
@@ -638,6 +692,37 @@ class _ExtractPageState extends State<ExtractPage> {
                           ),
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () => _addStudentResult(),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            margin: const EdgeInsets.only(bottom: 16),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add, size: 50, color: Colors.grey),
+                                Text(
+                                  'Click to fill in manually',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -646,6 +731,64 @@ class _ExtractPageState extends State<ExtractPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _dialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Fill in student details'),
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: TextField(
+                controller: studentNameController,
+                decoration: const InputDecoration(
+                  hintText: 'Student Name',
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10), // Changed the fill color
+                ),
+                style: const TextStyle(
+                    color: Colors.black), // Changed the text color
+              ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: TextField(
+                controller: studentIdController,
+                decoration: const InputDecoration(
+                  hintText: 'Student Id',
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10), // Changed the fill color
+                ),
+                style: const TextStyle(
+                    color: Colors.black), // Changed the text color
+              ),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Treasury department'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('State department'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

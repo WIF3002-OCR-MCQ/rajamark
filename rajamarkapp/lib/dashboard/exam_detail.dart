@@ -103,7 +103,7 @@ class _CreateExamDetailsViewState extends State<ExamDetailsView> {
               },
               icon: const Icon(Icons.remove_red_eye, color: Colors.white),
               label: Text(
-                'View Answer',
+                'Upload Answer',
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
