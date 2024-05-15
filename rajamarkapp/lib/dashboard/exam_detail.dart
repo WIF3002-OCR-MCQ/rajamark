@@ -181,9 +181,14 @@ class _CreateExamDetailsViewState extends State<ExamDetailsView> {
                     ),
                   ),
                   Expanded(
-                    flex: 2,
                     child: Text(
                       'Result',
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Score',
                       style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -235,9 +240,14 @@ class _CreateExamDetailsViewState extends State<ExamDetailsView> {
           ),
         ),
         Expanded(
-          flex: 2,
           child: Text(
             result.gradeLabel,
+            style: GoogleFonts.poppins(),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            result.score.toString(),
             style: GoogleFonts.poppins(),
           ),
         ),
