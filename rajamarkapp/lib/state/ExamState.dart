@@ -112,20 +112,22 @@ class ExamState extends GetxService {
     }
   }
 
-  void updateStudentResult(
+  void updateStudentResult(StudentResult oldStudentResult,
       StudentResult studentResult, Exam currentExam) async {
-    bool isUpdated = await firebaseService.updateStudentResult(studentResult);
+    removeStudentResult(oldStudentResult, currentExam);
+    addStudentResult(studentResult, currentExam);
+    // bool isRemoved = await firebaseService.updateStudentResult(studentResult);
 
-    if (!isUpdated) return;
-    for (var exam in exams) {
-      if (exam.examId == currentExam.examId) {
-        int index = exam.studentResults.indexWhere(
-            (element) => element.studentId == studentResult.studentId);
-        exam.studentResults[index] = studentResult;
-       return;
+    // if (!isUpdated) return;
+    // for (var exam in exams) {
+    //   if (exam.examId == currentExam.examId) {
+    //     int index = exam.studentResults.indexWhere(
+    //         (element) => element.studentId == studentResult.studentId);
+    //     exam.studentResults[index] = studentResult;
+    //    return;
 
-      }
-    }
+    //   }
+    // }
     // print("Update exam mean and median score");
     // currentExam.medianScore = calculateMedianScore(currentExam);
   }

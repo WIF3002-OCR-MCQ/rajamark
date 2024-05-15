@@ -251,13 +251,15 @@ class _ExtractPageState extends State<ExtractPage> {
           calculateScore(widget.examData.sampleAnswer, tempStudentAnswers);
       String gradeLabel = calculateGrade(score, widget.examData);
 
+      StudentResult oldStudentResult = currentStudentResult!;
+
       currentStudentResult!.score = score;
       currentStudentResult!.gradeLabel = gradeLabel;
       currentStudentResult!.studentName = studentNameController.text;
       currentStudentResult!.studentId = studentIdController.text;
       currentStudentResult!.answerText = tempStudentAnswers;
 
-      ExamState.to.updateStudentResult(currentStudentResult!, widget.examData);
+      ExamState.to.updateStudentResult(oldStudentResult, currentStudentResult!, widget.examData);
 
       setState(() {
         currentStudentResult!.score = score;
@@ -469,11 +471,17 @@ class _ExtractPageState extends State<ExtractPage> {
       return backgroundColor;
     }
 
+    print("SampleAnswer: $currentAnswer");
+
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          color: Colors.white,
+          border: currentAnswer == ""
+              ? Border.all(color: Colors.red, width: 2)
+              : Border.all(color: Colors.white, width: 0),
+          borderRadius: BorderRadius.circular(8)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
