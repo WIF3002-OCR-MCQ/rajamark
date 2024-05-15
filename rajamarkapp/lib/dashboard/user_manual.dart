@@ -562,9 +562,8 @@ class GettingStarted extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             '1.\t\tExam Page\n\nThe Exam Page contains all exams that have been created. The exams can be edited or deleted from this table. The date of creation will also be displayed on this page. It is also possible to create a new exam from this page.\n\n'
-            '2.\t\tAccount Page\n\nThe Account Page will display the user’s information. Users will also be able to check and manage their account subscription on this page.\n\n'
-            '3.\t\tUser Manual Page\n\nThe User Manual Page contains the documentation of the user manual that provides detailed instructions on how to use this system effectively.\n\n'
-            '4.\t\tLogout\n\nNavigate to the navigation bar located at the leftmost of the screen and click on the “LogOut” button if you wish to log out from your account.',
+            '2.\t\tUser Manual Page\n\nThe User Manual Page contains the documentation of the user manual that provides detailed instructions on how to use this system effectively.\n\n'
+            '3.\t\tLogout\n\nNavigate to the navigation bar located at the leftmost of the screen and click on the “LogOut” button if you wish to log out from your account.',
             style: _textStyle2,
           ),
         ],
