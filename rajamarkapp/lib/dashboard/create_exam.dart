@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -307,6 +311,125 @@ class _CreateExamPageState extends State<CreateExamPage> {
     Navigator.of(context).pop();
   }
 
+  void _uploadAnswerScheme(BuildContext context) async {
+    await _showFilePicker(context).then((lines) {
+      if (lines == null) {
+        return;
+      }
+      List<QuestionModal> tempList = [];
+      List<int> isIncomplete = [];
+
+      print(lines[lines.length - 1].split(" ")[0]);
+      int quesNumTracker = 1;
+
+      for (var i = 0; i < lines.length; i++) {
+        int? quesNum = int.tryParse(lines[i].split(" ")[0]);
+        String answer = lines[i].split(" ").last.toUpperCase();
+        if (quesNum != null) {
+          print("Question $quesNum $answer");
+          print("index $quesNum $quesNumTracker");
+          tempList
+              .add(QuestionModal(questionNum: i + 1, selectedAnswer: answer));
+          quesNumTracker++;
+          while (quesNum == quesNumTracker) {
+            print("WTF?");
+            tempList
+                .add(QuestionModal(questionNum: quesNum, selectedAnswer: ""));
+            quesNumTracker++;
+            break;
+          }
+        }else{
+          print("cannot parse");
+        }
+      }
+
+      if (isIncomplete.isNotEmpty) {
+        _dialogBuilder(context, "Incomplete Answer Scheme",
+            "Please fill in the missing answers for questions: $isIncomplete");
+      }
+      print("Temp list length is ${tempList.length}");
+
+      setState(() {
+        questionList = tempList;
+      });
+    });
+  }
+
+  Future<List<String>?> _showFilePicker(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['txt']);
+
+    if (result == null) {
+      print("File picker closed");
+      return null;
+    }
+
+    List<String>? lines;
+
+    if (!kIsWeb) {
+      //Other than web
+      String filePath = result.files.single.path!;
+
+      File file = File(filePath);
+      lines = file.readAsLinesSync();
+    } else {
+      final Uint8List? fileBytes = result.files.first.bytes;
+      final String? fileName = result.files.first.name;
+      if (fileBytes != null && fileName != null) {
+        String fileContent = utf8.decode(fileBytes);
+        List<String> extractedAnswers = fileContent.split('\n');
+        lines = extractedAnswers;
+      }
+    }
+    print("Lines length is ${lines?.length}");
+
+    return lines;
+  }
+
+  void uploadSampleAnswerTxtFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pd', 'txt'],
+    );
+
+    if (result != null) {
+      if (kIsWeb) {
+        final Uint8List? fileBytes = result.files.first.bytes;
+        final String? fileName = result.files.first.name;
+        if (fileBytes != null && fileName != null) {
+          String fileContent = utf8.decode(fileBytes);
+          List<String> extractedAnswers = fileContent.split('\n');
+          print("extracted");
+
+          List<QuestionModal> updatedQuestionList = [];
+
+          for (var answer in extractedAnswers) {
+            final splitted = answer.split(" ");
+            print(splitted.first);
+            print(splitted.last);
+            final answerNum = int.tryParse(splitted.first);
+            if (answerNum != null) {
+              print("answer : $answerNum");
+              updatedQuestionList.add(QuestionModal(
+                  questionNum: answerNum,
+                  selectedAnswer: splitted.last.toUpperCase()));
+            } else {
+              print("Unable to parse '${splitted.first}' into a number.");
+            }
+          }
+
+          for (var element in updatedQuestionList) {
+            print(element.questionNum);
+            print(element.selectedAnswer);
+          }
+          setState(() {
+            questionList = updatedQuestionList;
+          });
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -471,16 +594,29 @@ class _CreateExamPageState extends State<CreateExamPage> {
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.all(20),
-                child: Text(
-                  "Answer Scheme",
-                  style: GoogleFonts.poppins(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(20),
+                    child: Text(
+                      "Answer Scheme",
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
+                  ElevatedButton(
+                      onPressed: () => _uploadAnswerScheme(context),
+                      child: const Row(
+                        children: [
+                          Text("Upload .txt file"),
+                          IconButton(onPressed: null, icon: Icon(Icons.upload))
+                        ],
+                      )),
+                ],
               ),
+
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),

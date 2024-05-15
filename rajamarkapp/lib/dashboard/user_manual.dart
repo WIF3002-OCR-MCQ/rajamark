@@ -1147,7 +1147,7 @@ class BestPractices extends StatelessWidget {
                               ),
                               if (item.imagePath !=
                                   null) // Only show image if imagePath is provided
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                               if (item.imagePath != null)
                                 Center(
                                   child: Container(
