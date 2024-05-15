@@ -147,12 +147,12 @@ detailed instructions on how to use this system effectively.</p>
 
 3. Enter the examination’s details and grading’s criteria.
 <p align="center">
-  <img width="60%" src="[https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/ee2a3ccf-cfdd-4c3d-b8cc-8a08d4c7d266](https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EC2.png)">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EC2.png">
 </p>
 
 4. Scroll down to enter the answer scheme.
 <p align="center">
-  <img width="60%" src="[https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/56d5ea26-ddeb-44a7-b549-430550b7e651](https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EC3.png)">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EC3.png">
 </p>
 
 5. Click the “save” button to create the examination record.
@@ -162,12 +162,12 @@ detailed instructions on how to use this system effectively.</p>
 1. Go to the Exam page.
 2. Click on the “edit” icon for the specific exam to be edited.
 <p align="center">
-  <img width="60%" src="[https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/107c81a4-ef80-49ca-852c-d76ea706699a](https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EE1.png)">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EE1.png">
 </p>
 
 3. Enter the changes required in the Edit Exam page.
 <p align="center">
-  <img width="60%" src="[https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/8e247047-530c-44ad-af5f-80aacf80ffd6](https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EE2.png)">
+  <img width="60%" src="(https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EE2.png">
 </p>
 
 4. Scroll down and click the “save” button to apply the changes.
@@ -176,31 +176,31 @@ detailed instructions on how to use this system effectively.</p>
 1. Go to the Exam page.
 2. Click on the “eye” icon for a specific exam to view the exam’s details.
 <p align="center">
-  <img width="60%" src="[https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/4ae48f2d-d9b2-4dba-84a0-dd08936fcf0](https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/VED1.png)">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/VED1.png">
 </p>
 
 3. You will be directed to the Exam Details page.
 <p align="center">
-  <img width="60%" src="[https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/53bbf15d-bc32-4430-9ac4-1f250666cff7](https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/VED2.png)">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/VED2.png">
 </p>
 
 ### 3.4 Manage student's answer
 1. Go to the Exam page.
 2. Click on the “eye” icon to view the exam’s details.
 <p align="center">
-  <img width="60%" src="[https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/797ff1ec-be8c-4269-820b-2d74847da7e6](https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/MSA1.png)">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/MSA1.png">
 </p>
 
 3. Once redirected into the Exam Details page, navigate to the list of students’ records and
 click on the “eye” icon to view the student’s details, “note” icon to edit the student's
 details or “trash” icon to delete the student's information.
 <p align="center">
-  <img width="60%" src="[https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/2bc11354-f104-4864-b1f9-21c88467d1c7](https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/MSA2.png)">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/MSA2.png">
 </p>
 
 4. On the Student’s Details page, make the changes and click the “Save” button to save changes to the student's answer.
 <p align="center">
-  <img width="60%" src="[https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/78d37576-664e-4c94-a02d-eb826ef5831e](https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/MSA3.png)">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/MSA3.png">
 </p>
 
 ### 3.5 Upload Sample Answer
