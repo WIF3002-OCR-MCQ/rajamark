@@ -198,8 +198,7 @@ details or “trash” icon to delete the student's information.
   <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/2bc11354-f104-4864-b1f9-21c88467d1c7">
 </p>
 
-4. On the Student’s Details page, click the “Edit Result” button to make changes to the
-student's details.
+4. On the Student’s Details page, make the changes and click the “Save” button to save changes to the student's answer.
 <p align="center">
   <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/78d37576-664e-4c94-a02d-eb826ef5831e">
 </p>
