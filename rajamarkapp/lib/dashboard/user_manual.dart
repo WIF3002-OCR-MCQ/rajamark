@@ -331,6 +331,7 @@ class Introduction extends StatelessWidget {
             'tedious and error-prone manual grading process, making it ideal for educational institutions seeking a more efficient '
             'grading solution. ',
             style: TextStyle(fontSize: 14),
+            textAlign: TextAlign.justify,
           ),
           const SizedBox(height: 10),
           Text(
@@ -562,9 +563,8 @@ class GettingStarted extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             '1.\t\tExam Page\n\nThe Exam Page contains all exams that have been created. The exams can be edited or deleted from this table. The date of creation will also be displayed on this page. It is also possible to create a new exam from this page.\n\n'
-            '2.\t\tAccount Page\n\nThe Account Page will display the user’s information. Users will also be able to check and manage their account subscription on this page.\n\n'
-            '3.\t\tUser Manual Page\n\nThe User Manual Page contains the documentation of the user manual that provides detailed instructions on how to use this system effectively.\n\n'
-            '4.\t\tLogout\n\nNavigate to the navigation bar located at the leftmost of the screen and click on the “LogOut” button if you wish to log out from your account.',
+            '2.\t\tUser Manual Page\n\nThe User Manual Page contains the documentation of the user manual that provides detailed instructions on how to use this system effectively.\n\n'
+            '3.\t\tLogout\n\nNavigate to the navigation bar located at the leftmost of the screen and click on the “LogOut” button if you wish to log out from your account.',
             style: _textStyle2,
           ),
         ],
@@ -730,90 +730,45 @@ class Features extends StatelessWidget {
           const SizedBox(height: 10),
           Column(
             children: [
-              _buildStepWithImage('1. Go to the Exam page.', ''),
+              _buildStepWithImage('1. Go to the Exams page.', ''),
               SizedBox(height: 10),
               _buildStepWithImage(
-                  '2. Select the exam you wish to grade.', 'USA1.png'),
-              SizedBox(height: 15),
-              _buildStepWithImage(
-                  '3. In the student column, locate and click the "Add" button to input student data.',
+                  '2. Select the “eye icon” of the exam you wish to grade.',
                   'USA2.png'),
               SizedBox(height: 15),
               _buildStepWithImage(
-                  '4. Enter the student\'s ID and name into the designated fields.',
-                  ''),
-              _buildStepWithImage(
-                  '5. Click the "Upload" button to update the student\'s answer sheet.',
+                  '3. Click the “View Answer” button at the top right corner.',
                   'USA3.png'),
+              SizedBox(height: 15),
               _buildStepWithImage(
-                  '6. To add the student\'s answer sheet, either drag a file or use the "Choose files" option to select the file from your computer.',
+                  '4. Click the "+" button to upload the student\'s answer sheet.',
                   'USA4.png'),
-              SizedBox(height: 15),
               _buildStepWithImage(
-                  '7. After selecting a file, refer to Image Preprocessing for more details.',
-                  'USA4.png'),
-              SizedBox(height: 15),
-              _buildStepWithImage(
-                  '8. The student\'s details will be displayed on the page for confirmation.',
-                  'USA5.png'),
-              SizedBox(height: 15),
-              _buildStepWithImage(
-                  '9. Repeat steps 2 to 7 to add more students as necessary.',
+                  '5.After selecting a file, the system will automatically extract the data from the image. (Please refer to Best Practices to learn more about the guidelines for uploading the answer sheet)',
                   ''),
+              SizedBox(height: 15),
               _buildStepWithImage(
-                  '10. Once you have finished adding all students, click the "Save" button to save the student records.',
+                  '6. The extracted student\'s answer sheet will be displayed.',
+                  'USA6.png'),
+              _buildStepWithImage(
+                  '\t6.1 If the user wants to edit the answer sheet:', ''),
+              _buildStepWithImage(
+                  '\t\t6.1.1 Click the pen icon to edit.', 'USA6.1.1.png'),
+              _buildStepWithImage(
+                  '\t\t6.1.2 Modify the answer sheet and click on the save button to save the changes made.',
+                  'USA6.1.2.png'),
+              _buildStepWithImage(
+                  '\t6.2 If the user wants to delete the record: ', ''),
+              _buildStepWithImage(
+                  '\t\t6.2.1 Click on the trash icon.', 'USA6.2.1.png'),
+              _buildStepWithImage(
+                  '\t\t6.2.2 A confirmation dialog will be shown.',
+                  'USA6.2.2.png'),
+              _buildStepWithImage(
+                  '7. Repeat steps 4 to 6 to add more students as necessary.',
                   ''),
             ],
           ),
-          SizedBox(height: 20),
-          Text(
-            'Image Preprocessing',
-            style: textStyle1,
-          ),
-          const SizedBox(height: 10),
-          Column(
-            children: [
-              _buildStepWithImage(
-                  '1. Once a file is selected for upload, the system will begin processing the image.',
-                  'IP1.png'),
-              SizedBox(height: 15),
-              Text(
-                '2. After successful processing, users are required to enter a file name for saving and the author\'s name. (In case of processing failure, refer to Troubleshooting for more info)',
-                style: textStyle2,
-              ),
-              _buildStepWithImage(
-                  '3.  Click on "Extract this file" to initiate OCR processing.',
-                  'IP2.png'),
-              SizedBox(height: 15),
-              _buildStepWithImage(
-                  '4. The system will commence extracting text from the image.',
-                  'IP3.png'),
-              SizedBox(height: 15),
-              _buildStepWithImage(
-                  '5. Upon successful extraction, the extracted text (answers) will be displayed.',
-                  ''),
-              Text(
-                '6. If the extracted data is incorrect, users may request a reupload. Otherwise, proceed to Step 7 of Upload Student Answer if no issues arise.',
-                style: textStyle2,
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Text(
-            'Score Calculation and Reporting',
-            style: textStyle1,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            '1. Go to the Exam page.\n'
-            '2. Select the eye icon of the exam you wish to view.\n'
-            '3. Upon uploading students\' answers, the system will automatically calculate the score for each student and '
-            'calculate the mean and median score of the class. (Refer to Upload Student Answer to know more about uploading '
-            'student’s answer)\n'
-            '4. To generate a report, click on the "Generate Report" button. \n'
-            '5. The report will include statistical measures such as the median, mean, and other relevant statistics.',
-            style: TextStyle(fontSize: 14),
-          )
         ],
       ),
     );
