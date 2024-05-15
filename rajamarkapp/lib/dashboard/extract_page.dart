@@ -189,8 +189,13 @@ class _ExtractPageState extends State<ExtractPage> {
     int score =
         calculateScore(widget.examData.sampleAnswer, tempStudentAnswers);
     String gradeLabel = calculateGrade(score, widget.examData);
+
     currentStudentResult!.score = score;
     currentStudentResult!.gradeLabel = gradeLabel;
+    currentStudentResult!.studentName = studentNameController.text;
+    currentStudentResult!.studentId = studentIdController.text;
+    currentStudentResult!.answerText = tempStudentAnswers;
+
 
     ExamState.to.updateStudentResult(currentStudentResult!, widget.examData);
 

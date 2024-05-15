@@ -122,7 +122,11 @@ class ExamState extends GetxService {
         int index = exam.studentResults.indexWhere(
             (element) => element.studentId == studentResult.studentId);
         exam.studentResults[index] = studentResult;
+       return;
+
       }
     }
+    // print("Update exam mean and median score");
+    // currentExam.medianScore = calculateMedianScore(currentExam);
   }
 }
