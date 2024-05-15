@@ -15,14 +15,31 @@ class _ForgotPassModuleState extends State<ForgotPassModule> {
   final TextEditingController _passwordController = TextEditingController();
   bool isLinkSent = false;
   String errorMessage = '';
+
+  final _auth = FirebaseAuth.instance;
+
   Future<void> _sendPasswordResetEmail() async {
+    //Check if email is valid email
+    final bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(_emailController.text.trim());
+    print(emailValid);
+    if (!emailValid) {
+      setState(() {
+        errorMessage = 'Invalid email format';
+      });
+      return;
+    }
+
+    //Check if email exists in firebase auth
+
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(
+      await _auth.sendPasswordResetEmail(
         email: _emailController.text.trim(),
       );
       setState(() {
         isLinkSent = true;
-        errorMessage = '';
+        errorMessage = 'Reset email link sent!';
       });
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -42,7 +59,7 @@ class _ForgotPassModuleState extends State<ForgotPassModule> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              BackButton(),
+              const BackButton(),
               Text(
                 'Forgot Your Password?',
                 style: GoogleFonts.poppins(
@@ -68,16 +85,16 @@ class _ForgotPassModuleState extends State<ForgotPassModule> {
             style: GoogleFonts.poppins(),
           ),
           const SizedBox(height: 16.0),
-          if (isLinkSent)
-            Center(
-              child: Text(
-                'Reset email link sent!',
-                style: GoogleFonts.poppins(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
+          isLinkSent
+              ? const Text(
+                  "Link sent! Check your email",
+                  textAlign: TextAlign.start,
+                )
+              : Text(
+                  errorMessage,
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.start,
                 ),
-              ),
-            ),
           const SizedBox(height: 32.0),
           ElevatedButton(
             onPressed: _sendPasswordResetEmail,
