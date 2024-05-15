@@ -383,16 +383,6 @@ class GettingStarted extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            '- macOS 10.15 (Catalina) or later. This guide presumes your Mac runs the zsh as your default shell.',
-            style: _textStyle2,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            '- Debian Linux 11 or later and Ubuntu Linux 20.04 LTS or later.',
-            style: _textStyle2,
-          ),
-          const SizedBox(height: 10),
-          Text(
             '- ChromeOS.',
             style: _textStyle2,
           ),
@@ -1034,7 +1024,7 @@ class BestPractices extends StatelessWidget {
           PracticeItem(
             description:
                 '6. For best OCR text extraction, use white blank paper only instead of foolscap paper or grid-lined paper.',
-            imagePath: 'Images/tip0.png',
+            imagePath: 'Images/tip0.jpg',
           ),
         ],
       ),
@@ -1044,17 +1034,17 @@ class BestPractices extends StatelessWidget {
           PracticeItem(
             description:
                 '1. Ensure students format answers consistently and legibly to aid OCR accuracy.',
-            imagePath: 'Images/tip1.png',
+            imagePath: 'Images/tip1.jpg',
           ),
           PracticeItem(
             description:
                 '2. Advise clear separation of answers for each question to minimize ambiguity.',
-            imagePath: 'Images/tip2.png',
+            imagePath: 'Images/tip2.jpg',
           ),
           PracticeItem(
             description:
                 '3. Caution against overlapping answers to enhance OCR interpretation.',
-            imagePath: 'Images/tip3.png',
+            imagePath: 'Images/tip3.jpg',
           ),
           PracticeItem(
             description:
@@ -1067,12 +1057,12 @@ class BestPractices extends StatelessWidget {
           PracticeItem(
             description:
                 '6. Ensure students use dark, bold pens or pencils for writing to improve OCR readability.',
-            imagePath: 'Images/tip4.png',
+            imagePath: 'Images/tip4.jpg',
           ),
           PracticeItem(
             description:
                 '7. Remind students to avoid excessive use of decorative elements or symbols that may interfere with OCR recognition.',
-            imagePath: 'Images/tip5.png',
+            imagePath: 'Images/tip5.jpg',
           ),
           PracticeItem(
             description:
@@ -1085,7 +1075,7 @@ class BestPractices extends StatelessWidget {
           PracticeItem(
             description:
                 '10. Recommend students to use a ruler or straight edge for neat alignment of answers to improve OCR alignment.',
-            imagePath: 'Images/tip6.png',
+            imagePath: 'Images/tip6.jpg',
           ),
         ],
       ),
