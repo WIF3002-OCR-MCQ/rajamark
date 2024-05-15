@@ -1079,7 +1079,7 @@ class BestPractices extends StatelessWidget {
           PracticeItem(
             description:
                 '6. For best OCR text extraction, use white blank paper only instead of foolscap paper or grid-lined paper.',
-            imagePath: 'assets/images/tip0.png',
+            imagePath: 'Images/tip0.png',
           ),
         ],
       ),
