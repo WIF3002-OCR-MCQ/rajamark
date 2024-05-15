@@ -52,40 +52,40 @@ class _CreateExamPageState extends State<CreateExamPage> {
 
       switch (grade) {
         case "A":
-          gradeMap[grade]![0].text = "90";
+          gradeMap[grade]![0].text = "80";
           gradeMap[grade]![1].text = "100";
           break;
         case "A-":
-          gradeMap[grade]![0].text = "85";
-          gradeMap[grade]![1].text = "89";
-          break;
-        case "B+":
-          gradeMap[grade]![0].text = "80";
-          gradeMap[grade]![1].text = "84";
-          break;
-        case "B":
           gradeMap[grade]![0].text = "75";
           gradeMap[grade]![1].text = "79";
           break;
-        case "B-":
+        case "B+":
           gradeMap[grade]![0].text = "70";
           gradeMap[grade]![1].text = "74";
           break;
-        case "C+":
+        case "B":
           gradeMap[grade]![0].text = "65";
           gradeMap[grade]![1].text = "69";
           break;
-        case "C":
+        case "B-":
           gradeMap[grade]![0].text = "60";
           gradeMap[grade]![1].text = "64";
           break;
-        case "D":
-          gradeMap[grade]![0].text = "50";
+        case "C+":
+          gradeMap[grade]![0].text = "55";
           gradeMap[grade]![1].text = "59";
+          break;
+        case "C":
+          gradeMap[grade]![0].text = "50";
+          gradeMap[grade]![1].text = "54";
+          break;
+        case "D":
+          gradeMap[grade]![0].text = "40";
+          gradeMap[grade]![1].text = "49";
           break;
         case "F":
           gradeMap[grade]![0].text = "0";
-          gradeMap[grade]![1].text = "49";
+          gradeMap[grade]![1].text = "39";
           break;
         default:
           gradeMap[grade]![0].text = "0";
