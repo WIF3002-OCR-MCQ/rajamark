@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rajamarkapp/auth/verify_email.dart';
+//import 'package:rajamarkapp/auth/verify_email.dart';
 
 class ForgotPassModule extends StatefulWidget {
   const ForgotPassModule({Key? key}) : super(key: key);
@@ -13,6 +14,22 @@ class _ForgotPassModuleState extends State<ForgotPassModule> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isLinkSent = false;
+String errorMessage = '';
+  Future<void> _sendPasswordResetEmail() async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: _emailController.text.trim(),
+      );
+      setState(() {
+        isLinkSent = true;
+        errorMessage = '';
+      });
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message ?? 'An error occurred';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,15 +76,7 @@ class _ForgotPassModuleState extends State<ForgotPassModule> {
             ),
           const SizedBox(height: 32.0),
           ElevatedButton(
-            onPressed: () {
-              // TODO: Implement ForgotPass functionality.
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => VerifyEmailPage()));
-            
-              setState(() {
-                isLinkSent = true;
-              });
-            },
+            onPressed: _sendPasswordResetEmail,
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromARGB(255, 49, 114, 178),
               padding: const EdgeInsets.symmetric(vertical: 16.0),
