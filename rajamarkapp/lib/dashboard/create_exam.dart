@@ -265,24 +265,29 @@ class _CreateExamPageState extends State<CreateExamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: TopRowWidget(),
-      ),
+      // appBar: AppBar(
+      //   title: TopRowWidget(),
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
-                child: Text(
-                  "Create Exam",
-                  style: GoogleFonts.poppins(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+              Row(
+                children: [
+                  const BackButton(),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
+                    child: Text(
+                      "Create Exam",
+                      style: GoogleFonts.poppins(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
               Divider(
                 color: Colors.grey, // Customize the color of the divider

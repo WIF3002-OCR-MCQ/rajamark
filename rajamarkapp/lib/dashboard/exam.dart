@@ -49,7 +49,7 @@ class ExamDashboard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'John Doe',
+                        UserState.to.getUser()?.displayName ?? "Anonymous",
                         style: GoogleFonts.poppins(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
