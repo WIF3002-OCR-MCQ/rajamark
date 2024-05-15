@@ -46,7 +46,7 @@ class _ForgotPassModuleState extends State<ForgotPassModule> {
         isLinkSent = false;
         errorMessage = e.message ?? 'An error occurred';
       });
-    } catch(e){
+    } catch (e) {
       setState(() {
         isLinkSent = false;
         errorMessage = 'An unknown error occurred, please try again later.';

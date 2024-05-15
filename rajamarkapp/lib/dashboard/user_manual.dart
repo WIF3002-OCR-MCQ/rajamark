@@ -165,51 +165,51 @@ class _UserManualState extends State<UserManual> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Container(
-                width: 500,
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: _searchController,
-                      onChanged: _updateSearchResults,
-                      decoration: InputDecoration(
-                        labelText: "Find",
-                        hintText: "Find in user manual",
-                        prefixIcon: Icon(Icons.search),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    if (_showSearchResults)
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        width: 500,
-                        padding: EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _searchResults.map((section) {
-                            return InkWell(
-                              onTap: () {
-                                _scrollToSection(section);
-                                _hideSearchResults(); // Hide search results after tapping section
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text(section),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.all(10.0),
+            //   child: Container(
+            //     width: 500,
+            //     child: Column(
+            //       children: [
+            //         TextField(
+            //           controller: _searchController,
+            //           onChanged: _updateSearchResults,
+            //           decoration: InputDecoration(
+            //             labelText: "Find",
+            //             hintText: "Find in user manual",
+            //             prefixIcon: Icon(Icons.search),
+            //             border: OutlineInputBorder(),
+            //           ),
+            //         ),
+            //         if (_showSearchResults)
+            //           Container(
+            //             decoration: BoxDecoration(
+            //               color: Colors.grey[200],
+            //               borderRadius: BorderRadius.circular(5.0),
+            //             ),
+            //             width: 500,
+            //             padding: EdgeInsets.all(10.0),
+            //             child: Column(
+            //               crossAxisAlignment: CrossAxisAlignment.start,
+            //               children: _searchResults.map((section) {
+            //                 return InkWell(
+            //                   onTap: () {
+            //                     _scrollToSection(section);
+            //                     _hideSearchResults(); // Hide search results after tapping section
+            //                   },
+            //                   child: Padding(
+            //                     padding:
+            //                         const EdgeInsets.symmetric(vertical: 5.0),
+            //                     child: Text(section),
+            //                   ),
+            //                 );
+            //               }).toList(),
+            //             ),
+            //           ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: Row(
                 children: [
