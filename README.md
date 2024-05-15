@@ -142,7 +142,7 @@ detailed instructions on how to use this system effectively.</p>
 1. Go to the Exam page.
 2. Click on the “Create” button to create a new examination/quiz.
 <p align="center">
-  <img width="60%" src="[https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/b694fd6a-f5f9-4305-993c-2372a246033a](https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/EC1.png)">
+  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/b694fd6a-f5f9-4305-993c-2372a246033a">
 </p>
 
 3. Enter the examination’s details and grading’s criteria.
