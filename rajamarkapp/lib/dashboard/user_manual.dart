@@ -678,41 +678,6 @@ class Features extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Text(
-            'Upload Sample Answer',
-            style: textStyle1,
-          ),
-          const SizedBox(height: 10),
-          Column(
-            children: [
-              _buildStepWithImage('1. Go to the Exam page.', ''),
-              SizedBox(height: 10),
-              _buildStepWithImage(
-                  '2. Click on the “eye” icon to view the exam’s details.',
-                  'USAns1.png'),
-              SizedBox(height: 15),
-              _buildStepWithImage(
-                  '3. Click on the “Upload answer” button to upload the sample answer scheme.',
-                  'USAns2.png'),
-              SizedBox(height: 15),
-              _buildStepWithImage(
-                  '4. Once redirected into the Answer Scheme page, click the “+” icon to upload the sample answer scheme.',
-                  'USAns3.png'),
-              _buildStepWithImage(
-                  '5. Upload the answer scheme file.', 'USAns4.png'),
-              _buildStepWithImage(
-                  '6. If the image processing fails, try to upload another file with a clearer view of the answer scheme.',
-                  'USAns5.png'),
-              SizedBox(height: 15),
-              _buildStepWithImage(
-                  '7. Wait for the file to be processed.', 'USAns6.png'),
-              SizedBox(height: 15),
-              _buildStepWithImage(
-                  '8. Click the “confirm” button to apply the answer scheme.',
-                  'USAns8.png'),
-            ],
-          ),
-          SizedBox(height: 20),
-          Text(
             'Upload Student Answer',
             style: textStyle1,
           ),
