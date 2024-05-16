@@ -203,49 +203,7 @@ details or “trash” icon to delete the student's information.
   <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/blob/8765cac70fa1d55e58d26b3d627bcffbae285707/rajamarkapp/Images/MSA3.png">
 </p>
 
-### 3.5 Upload Sample Answer
-1. Go to the Exam page.
-2. Click on the “eye” icon to view the exam’s details.
-<p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/8b829546-ae1c-48f5-80f6-f87baab31e05">
-</p>
-
-3. Click on the “Upload answer” button to upload the sample answer scheme.
-<p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/d9d340ef-261f-4fc0-a508-e5b5487d2dfe">
-</p>
-
-4. Once redirected into the Answer Scheme page, click the “+” icon to upload the sample
-answer scheme.
-<p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/f4f83d47-6321-4625-a0be-edf910094112">
-</p>
-
-5. Upload the answer scheme file.
-<p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/e53cdced-958a-45dc-bfcd-fe5155346ac9">
-</p>
-
-6. If the image processing fails, try to upload another file with a clearer view of the answer
-scheme.
-<p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/82aa0872-9b38-4b45-94a8-9749ea16d870)">
-</p>
-
-7. Wait for the file to be processed.
-<p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/07f73b2b-f513-4091-a564-f1c52757625c">
-</p>
-<p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/bc6b42f4-cb63-4022-9eab-f11b133800ef">
-</p>
-
-8. Click the “confirm” button to apply the answer scheme.
-<p align="center">
-  <img width="60%" src="https://github.com/WIF3002-OCR-MCQ/rajamark/assets/117422678/5b8ad11d-13a4-4b71-868d-382c5799013b">
-</p>
-
-### 3.6 Upload Student Answer
+### 3.5 Upload Student Answer
 1. Go to the Exam page.
 2. Select the “eye icon” of the exam you wish to grade.
 <p align="center">
