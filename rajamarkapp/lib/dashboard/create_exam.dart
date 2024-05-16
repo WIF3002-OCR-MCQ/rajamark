@@ -319,11 +319,15 @@ class _CreateExamPageState extends State<CreateExamPage> {
       List<QuestionModal> tempList = [];
       List<int> isIncomplete = [];
 
-      print(lines[lines.length - 1].split(" ")[0]);
-      int quesNumTracker = 1;
-
       for (var line in lines) {
         bool containsSpecialCharacter = RegExp(r'[^\w\s]').hasMatch(line);
+
+        if (line.trim().isNotEmpty) {
+          _dialogBuilder(context, "Empty File",
+              "The selected file contains only empty strings");
+          return null;
+        }
+
         if (containsSpecialCharacter) {
           _dialogBuilder(context, "The format is incorrect",
               "Please follow the user manual when writing the .txt sample answer");
@@ -337,23 +341,20 @@ class _CreateExamPageState extends State<CreateExamPage> {
             answer.compareTo("B") != 0 &&
             answer.compareTo("C") != 0 &&
             answer.compareTo("D") != 0) {
-          print("Problem here");
-          print(answer);
-          print(line);
           _dialogBuilder(
               context, "Invalid Answer", "Answer must be either A, B, C, or D");
           return;
         }
 
         if (quesNum == null || quesNum < 1 || quesNum > 100) {
-          print("Problem here");
-          print(quesNum);
-          print(line);
           _dialogBuilder(context, "Question number invalid",
               "Please make sure your question number is a valid one.");
           return;
         }
       }
+
+      print(lines[lines.length - 1].split(" ")[0]);
+      int quesNumTracker = 1;
 
       for (var i = 0; i < lines.length; i++) {
         int? quesNum = int.tryParse(lines[i].split(" ")[0]);
@@ -365,7 +366,6 @@ class _CreateExamPageState extends State<CreateExamPage> {
               .add(QuestionModal(questionNum: i + 1, selectedAnswer: answer));
           quesNumTracker++;
           while (quesNum == quesNumTracker) {
-            print("WTF?");
             tempList
                 .add(QuestionModal(questionNum: quesNum, selectedAnswer: ""));
             quesNumTracker++;
