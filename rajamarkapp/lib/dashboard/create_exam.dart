@@ -322,6 +322,39 @@ class _CreateExamPageState extends State<CreateExamPage> {
       print(lines[lines.length - 1].split(" ")[0]);
       int quesNumTracker = 1;
 
+      for (var line in lines) {
+        bool containsSpecialCharacter = RegExp(r'[^\w\s]').hasMatch(line);
+        if (containsSpecialCharacter) {
+          _dialogBuilder(context, "The format is incorrect",
+              "Please follow the user manual when writing the .txt sample answer");
+          // Handle the case where the line contains a special character
+        }
+
+        int? quesNum = int.tryParse(line.split(" ").first.trim());
+        String answer = line.split(" ").last.toUpperCase().trim();
+
+        if (answer.compareTo("A") != 0 &&
+            answer.compareTo("B") != 0 &&
+            answer.compareTo("C") != 0 &&
+            answer.compareTo("D") != 0) {
+          print("Problem here");
+          print(answer);
+          print(line);
+          _dialogBuilder(
+              context, "Invalid Answer", "Answer must be either A, B, C, or D");
+          return;
+        }
+
+        if (quesNum == null || quesNum < 1 || quesNum > 100) {
+          print("Problem here");
+          print(quesNum);
+          print(line);
+          _dialogBuilder(context, "Question number invalid",
+              "Please make sure your question number is a valid one.");
+          return;
+        }
+      }
+
       for (var i = 0; i < lines.length; i++) {
         int? quesNum = int.tryParse(lines[i].split(" ")[0]);
         String answer = lines[i].split(" ").last.toUpperCase();
@@ -338,8 +371,6 @@ class _CreateExamPageState extends State<CreateExamPage> {
             quesNumTracker++;
             break;
           }
-        } else {
-          print("cannot parse");
         }
       }
 
@@ -381,53 +412,10 @@ class _CreateExamPageState extends State<CreateExamPage> {
         lines = extractedAnswers;
       }
     }
+
     print("Lines length is ${lines?.length}");
-
+    lines?.removeWhere((line) => line.trim().isEmpty);
     return lines;
-  }
-
-  void uploadSampleAnswerTxtFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pd', 'txt'],
-    );
-
-    if (result != null) {
-      if (kIsWeb) {
-        final Uint8List? fileBytes = result.files.first.bytes;
-        final String? fileName = result.files.first.name;
-        if (fileBytes != null && fileName != null) {
-          String fileContent = utf8.decode(fileBytes);
-          List<String> extractedAnswers = fileContent.split('\n');
-          print("extracted");
-
-          List<QuestionModal> updatedQuestionList = [];
-
-          for (var answer in extractedAnswers) {
-            final splitted = answer.split(" ");
-            print(splitted.first);
-            print(splitted.last);
-            final answerNum = int.tryParse(splitted.first);
-            if (answerNum != null) {
-              print("answer : $answerNum");
-              updatedQuestionList.add(QuestionModal(
-                  questionNum: answerNum,
-                  selectedAnswer: splitted.last.toUpperCase()));
-            } else {
-              print("Unable to parse '${splitted.first}' into a number.");
-            }
-          }
-
-          for (var element in updatedQuestionList) {
-            print(element.questionNum);
-            print(element.selectedAnswer);
-          }
-          setState(() {
-            questionList = updatedQuestionList;
-          });
-        }
-      }
-    }
   }
 
   @override
