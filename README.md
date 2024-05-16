@@ -36,9 +36,6 @@ workload on educators.</p>
 RajaMark requires (either one):
 - the 64-bit version of Microsoft Windows 10 or later. These versions of Windows should
 include the required Windows PowerShell 5 or later.
-- macOS 10.15 (Catalina) or later. This guide presumes your Mac runs the zsh as your
-default shell.
-- Debian Linux 11 or later and Ubuntu Linux 20.04 LTS or later.
 - ChromeOS.
 
 ### 2.2 Installation Steps
