@@ -322,12 +322,6 @@ class _CreateExamPageState extends State<CreateExamPage> {
       for (var line in lines) {
         bool containsSpecialCharacter = RegExp(r'[^\w\s]').hasMatch(line);
 
-        if (line.trim().isNotEmpty) {
-          _dialogBuilder(context, "Empty File",
-              "The selected file contains only empty strings");
-          return null;
-        }
-
         if (containsSpecialCharacter) {
           _dialogBuilder(context, "The format is incorrect",
               "Please follow the user manual when writing the .txt sample answer");
