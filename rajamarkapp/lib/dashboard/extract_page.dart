@@ -124,6 +124,9 @@ class _ExtractPageState extends State<ExtractPage> {
     if (!isAllDetailsExtracted(studentResult)) {
       _showAlertDialog(context, 'Incomplete Details',
           'Please fill in the student details manually');
+      setState(() {
+        tempStudentAnswers = studentResult.answerText;
+      });
       nextView = ExamView.edit;
     }
 
@@ -237,6 +240,8 @@ class _ExtractPageState extends State<ExtractPage> {
 
   void _addStudentResult() {
     setState(() {
+      studentIdController.text = '';
+      studentNameController.text = '';
       isAdding = true;
       currentView = ExamView.edit;
       tempStudentAnswers =
@@ -259,7 +264,8 @@ class _ExtractPageState extends State<ExtractPage> {
       currentStudentResult!.studentId = studentIdController.text;
       currentStudentResult!.answerText = tempStudentAnswers;
 
-      ExamState.to.updateStudentResult(oldStudentResult, currentStudentResult!, widget.examData);
+      ExamState.to.updateStudentResult(
+          oldStudentResult, currentStudentResult!, widget.examData);
 
       setState(() {
         currentStudentResult!.score = score;
